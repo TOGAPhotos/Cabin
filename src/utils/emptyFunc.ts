@@ -1,2 +1,2 @@
 
-export default () => {}
+export const EMPTY_FUNC = () => {}

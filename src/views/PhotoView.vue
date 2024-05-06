@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {computed, onMounted, ref} from "vue";
-import {staticResourceUrl} from "@/config";
+import {STATIC_RESOURCE_URL} from "@/config";
 import {useRoute} from "vue-router";
 import serverRequest from "@/utils/request";
 import router from "@/router";
@@ -24,7 +24,7 @@ type PhotoData = {
 
 const route = useRoute();
 const photoId = route.params.id;
-const url = computed(() => `${staticResourceUrl}/photos/${photoId}.jpg`);
+const url = computed(() => `${STATIC_RESOURCE_URL}/photos/${photoId}.jpg`);
 const photoInfo = ref<PhotoData>()
 
 onMounted(async () => {

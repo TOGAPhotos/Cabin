@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {computed, ref} from "vue";
-import {staticResourceUrl} from "@/config";
+import {STATIC_RESOURCE_URL} from "@/config";
 
 type ThumbnailData = {
   id: number,
@@ -20,7 +20,7 @@ const props = defineProps<ThumbnailData>();
 
 const showAirport = ref(false)
 const airportLine = ref();
-const url = computed(() => `${staticResourceUrl}/min/photos/${props.id}.jpg`);
+const url = computed(() => `${STATIC_RESOURCE_URL}/min/photos/${props.id}.jpg`);
 const href = computed(() => `/photo/${props.id}`);
 
 if (props.airport?.name) {

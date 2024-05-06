@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {type CSSProperties, onMounted, ref} from "vue";
-import {staticResourceUrl} from "@/config";
+import {STATIC_RESOURCE_URL} from "@/config";
 import serverRequest from "@/utils/request";
 
 const headPhotoList = ref<PhotoInfo[]>([])
@@ -12,7 +12,7 @@ onMounted(()=>headPhotoReq.start())
 
 function processHeadPhoto(imgId:number):CSSProperties{
   return {
-    backgroundImage: `url(${staticResourceUrl}/photos/${imgId}.jpg)`,
+    backgroundImage: `url(${STATIC_RESOURCE_URL}/photos/${imgId}.jpg)`,
 
   }
 }

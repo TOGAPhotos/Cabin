@@ -9,8 +9,8 @@ interface RequestFailFunc {
 
 export default class serverRequest{
 
-    private readonly method: string;
-    private readonly url: string;
+    private readonly METHOD: string;
+    private readonly URL: string;
     private body: string|object|FormData|null;
     private data:any;
     private headers: {[key: string]: string|null};
@@ -18,8 +18,8 @@ export default class serverRequest{
     private user = userInfoStore()
 
     constructor(method: string, url: string, data:object|FormData|null =null, contentType:string|null= 'application/json'){
-        this.method = method;
-        this.url = API_URL+url;
+        this.METHOD = method;
+        this.URL = API_URL+url;
         this.headers = {'Content-Type': contentType}
         this.body = data;
     }
@@ -35,7 +35,7 @@ export default class serverRequest{
         }
 
         init = {
-            method: this.method,
+            method: this.METHOD,
             headers: this.headers as HeadersInit,     
         }
         if(this.body){
@@ -48,7 +48,7 @@ export default class serverRequest{
     async start(){
         let init = this.preProcess();
         try{
-            this.response = await fetch(this.url,init);
+            this.response = await fetch(this.URL,init);
         }catch(e){
             this.networkError(<Error>e);
         }
