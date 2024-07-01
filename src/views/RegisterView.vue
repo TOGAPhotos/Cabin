@@ -88,7 +88,7 @@ function register(){
         user.setUserInfo(id, username,token,expireTime,permission);
     }
 
-    registerRequest.start()
+    registerRequest.send()
 
 }
 </script>

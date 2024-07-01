@@ -54,7 +54,7 @@ async function login() {
   }
   loginRequest.error = (code, msg) => ElNotification.error(msg)
 
-  await loginRequest.start()
+  await loginRequest.send()
 
 }
 router.afterEach(()=> loginDialogVisible.value = false)

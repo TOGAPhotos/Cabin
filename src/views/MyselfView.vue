@@ -22,7 +22,7 @@ userInfoReq.success = () => {
   userInfo.value = userInfoReq.getData('userInfo')
 }
 onMounted(() => Promise.allSettled([
-  userInfoReq.start(),
+  userInfoReq.send(),
 ]))
 
 const logout = async () =>{
