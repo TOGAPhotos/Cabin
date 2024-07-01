@@ -2,7 +2,7 @@
     <footer>
         <div class="footer-info">
             由TO/GAPhotos Team维护<br>
-            Maintenanced by TO/GAPhotos Team
+            Maintenance by TO/GAPhotos Team
         </div>
         <div class="footer-info">
             Copyright©2023-Present TO/GAPhotos All Rights Reserved.

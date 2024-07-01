@@ -19,7 +19,7 @@ websiteInfoReq.success = () =>{
 }
 websiteInfoReq.error = () => router.push('/maintenance');
 
-onMounted(() => websiteInfoReq.start())
+onMounted(() => websiteInfoReq.send())
 </script>
 
 <template>
