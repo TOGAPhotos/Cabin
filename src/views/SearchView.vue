@@ -3,45 +3,69 @@
 import {onMounted, reactive, ref} from "vue";
 import Thumbnail from "@/components/Thumbnail.vue";
 import {useRoute} from "vue-router";
-import serverRequest from "@/utils/request";
 import {ElMessage} from "element-plus";
 import router from "@/router";
-interface SearchResult extends PhotoInfo  {
-  cn_name: string;
-  iata: string;
-  icao:string;
+import {RemoteSearch,} from "@/utils/remoteSearch";
+import {BottomLoader} from "@/utils/bottomLoader";
+import type {PhotoSearchResult, SearchType} from "@/utils/type/remoteSearch";
+
+enum FUNC_CALL{
+  FIRST,
+  CONTINUE
 }
 
-const resultList = ref<SearchResult[]>();
-
-let lastId = -1;
+const resultList = ref<PhotoSearchResult[]>();
 const searchInfo = reactive({type: "reg", content: ''});
+const showResult = ref(false);
+const searchLoading = ref(false);
 
-async function search() {
-  if (searchInfo.content === '') {
-    return ElMessage.warning('请输入查询内容')
-  }
-  const searchUrl = `/search?keyword=${searchInfo.content}&type=${searchInfo.type}&lastId=${lastId}`
-  const searchReq = new serverRequest('GET', searchUrl)
-  searchReq.success = () => {
-    if(lastId === -1){
-      resultList.value = searchReq.getData('data')
-    }else{
-      resultList.value = resultList.value?.concat(searchReq.getData('data'))
-    }
-    router.push(`/search?content=${searchInfo.content}&type=${searchInfo.type}`)
-  }
-  await searchReq.start();
-}
-
-const route = useRoute()
 onMounted(async () => {
+  const route = useRoute()
   searchInfo.type = route.query?.type as string || 'reg'
   searchInfo.content = route.query?.content as string || ''
   if(searchInfo.content !== '') {
-    await search()
+    await search(FUNC_CALL.FIRST)
   }
+
 })
+
+function getLastId(){
+  if(!resultList.value || resultList.value.length === 0){
+    return -1;
+  }
+  return resultList.value[resultList.value.length-1].id
+}
+
+async function search(callType:number) {
+  if (searchInfo.content === '') {
+    return ElMessage.warning('请输入查询内容')
+  }
+
+  let lastId = -1;
+  if(callType === FUNC_CALL.CONTINUE){
+    lastId = getLastId();
+  }
+
+  searchLoading.value = true;
+
+  try{
+    const result = await RemoteSearch.photo(searchInfo.type as SearchType, searchInfo.content, lastId);
+    if(lastId === -1){
+      resultList.value = result;
+    }else{
+      resultList.value = resultList.value?.concat(result)
+    }
+    router.push(`/search?content=${searchInfo.content}&type=${searchInfo.type}`)
+    showResult.value = true;
+  }catch(error){
+    console.log(error);
+  }finally {
+    searchLoading.value = false;
+  }
+
+}
+
+const bottomLoader = new BottomLoader(() => search(FUNC_CALL.CONTINUE))
 
 const searchOptions = [
   {
@@ -66,7 +90,6 @@ const searchOptions = [
   }
 ]
 
-
 </script>
 
 <template>
@@ -82,10 +105,10 @@ const searchOptions = [
         />
       </el-select>
       <el-input class="input" v-model="searchInfo.content"/>
-      <el-button id="search-button" type="primary" @click="search()">搜索</el-button>
+      <el-button id="search-button" type="primary" @click="search(FUNC_CALL.FIRST)">搜索</el-button>
     </div>
-    <div class="content-box">
-      <div class="content-box-title">
+    <div class="content-box" v-loading="searchLoading">
+      <div class="content-box-title" v-if="showResult">
         <h2>搜索结果</h2>
       </div>
       <div class="content-box-main">

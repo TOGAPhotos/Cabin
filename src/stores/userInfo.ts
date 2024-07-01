@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 
-type UserInfo = {
+interface UserInfo {
     username: string,
     token: string | null,
     expireTime: number,

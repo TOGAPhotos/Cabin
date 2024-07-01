@@ -42,6 +42,7 @@ async function login() {
     email: loginForm.email,
     password: loginForm.password
   })
+
   loginRequest.success = () => {
     const id = loginRequest.getData('id') as number;
     const username = loginRequest.getData('username') as string;
@@ -52,6 +53,7 @@ async function login() {
     loginDialogVisible.value = false;
     router.go(0);
   }
+
   loginRequest.error = (code, msg) => ElNotification.error(msg)
 
   await loginRequest.send()
@@ -61,9 +63,18 @@ router.afterEach(()=> loginDialogVisible.value = false)
 </script>
 
 <template>
-  <el-dialog v-model="loginDialogVisible" title="用户登陆" width="600">
-
-    <el-form ref="loginFormRef" :model="loginForm" :rules="loginRules" style="max-width: 500px;margin: 12px auto;">
+  <el-dialog v-model="loginDialogVisible" width="600">
+    <template #header="{ close, titleId, titleClass }">
+      <div class="my-header">
+        <h4 :id="titleId" :class="titleClass" style="font-weight: bolder">登陆</h4>
+      </div>
+    </template>
+    <el-form ref="loginFormRef"
+             :model="loginForm"
+             :rules="loginRules"
+             label-position="top"
+             style="max-width: 500px;margin: 12px auto;"
+    >
       <el-form-item label="邮箱" prop="email">
         <el-input v-model="loginForm.email"/>
       </el-form-item>
@@ -77,3 +88,10 @@ router.afterEach(()=> loginDialogVisible.value = false)
     </template>
   </el-dialog>
 </template>
+
+<style scoped>
+.my-header{
+  padding: 0 0 0.5rem 1rem;
+  border-bottom: 1px solid #f0f0f0;
+}
+</style>
