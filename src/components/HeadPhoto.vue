@@ -8,7 +8,7 @@ const headPhotoList = ref<PhotoInfo[]>([])
 const headPhotoReq = new serverRequest('GET', `/website`);
 headPhotoReq.success = () => headPhotoList.value = headPhotoReq.getData('homepageInfo', 'randomPhotoList');
 
-onMounted(()=>headPhotoReq.start())
+onMounted(()=>headPhotoReq.send())
 
 function processHeadPhoto(imgId:number):CSSProperties{
   return {

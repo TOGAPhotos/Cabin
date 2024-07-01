@@ -28,7 +28,7 @@ onMounted(async ()=>{
     const airport = airportReq.getData('airport')
     airportOptionsList.value[0].options=[{label: airport["cn_name"],value: airport["id"]}]
   }
-  await airportReq.start();
+  await airportReq.send();
 })
 
 const airportRemoteSearch = async (query: string) => {
@@ -53,7 +53,7 @@ const airportRemoteSearch = async (query: string) => {
     ElMessage.error('搜索出错')
     loading.value = false;
   }
-  await searchReq.start();
+  await searchReq.send();
 
 }
 

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
 import {onMounted, ref} from "vue";
-import {BottomLoader,} from '@/utils/bottomLoader';
+import {BottomLoader} from '@/utils/bottomLoader';
 import serverRequest from "@/utils/request";
 import Thumbnail from "@/components/Thumbnail.vue";
 import {ElNotification} from "element-plus";
@@ -41,13 +41,13 @@ const bottomLoad = new BottomLoader(async () => {
   const lastImgId = photoList.value[photoList.value.length - 1]['id'];
   const appendListReq = new serverRequest('GET', `/photos/full?lastId=${lastImgId}`,);
   appendListReq.success = () => photoList.value = photoList.value?.concat(appendListReq.getData('data'))
-  await appendListReq.start();
+  await appendListReq.send();
 })
 
 onMounted(() => {
   Promise.allSettled([
-    photoListReq.start(),
-    notamReq.start(),
+    photoListReq.send(),
+    notamReq.send(),
   ])
 })
 

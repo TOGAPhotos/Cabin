@@ -45,7 +45,7 @@ export default class serverRequest{
 
     }
 
-    async start(){
+    async send(){
         let init = this.preProcess();
         try{
             this.response = await fetch(this.URL,init);

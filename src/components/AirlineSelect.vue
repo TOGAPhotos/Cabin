@@ -29,7 +29,7 @@ const airlineRemoteSearch = async (query: string) => {
     ElMessage.error('搜索出错')
     loading.value = false;
   }
-  await searchReq.start();
+  await searchReq.send();
 }
 
 </script>

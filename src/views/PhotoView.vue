@@ -31,7 +31,7 @@ onMounted(async () => {
   const photoInfoReq = new serverRequest('GET', `/photo/${photoId}`);
   photoInfoReq.success = () => photoInfo.value = photoInfoReq.getData('photoInfo') as PhotoData
   photoInfoReq.error = () => router.push('/')
-  await photoInfoReq.start()
+  await photoInfoReq.send()
 })
 
 </script>
