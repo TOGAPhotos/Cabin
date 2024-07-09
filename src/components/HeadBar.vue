@@ -60,7 +60,7 @@ const showMobileMenu = () => mobileMenuVisible.value = (!mobileMenuVisible.value
       <div style="display: flex;justify-content: space-around;margin-bottom: 2em">
         <a href="/search">
           <div class="head-bar-menu-item">
-            图库
+            搜索
           </div>
         </a>
         <a href="https://blog.togaphotos.com">
