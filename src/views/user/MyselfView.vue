@@ -4,26 +4,40 @@ import Thumbnail from "@/components/Thumbnail.vue";
 import {onMounted, ref} from "vue";
 import serverRequest from "@/utils/request";
 import router from "@/router";
+import AccountSetting from "@/components/AccountSetting.vue";
+import type {UserSelfInfo} from "@/utils/type/user";
+import type {AirportData} from "@/utils/type/airport";
+import type {PhotoInfo} from "@/utils/type/photo";
 
 const user = useUserInfoStore();
 
-interface UserSelfInfo {
-  free_queue: number,
-  status: number,
-  total_photo: number,
-  passing_rate: number,
-}
-
 const photoList = ref<PhotoInfo[]>([]);
 const userInfo = ref<UserSelfInfo>();
-const userInfoReq = new serverRequest('GET', `/user/${user.id}`,);
-userInfoReq.success = () => {
-  photoList.value = userInfoReq.getData('photoList')
-  userInfo.value = userInfoReq.getData('userInfo')
-}
-onMounted(() => Promise.allSettled([
-  userInfoReq.send(),
-]))
+const airportText = ref("");
+const backgroundCssConfig = ref("");
+onMounted(async () => {
+  const userInfoReq = new serverRequest('GET', `/user/${user.id}`,);
+  userInfoReq.success = () => {
+    photoList.value = userInfoReq.getData('photoList')
+    userInfo.value = userInfoReq.getData('userInfo')
+    backgroundCssConfig.value = `linear-gradient(rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%),
+  url("https://cdn.photo.tp.794td.cn/photos/${userInfo.value?.cover_photo_id}.jpg") no-repeat center`;
+  }
+  await userInfoReq.send();
+
+  const airportInfoReq = new serverRequest('GET', `/airport/${userInfo.value?.airport_id}`,);
+  airportInfoReq.success = () => {
+    const airportData = airportInfoReq.getData() as AirportData;
+    airportText.value = airportData.icao_code + " " + airportData.airport_cn;
+    if(airportData.iata_code){
+      airportText.value = `${airportData.iata_code}/${airportText.value}`;
+    }
+  }
+  await airportInfoReq.send();
+})
+
+const settingPanelVisible = ref(false)
+const showProfilePanel = () => settingPanelVisible.value = true;
 
 const logout = async () =>{
   user.clearUserInfo();
@@ -39,7 +53,7 @@ const logout = async () =>{
       <div class="myself-content">
         <h2 id="username">{{ user.username }}</h2>
         <div id="home-base">
-          <div class="airport">PEK-ZBAA 北京首都</div>
+          <div class="airport">{{ airportText }}</div>
         </div>
         <div class="badge-box">
           <el-popover class="badge" :width="300">
@@ -93,6 +107,8 @@ const logout = async () =>{
           <div class="explain">查看正在等待审核的图片，您可以利用TOGAPhotos提供的工具自行检查您上传的图片。</div>
           <a>未过审队列</a>
           <div class="explain">查看您最近10张没有通过TOGAPhotos审核的图片，了解您的图片没能通过审核的原因</div>
+          <a @click="showProfilePanel">账户设置</a>
+          <div class="explain">更改账户信息，调整您对第三方的授权</div>
           <a style="color: #ff4d4a;" @click="logout()">退出登陆</a>
           <div class="explain">退出当前账户，注销本地存储的凭据</div>
         </div>
@@ -101,11 +117,12 @@ const logout = async () =>{
     <div class="photo-box">
       <Thumbnail v-for="photo in photoList" :key="photo.id"
                  :id="photo.id"
-                 :reg="photo.reg"
+                 :reg="photo.ac_reg"
                  :airline="photo.airline"
-                 :airType="photo.airtype"
+                 :airType="photo.ac_type"
       />
     </div>
+    <AccountSetting v-model="settingPanelVisible" />
   </div>
 </template>
 
@@ -121,8 +138,7 @@ const logout = async () =>{
 
 .myself-header {
   width: 100%;
-  background: linear-gradient(rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%),
-  url("https://cdn.photo.tp.794td.cn/photos/3239.jpg") no-repeat center;
+  background: v-bind(backgroundCssConfig) ;
   background-size: cover;
 }
 
