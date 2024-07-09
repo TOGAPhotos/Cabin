@@ -2,7 +2,7 @@
 import {computed, ref} from "vue";
 import {STATIC_RESOURCE_URL} from "@/config";
 
-type ThumbnailData = {
+interface ThumbnailData{
   id: number,
   reg: string,
   airline: string,
@@ -44,18 +44,16 @@ if (props.airport?.name) {
             <div class="round inner lightblue">
             </div>
           </div>
-          <span class="info-text">
             由<strong>{{ username }}</strong>拍摄
-          </span>
         </div>
         <div class="info-area-row">
             <div class="round outer blue">
               <div class="round inner blue">
               </div>
             </div>
-            <span class="info-text">
-              {{ airline }} | {{ reg }}
-            </span>
+<!--            <span class="info-text">-->
+              <span class="airline">{{ airline }}</span> | <span class="reg">{{ reg }}</span>
+<!--            </span>-->
         </div>
         <div class="info-area-row">
           <div class="round outer lightblue">
@@ -116,6 +114,7 @@ if (props.airport?.name) {
   display: flex;
   line-height: 1rem;
   align-items: center;
+  min-height: 16px;
 }
 .blue{
   background: #0984e3;
@@ -143,5 +142,19 @@ if (props.airport?.name) {
   width: 0.45rem;
   height: 0.45rem;
   border: 0.07rem solid white;
+}
+
+.airline{
+  max-width: 53%;
+}
+.reg{
+  max-width: 45%;
+}
+.airline, .reg{
+  display: inline-block;
+  line-height: 1em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 </style>
