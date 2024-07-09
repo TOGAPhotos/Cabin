@@ -7,7 +7,7 @@ import type {UploadInstance, UploadProps, UploadRawFile,FormInstance,FormRules }
 import {ElMessage, genFileId,} from "element-plus";
 import AirlineSelect from "@/components/AirlineSelect.vue";
 
-type UploadInfo = {
+interface UploadInfo{
   register: string,
   msn:string,
   airportId: number | undefined,
@@ -54,7 +54,8 @@ const checkFile: UploadProps['beforeUpload'] = async (rawFile) => {
   if (rawFile.type !== 'image/jpeg') {
     ElMessage.error('格式错误');
     return false;
-  } else if (rawFile.size / 1024 / 1024 > 4) {
+  }
+  if (rawFile.size / 1024 / 1024 > 4) {
     ElMessage.error('图片大于4MB');
     return false;
   }
