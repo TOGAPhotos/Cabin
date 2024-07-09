@@ -14,27 +14,42 @@ const router = createRouter({
     {
       path:'/register',
       name:'register',
-      component: () => import('@/views/RegisterView.vue')
+      component: () => import('@/views/user/RegisterView.vue')
     },
     {
       path:'/photo/:id',
       name:'photo',
-      component: () => import('@/views/PhotoView.vue')
+      component: () => import('@/views/photo/PhotoView.vue')
     },
     {
       path:'/search',
       name:'search',
-      component: () => import('@/views/SearchView.vue')
+      component: () => import('@/views/photo/SearchView.vue')
     },
     {
       path:'/myself',
       name:'myself',
-      component: () => import('@/views/MyselfView.vue')
+      component: () => import('@/views/user/MyselfView.vue')
     },
     {
       path:'/upload',
       name:'upload',
-      component: () => import('@/views/UploadView.vue')
+      component: () => import('@/views/photo/UploadView.vue')
+    },
+    {
+      path:'/user/:id',
+      name:'user',
+      component: () => import('@/views/user/UserView.vue')
+    },
+    {
+      path:'/privacy',
+      name:'privacy',
+      component: () => import("@/views/other/Privacy.vue")
+    },
+    {
+      path:"/user-agreement",
+      name:'user-agreement',
+      component: () => import('@/views/other/UserAgreementView.vue')
     }
   ]
 })
