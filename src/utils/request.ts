@@ -6,7 +6,9 @@ import { API_URL } from "@/config";
 interface RequestFailFunc {
     (code:number,msg:string):any
 }
-
+interface RequestSuccessFunc {
+    (msg:string):any
+}
 export default class serverRequest{
 
     private readonly METHOD: string;
@@ -59,11 +61,11 @@ export default class serverRequest{
             this.data = null;
         }
 
+        const msg = this.data?.msg;
         if(this.response?.ok){
-            this.success();
+            this.success(msg||"请求成功");
         }else{
-            const msg = this.data?.message || "请求出错"
-            this.error(<number>this.response?.status,msg);
+            this.error(<number>this.response?.status,msg||"请求出错");
         }
     }
     getData(...args:string[]){
@@ -71,14 +73,14 @@ export default class serverRequest{
             return null;
         }
 
+        args = ['data'].concat(args);
         let data = this.data;
         for (let key of args) {
             data = data[key]
         }
         return data;
-        
     }
-    success = () =>{}
+    success:RequestSuccessFunc = () =>{}
     error:RequestFailFunc = () =>{}
 
     networkError(e:Error){

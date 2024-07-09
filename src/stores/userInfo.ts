@@ -2,6 +2,7 @@ import { defineStore } from 'pinia';
 
 interface UserInfo {
     username: string,
+    email: string,
     token: string | null,
     expireTime: number,
     permission: string,
@@ -11,6 +12,7 @@ interface UserInfo {
 const useUserInfoStore = defineStore('userInfo', {
     state: ():UserInfo => ({
         username: '',
+        email:"",
         token: null,
         expireTime: 0,
         permission: '',
@@ -20,9 +22,10 @@ const useUserInfoStore = defineStore('userInfo', {
         isLoggedIn: state => state.token !== null && state.expireTime > Date.now(),
     },
     actions: {
-        setUserInfo(id:number,username: string, token: string, expireTime: number, permission: string) {
+        setUserInfo(id:number,username: string,email:string, token: string, expireTime: number, permission: string) {
             this.id = id;
             this.username = username;
+            this.email = email;
             this.token = token;
             this.expireTime = expireTime;
             this.permission = permission;
@@ -30,6 +33,7 @@ const useUserInfoStore = defineStore('userInfo', {
         clearUserInfo() {
             this.id = -1;
             this.username = '';
+            this.email = '';
             this.token = '';
             this.expireTime = 0;
             this.permission = '';

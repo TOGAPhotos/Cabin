@@ -1,3 +1,5 @@
+import type {PhotoInfo} from "@/utils/type/photo";
+
 export interface PhotoSearchResult extends PhotoInfo  {
     cn_name: string;
     iata: string;

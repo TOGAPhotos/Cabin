@@ -1,45 +1,59 @@
 <script setup lang="ts">
+import {useRoute} from "vue-router";
+import router from "@/router";
 import useUserInfoStore from "@/stores/userInfo";
 import Thumbnail from "@/components/Thumbnail.vue";
-import {onMounted, ref} from "vue";
+import {ref,onMounted} from "vue";
 import serverRequest from "@/utils/request";
-import router from "@/router";
+import type {AirportData} from "@/utils/type/airport";
+import type {BasicUserInfo} from "@/utils/type/user";
 
-const user = useUserInfoStore();
+const route = useRoute();
+const userId = route.params.id;
 
-interface UserSelfInfo {
-  free_queue: number,
-  status: number,
-  total_photo: number,
-  passing_rate: number,
+// ==== Pre Check ====
+if(!userId){
+  router.go(-1);
 }
-
-const photoList = ref<PhotoInfo[]>([]);
-const userInfo = ref<UserSelfInfo>();
-const userInfoReq = new serverRequest('GET', `/user/${user.id}`,);
-userInfoReq.success = () => {
-  photoList.value = userInfoReq.getData('photoList')
-  userInfo.value = userInfoReq.getData('userInfo')
+if (Number(userId) === useUserInfoStore().id){
+  router.replace("/myself");
 }
-onMounted(() => Promise.allSettled([
-  userInfoReq.send(),
-]))
+// ==== Pre Check ====
 
-const logout = async () =>{
-  user.clearUserInfo();
-  await router.push('/')
-  router.go(0)
-}
+const userInfo = ref<BasicUserInfo>();
+const photoList = ref();
+const backgroundCssConfig = ref("")
+const airportText = ref("");
+
+onMounted(async ()=>{
+  const userInfoReq = new serverRequest('GET', `/user/${userId}`,);
+  userInfoReq.success = () => {
+    photoList.value = userInfoReq.getData('photoList')
+    userInfo.value = userInfoReq.getData('userInfo')
+    backgroundCssConfig.value = `linear-gradient(rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%),
+  url("https://cdn.photo.tp.794td.cn/photos/${userInfo.value?.cover_photo_id}.jpg") no-repeat center`;
+  }
+  await userInfoReq.send();
+
+  const airportInfoReq = new serverRequest('GET', `/airport/${userInfo.value?.airport_id}`,);
+  airportInfoReq.success = () => {
+    const airportData = airportInfoReq.getData() as AirportData;
+    airportText.value = airportData.icao_code + " " + airportData.airport_cn;
+    if(airportData.iata_code){
+      airportText.value = `${airportData.iata_code}/${airportText.value}`;
+    }
+  }
+  await airportInfoReq.send();
+})
 </script>
-
 <template>
   <div class="myself-page">
     <div class="self-intro">
       <div class="myself-header"></div>
       <div class="myself-content">
-        <h2 id="username">{{ user.username }}</h2>
+        <h2 id="username">{{ userInfo?.username }}</h2>
         <div id="home-base">
-          <div class="airport">PEK-ZBAA 北京首都</div>
+          <div class="airport">{{ airportText }}</div>
         </div>
         <div class="badge-box">
           <el-popover class="badge" :width="300">
@@ -78,32 +92,14 @@ const logout = async () =>{
       </div>
       <div class="statistic-box">
         <el-statistic class="statistic-item" title="入库数量" :value="userInfo?.total_photo"/>
-        <el-statistic class="statistic-item" title="过审率" :value="userInfo?.passing_rate">
-          <template #suffix>
-            %
-          </template>
-        </el-statistic>
-
-      </div>
-      <div class="action-box">
-        <div class="action-item">
-          <a href="/upload">上传图片</a>
-          <div class="explain">从这里上传您的照片到TOGAPhotos</div>
-          <a>上传队列</a>
-          <div class="explain">查看正在等待审核的图片，您可以利用TOGAPhotos提供的工具自行检查您上传的图片。</div>
-          <a>未过审队列</a>
-          <div class="explain">查看您最近10张没有通过TOGAPhotos审核的图片，了解您的图片没能通过审核的原因</div>
-          <a style="color: #ff4d4a;" @click="logout()">退出登陆</a>
-          <div class="explain">退出当前账户，注销本地存储的凭据</div>
-        </div>
       </div>
     </div>
     <div class="photo-box">
       <Thumbnail v-for="photo in photoList" :key="photo.id"
                  :id="photo.id"
-                 :reg="photo.reg"
+                 :reg="photo.ac_reg"
                  :airline="photo.airline"
-                 :airType="photo.airtype"
+                 :airType="photo.ac_type"
       />
     </div>
   </div>
@@ -121,8 +117,7 @@ const logout = async () =>{
 
 .myself-header {
   width: 100%;
-  background: linear-gradient(rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%),
-  url("https://cdn.photo.tp.794td.cn/photos/3239.jpg") no-repeat center;
+  background: v-bind(backgroundCssConfig) ;
   background-size: cover;
 }
 
