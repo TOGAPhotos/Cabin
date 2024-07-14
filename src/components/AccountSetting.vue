@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {onMounted, reactive, ref} from "vue";
 import AirportSelect from "@/components/AirportSelect.vue";
-import serverRequest from "@/utils/request";
+import ServerRequest from "@/utils/request";
 import useUserInfoStore from "@/stores/userInfo";
 import {ElMessage} from "element-plus";
 import router from "@/router";
@@ -21,7 +21,7 @@ const accountSetting = reactive({
 const photoList = ref<{label:string,value:string}[]>([]);
 
 onMounted(async () => {
-  const userInfoReq = new serverRequest("GET", `/user/${user.id}`,);
+  const userInfoReq = new ServerRequest("GET", `/user/${user.id}`,);
   userInfoReq.success = () => {
     const userInfo = userInfoReq.getData("userInfo");
     accountSetting.toga = userInfo.allow_toga_use;
@@ -49,7 +49,7 @@ async function submit(){
     allow_third_use: accountSetting.thirdParty,
     cover_photo_id: accountSetting.coverPhotoId,
   }
-  const updateReq = new serverRequest("PUT", `/user/${user.id}`,updateInfo);
+  const updateReq = new ServerRequest("PUT", `/user/${user.id}`,updateInfo);
   updateReq.success= (msg) => {
     ElMessage.success(msg);
     panelVisible.value = false;

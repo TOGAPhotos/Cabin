@@ -2,7 +2,7 @@
 import {computed, onMounted, ref} from "vue";
 import {STATIC_RESOURCE_URL} from "@/config";
 import {useRoute} from "vue-router";
-import serverRequest from "@/utils/request";
+import ServerRequest from "@/utils/request";
 import router from "@/router";
 import {Checked, User} from "@element-plus/icons-vue";
 import InfoLabel from "@/components/InfoLabel.vue";
@@ -41,7 +41,7 @@ async function SearchRelatedPhoto(){
 }
 
 onMounted(async () => {
-  const photoInfoReq = new serverRequest('GET', `/photo/${photoId}`);
+  const photoInfoReq = new ServerRequest('GET', `/photo/${photoId}`);
   photoInfoReq.success = () => photoInfo.value = photoInfoReq.getData() as FullPhotoInfo;
   photoInfoReq.error = () => router.push('/')
   await photoInfoReq.send();

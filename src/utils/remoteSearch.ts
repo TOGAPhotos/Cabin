@@ -1,4 +1,4 @@
-import serverRequest from "@/utils/request";
+import ServerRequest from "@/utils/request";
 import {ElMessage} from "element-plus";
 import type {PhotoSearchResult, SearchType} from "@/utils/type/remoteSearch";
 
@@ -9,7 +9,7 @@ export class RemoteSearch{
         }
 
         const searchUrl = `/search?keyword=${ctx}&type=${type}&lastId=${lastId}&num=${num}`
-        const searchReq = new serverRequest('GET', searchUrl)
+        const searchReq = new ServerRequest('GET', searchUrl)
 
         let result:PhotoSearchResult[]=[];
         searchReq.success = () => result = searchReq.getData();

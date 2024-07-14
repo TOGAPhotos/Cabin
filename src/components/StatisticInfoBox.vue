@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {CameraFilled, PictureFilled, UserFilled} from "@element-plus/icons-vue";
 import {onMounted, reactive,ref} from "vue";
-import serverRequest from "@/utils/request";
+import ServerRequest from "@/utils/request";
 import router from "@/router";
 
 const statisticInfo = reactive({
@@ -23,7 +23,7 @@ function runTime(): string {
   return `共运行${years}年${months}月${days}日`;
 }
 
-const websiteInfoReq = new serverRequest('GET','/website');
+const websiteInfoReq = new ServerRequest('GET','/website');
 websiteInfoReq.success = () =>{
   const data = websiteInfoReq.getData();
   statisticInfo.userNum = data['userNum'];

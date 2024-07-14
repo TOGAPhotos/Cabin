@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import {onMounted, ref} from "vue";
-import serverRequest from "@/utils/request";
+import ServerRequest from "@/utils/request";
 import Thumbnail from "@/components/Thumbnail.vue";
 import type {PhotoInfo} from "@/utils/type/photo";
 
 const activeTabName = ref("first")
 const headPhotoList = ref<PhotoInfo[]>([])
 
-const headPhotoReq = new serverRequest('GET', `/website`);
+const headPhotoReq = new ServerRequest('GET', `/website`);
 headPhotoReq.success = () => {
   headPhotoList.value = headPhotoReq.getData( 'randomPhotoList');
   headPhotoList.value =  headPhotoList.value.splice(0,4)
