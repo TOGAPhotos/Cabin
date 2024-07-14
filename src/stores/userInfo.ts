@@ -6,7 +6,8 @@ interface UserInfo {
     token: string | null,
     expireTime: number,
     permission: string,
-    id:number
+    id:number,
+    notam:number,
 }
 
 const useUserInfoStore = defineStore('userInfo', {
@@ -17,6 +18,7 @@ const useUserInfoStore = defineStore('userInfo', {
         expireTime: 0,
         permission: '',
         id:-1,
+        notam:-1,
     }),
     getters: {
         isLoggedIn: state => state.token !== null && state.expireTime > Date.now(),
@@ -37,6 +39,7 @@ const useUserInfoStore = defineStore('userInfo', {
             this.token = '';
             this.expireTime = 0;
             this.permission = '';
+            this.notam = -1;
         }
     },
     persist: true
