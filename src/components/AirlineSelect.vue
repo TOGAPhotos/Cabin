@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import serverRequest from "@/utils/request";
-import {ElMessage, type ListItem} from "element-plus";
+import ServerRequest from "@/utils/request";
+import {ElMessage} from "element-plus";
 import {ref} from "vue";
+import type {Option} from "@/utils/type/option";
 
 const value = defineModel({type: Number})
 const loading = ref(false)
-const airlineOptions = ref<ListItem[]>([])
+const airlineOptions = ref<Option[]>([])
 
 const airlineRemoteSearch = async (query: string) => {
 
@@ -13,23 +14,22 @@ const airlineRemoteSearch = async (query: string) => {
     return
   }
 
-  const searchReq = new serverRequest('GET', `/airline/${query}`)
+  const searchReq = new ServerRequest('GET', `/airline?search=${query}`)
   searchReq.success = () => {
     loading.value = true;
-    airlineOptions.value = searchReq.getData('airline').map(
+    airlineOptions.value = searchReq.getData().map(
         (item: any) => {
           return {
             label: item['airline_cn_name'] || item['airline_en_name'],
             value: item['id']
           }
         })
-    loading.value = false;
   }
   searchReq.error = () => {
     ElMessage.error('搜索出错')
-    loading.value = false;
   }
   await searchReq.send();
+  loading.value = false;
 }
 
 </script>
