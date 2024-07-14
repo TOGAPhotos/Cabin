@@ -2,29 +2,30 @@
 
 import {onMounted, ref} from "vue";
 import {BottomLoader} from '@/utils/bottomLoader';
-import serverRequest from "@/utils/request";
+import ServerRequest from "@/utils/request";
 import Thumbnail from "@/components/Thumbnail.vue";
 import {ElNotification} from "element-plus";
 import StatisticInfoBox from "@/components/StatisticInfoBox.vue";
 import HeadPhoto from "@/components/HeadPhoto.vue";
 import Activity from "@/components/Activity.vue";
 import type {PhotoInfo} from "@/utils/type/photo";
+import useUserInfoStore from "@/stores/userInfo";
 
+const localUserInfo = useUserInfoStore();
 const photoList = ref<PhotoInfo[]>([]);
 
 
-const photoListReq = new serverRequest('GET', "/photos?lastId=-1");
+const photoListReq = new ServerRequest('GET', "/photos?lastId=-1");
 photoListReq.success = () => photoList.value = photoListReq.getData()
 
-const notamReq = new serverRequest('GET', "/notam");
+const notamReq = new ServerRequest('GET', "/notam");
 notamReq.success = () => {
   const notam = {
     title: notamReq.getData('title'),
     id: notamReq.getData('id'),
     content: notamReq.getData('content'),
   }
-  const readNotam = sessionStorage.getItem('read_notam') || -1;
-  if (notam.title === "NOTAM CLSD" || notam.id === Number(readNotam)) {
+  if (notam.title === "NOTAM CLSD" || notam.id === localUserInfo.notam) {
     return;
   }
   ElNotification({
@@ -32,7 +33,7 @@ notamReq.success = () => {
     message: notam.content,
     offset: 64,
     duration: 5000,
-    onClose: () => sessionStorage.setItem('read_notam', `${notam.id}`)
+    onClose: () => localUserInfo.notam = notam.id
   })
 }
 
@@ -41,7 +42,7 @@ const bottomLoad = new BottomLoader(async () => {
     return;
   }
   const lastImgId = photoList.value[photoList.value.length - 1]['id'];
-  const appendListReq = new serverRequest('GET', `/photos?lastId=${lastImgId}`,);
+  const appendListReq = new ServerRequest('GET', `/photos?lastId=${lastImgId}`,);
   appendListReq.success = () => photoList.value = photoList.value?.concat(appendListReq.getData())
   await appendListReq.send();
 })
