@@ -5,6 +5,7 @@ import AirlineSelect from "@/components/AirlineSelect.vue";
 import AirtypeSelect from "@/components/AirtypeSelect.vue";
 import PhotoTypeSelect from "@/components/PhotoTypeSelect.vue";
 
+
 import {onMounted, reactive, ref} from "vue";
 import {useRoute} from "vue-router";
 
@@ -23,7 +24,8 @@ import ServerRequest from "@/utils/request";
 import useUserInfoStore from "@/stores/userInfo";
 import type {AircraftInfo} from "@/utils/type/aircraft";
 import CreateAirport from "@/components/CreateAirport.vue";
-
+import CreateAirline from "@/components/CreateAirline.vue";
+import CreateAirtype from "@/components/CreateAirtype.vue";
 
 
 interface UploadFormInfo {
@@ -51,7 +53,9 @@ const elemStatus = reactive({
   prioQueueText:'',
   showSelectPanel:'',
   uploading:false,
-  airportDialog:false,
+  airportPanel:false,
+  airlinePanel:false,
+  airtypePanel:false,
 })
 const localUserInfo = useUserInfoStore();
 const route = useRoute();
@@ -238,9 +242,9 @@ async function AutoFill(){
         TOGAPhotos是一个由航空爱好者发起和维护的图库项目，我们诚挚的欢迎每一位新用户的到来，你们的支持是图库继续发展的最大动力。</p>
       <h4>补充信息</h4>
       <p>如果数据库中缺少您所需要的信息，请通过:
-        <a @click="elemStatus.airportDialog=true">添加机场</a>，
-        <a>添加航司/运营人</a>，
-        <a>添加机型</a>
+        <a @click="elemStatus.airportPanel=true">添加机场</a>，
+        <a @click="elemStatus.airlinePanel = true">添加航司/运营人</a>，
+        <a @click="elemStatus.airtypePanel = true">添加机型</a>
         进行补充。
       </p>
 
@@ -354,7 +358,9 @@ async function AutoFill(){
 
       </el-form>
     </div>
-    <CreateAirport v-model="elemStatus.airportDialog"/>
+    <CreateAirport v-model="elemStatus.airportPanel"/>
+    <CreateAirline v-model="elemStatus.airlinePanel"/>
+    <CreateAirtype v-model="elemStatus.airtypePanel"/>
   </div>
 </template>
 
