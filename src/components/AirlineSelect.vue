@@ -20,7 +20,7 @@ const airlineRemoteSearch = async (query: string) => {
     airlineOptions.value = searchReq.getData().map(
         (item: any) => {
           return {
-            label: item['airline_cn_name'] || item['airline_en_name'],
+            label: item['airline_cn'] || item['airline_en'],
             value: item['id']
           }
         })
