@@ -36,7 +36,7 @@ const airportRemoteSearch = async (query: string) => {
     return
   }
 
-  const searchReq = new ServerRequest('GET', `/airports?search=${query}`)
+  const searchReq = new ServerRequest('GET', `/airport?search=${query}`)
   searchReq.success = () => {
     loading.value = true;
     airportOptionsList.value[0].options = searchReq.getData().map(

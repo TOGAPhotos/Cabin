@@ -133,7 +133,6 @@ const searchLink = (type:SearchType,ctx:string|undefined) => ctx ? `/search?type
   max-width: none;
   padding: 0 !important;
   margin: 0 auto 48px 0 !important;
-
 }
 .label-group{
   margin: 0 0.2rem;
