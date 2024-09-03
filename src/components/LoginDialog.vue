@@ -2,7 +2,7 @@
 import {reactive, ref} from 'vue'
 import userInfoStore from '../stores/userInfo'
 import {ElNotification, type FormInstance, type FormRules} from 'element-plus'
-import serverRequest from '../utils/request'
+import ServerRequest from '../utils/request'
 import router from "@/router";
 
 const loginDialogVisible = defineModel({type: Boolean})
@@ -38,7 +38,7 @@ async function login() {
     return
   }
 
-  const loginRequest = new serverRequest('POST', '/user/login', {
+  const loginRequest = new ServerRequest('POST', '/user/login', {
     email: loginForm.email,
     password: loginForm.password
   })
@@ -49,7 +49,15 @@ async function login() {
     const token = loginRequest.getData('token') as string;
     const expireTime = loginRequest.getData('expireTime') as number;
     const permission = loginRequest.getData('permission') as string;
-    user.setUserInfo(id, username, token, expireTime, permission);
+    user.setUserInfo({
+      id, 
+      username, 
+      email:loginForm.email, 
+      token, 
+      expireTime, 
+      permission
+    });
+
     loginDialogVisible.value = false;
     router.go(0);
   }

@@ -1,3 +1,7 @@
 .red-font{
     color: #ff4d51;
 }
+.rev-color{
+    color: #f0f0f0!important;
+    background-color: var(--color-basic-deep);
+}

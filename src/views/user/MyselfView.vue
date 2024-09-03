@@ -2,7 +2,7 @@
 import useUserInfoStore from "@/stores/userInfo";
 import Thumbnail from "@/components/Thumbnail.vue";
 import {onMounted, ref} from "vue";
-import serverRequest from "@/utils/request";
+import ServerRequest from "@/utils/request";
 import router from "@/router";
 import AccountSetting from "@/components/AccountSetting.vue";
 import type {UserSelfInfo} from "@/utils/type/user";
@@ -16,7 +16,7 @@ const userInfo = ref<UserSelfInfo>();
 const airportText = ref("");
 const backgroundCssConfig = ref("");
 onMounted(async () => {
-  const userInfoReq = new serverRequest('GET', `/user/${user.id}`,);
+  const userInfoReq = new ServerRequest('GET', `/user/${user.id}`,);
   userInfoReq.success = () => {
     photoList.value = userInfoReq.getData('photoList')
     userInfo.value = userInfoReq.getData('userInfo')
@@ -25,7 +25,7 @@ onMounted(async () => {
   }
   await userInfoReq.send();
 
-  const airportInfoReq = new serverRequest('GET', `/airport/${userInfo.value?.airport_id}`,);
+  const airportInfoReq = new ServerRequest('GET', `/airport/${userInfo.value?.airport_id}`,);
   airportInfoReq.success = () => {
     const airportData = airportInfoReq.getData() as AirportData;
     airportText.value = airportData.icao_code + " " + airportData.airport_cn;

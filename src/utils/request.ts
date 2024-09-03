@@ -9,7 +9,7 @@ interface RequestFailFunc {
 interface RequestSuccessFunc {
     (msg:string):any
 }
-export default class serverRequest{
+export default class ServerRequest {
 
     private readonly METHOD: string;
     private readonly URL: string;

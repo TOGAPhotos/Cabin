@@ -2,14 +2,14 @@
 import {computed, onMounted, ref} from "vue";
 import {STATIC_RESOURCE_URL} from "@/config";
 import {useRoute} from "vue-router";
-import serverRequest from "@/utils/request";
+import ServerRequest from "@/utils/request";
 import router from "@/router";
 import {Checked, User} from "@element-plus/icons-vue";
 import InfoLabel from "@/components/InfoLabel.vue";
 import ContactPanel from "@/components/ContactPanel.vue";
 import type {FullPhotoInfo, PhotoInfo} from "@/utils/type/photo";
 import {RemoteSearch} from "@/utils/remoteSearch";
-import type {PhotoSearchResult} from "@/utils/type/remoteSearch";
+import type {PhotoSearchResult, SearchType} from "@/utils/type/remoteSearch";
 import Thumbnail from "@/components/Thumbnail.vue";
 import Device from "@/utils/device";
 
@@ -41,7 +41,7 @@ async function SearchRelatedPhoto(){
 }
 
 onMounted(async () => {
-  const photoInfoReq = new serverRequest('GET', `/photo/${photoId}`);
+  const photoInfoReq = new ServerRequest('GET', `/photo/${photoId}`);
   photoInfoReq.success = () => photoInfo.value = photoInfoReq.getData() as FullPhotoInfo;
   photoInfoReq.error = () => router.push('/')
   await photoInfoReq.send();
@@ -57,6 +57,7 @@ onMounted(async () => {
 
 })
 
+const searchLink = (type:SearchType,ctx:string|undefined) => ctx ? `/search?type=${type}&ctx=${ctx}` : " ";
 </script>
 
 <template>
@@ -67,17 +68,32 @@ onMounted(async () => {
     <div class="info-box">
       <div class="info-area">
         <div class="label-group">
-          <InfoLabel label="注册号" :value="photoInfo?.ac_reg" />
+          <InfoLabel
+              label="注册号" :value="photoInfo?.ac_reg"
+              :link="searchLink('reg',photoInfo?.ac_reg)"
+          />
           <InfoLabel label="序列号" :value="photoInfo?.ac_msn" />
-          <InfoLabel label="机型" :value="photoInfo?.ac_type" />
+          <InfoLabel
+              label="机型" :value="photoInfo?.ac_type"
+              :link="searchLink('airtype',photoInfo?.ac_type)"
+          />
         </div>
         <div class="label-group">
-          <InfoLabel label="航空公司/运营人" :value="photoInfo?.airline" />
-          <InfoLabel label="机场代码" :value="airportText" />
+          <InfoLabel
+              label="航空公司/运营人" :value="photoInfo?.airline"
+          />
+          <InfoLabel
+              label="机场代码" :value="airportText"
+              :link="searchLink('airport',photoInfo?.airport_icao_code)"
+          />
           <InfoLabel label="机场" :value="photoInfo?.airport_cn"/>
         </div>
-        <div class="label-group">
-          <InfoLabel label="摄影师" :value="photoInfo?.username" />
+        <div class="label-group user-info">
+          <InfoLabel
+              label="摄影师" :value="photoInfo?.username"
+              :link="'/user/'+photoInfo?.upload_user_id"
+              class="username"
+          />
           <InfoLabel label="摄影师备注" :value="photoInfo?.user_remark"/>
         </div>
       </div>
@@ -96,6 +112,7 @@ onMounted(async () => {
         </div>
       </div>
     </div>
+    <el-divider/>
     <div class="related-photo-area">
       <Thumbnail
         v-for="photo in relatedPhotoList"
@@ -116,7 +133,6 @@ onMounted(async () => {
   max-width: none;
   padding: 0 !important;
   margin: 0 auto 48px 0 !important;
-
 }
 .label-group{
   margin: 0 0.2rem;
@@ -171,6 +187,14 @@ onMounted(async () => {
   .info-area{
     margin-bottom: 1rem;
     justify-content: left;
+  }
+  .user-info.label-group{
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+  }
+  .user-info .username{
+    margin-right: 3em;
   }
 }
 

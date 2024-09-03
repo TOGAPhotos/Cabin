@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {onMounted, ref} from "vue";
-import serverRequest from "@/utils/request";
+import ServerRequest from "@/utils/request";
 import {ElMessage} from "element-plus";
 
 const value = defineModel({type: Number})
@@ -23,7 +23,7 @@ onMounted(async ()=>{
   if(!value.value){
     return;
   }
-  const airportReq = new serverRequest('GET', `/airport/${value.value}`)
+  const airportReq = new ServerRequest('GET', `/airport/${value.value}`)
   airportReq.success = () =>{
     const airport = airportReq.getData()
     airportOptionsList.value[0].options=[{label: airport["airport_cn"],value: airport["id"]}]
@@ -32,12 +32,11 @@ onMounted(async ()=>{
 })
 
 const airportRemoteSearch = async (query: string) => {
-
   if ((!query) || query.length < 2) {
     return
   }
 
-  const searchReq = new serverRequest('GET', `/airports?search=${query}`)
+  const searchReq = new ServerRequest('GET', `/airport?search=${query}`)
   searchReq.success = () => {
     loading.value = true;
     airportOptionsList.value[0].options = searchReq.getData().map(
@@ -54,8 +53,8 @@ const airportRemoteSearch = async (query: string) => {
     loading.value = false;
   }
   await searchReq.send();
-
 }
+
 
 </script>
 

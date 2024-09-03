@@ -6,10 +6,11 @@ interface UserInfo {
     token: string | null,
     expireTime: number,
     permission: string,
-    id:number
+    id:number,
+    notam?:number,
 }
 
-const useUserInfoStore = defineStore('userInfo', {
+const useUserInfoStore = defineStore('toga_user_info_main', {
     state: ():UserInfo => ({
         username: '',
         email:"",
@@ -17,12 +18,20 @@ const useUserInfoStore = defineStore('userInfo', {
         expireTime: 0,
         permission: '',
         id:-1,
+        notam:-1,
     }),
     getters: {
         isLoggedIn: state => state.token !== null && state.expireTime > Date.now(),
     },
     actions: {
-        setUserInfo(id:number,username: string,email:string, token: string, expireTime: number, permission: string) {
+        setUserInfo({
+            id,
+            username,
+            email,
+            token,
+            expireTime,
+            permission,
+        }:UserInfo) {
             this.id = id;
             this.username = username;
             this.email = email;
@@ -37,6 +46,7 @@ const useUserInfoStore = defineStore('userInfo', {
             this.token = '';
             this.expireTime = 0;
             this.permission = '';
+            this.notam = -1;
         }
     },
     persist: true

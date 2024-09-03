@@ -89,7 +89,7 @@ const showMobileMenu = () => mobileMenuVisible.value = (!mobileMenuVisible.value
 <style scoped>
 header {
   /*background-color: #001529;*/
-  background-color: #001A38;
+  background-color: var(--color-basic-deep);
   position: sticky;
   top: 0;
   z-index: 100;
