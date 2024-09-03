@@ -20,6 +20,7 @@ import {
 import {ElMessage, genFileId,} from "element-plus";
 import {UploadFilled} from "@element-plus/icons-vue";
 
+import { ExifReader } from "@/utils/exif";
 import ServerRequest from "@/utils/request";
 import useUserInfoStore from "@/stores/userInfo";
 import type {AircraftInfo} from "@/utils/type/aircraft";
@@ -41,7 +42,7 @@ interface UploadFormInfo {
 }
 
 
-let fileWaitForUpload:UploadRawFile;
+let FILE:UploadRawFile;
 const IMAGE = new Image()
 const elemStatus = reactive({
   upload:false,
@@ -97,7 +98,10 @@ const uploadFormRules = reactive<FormRules<UploadFormInfo>>({
   ],
   ac_type:[
     {required:true,message:'请选择机型',trigger:"blur"},
-  ]
+  ],
+  message:[
+    {max:100,message:'留言不能超过100字',trigger:"blur"}
+  ],
 })
 const uploadFormInfo = reactive<UploadFormInfo>({
   reg:'',
@@ -142,7 +146,7 @@ async function CheckImage (rawFile:UploadRawFile){
     return Promise.reject()
   }
 
-  fileWaitForUpload = rawFile;
+  FILE = rawFile;
   return Promise.reject()
 }
 
@@ -175,23 +179,28 @@ const getAirportIcaoCode = async (value:number)=>{
 async function PreUpload(){
   elemStatus.uploading = true;
   fileUpload.value!.submit();
-  if(!fileWaitForUpload){
+
+  if(!FILE){
     uploadFormInstance.value!.scrollToField("file")
     ElMessage.error("图片未上传");
     return elemStatus.uploading = false;
   }
+  const exif = ExifReader(FILE)
 
-  const validateResult = await uploadFormInstance.value!.validate((isValid, invalidFields)=>{
-    if(invalidFields){
+  const validateResult = await uploadFormInstance.value!.validate(
+    (isValid, invalidFields)=>{
+      if(!invalidFields)return;
       const firstField = Object.values(invalidFields)[0][0].field as string
       uploadFormInstance.value?.scrollToField(firstField)
-    }
   })
 
   if(!validateResult){
     elemStatus.uploading = false;
     return;
   }
+
+  
+
 
   uploadFormData.set("register",uploadFormInfo.reg)
   uploadFormData.set("msn",uploadFormInfo.msn)
@@ -201,7 +210,7 @@ async function PreUpload(){
   uploadFormData.set("remark",uploadFormInfo.remark)
   uploadFormData.set("message",uploadFormInfo.message)
   uploadFormData.set("photo_type",uploadFormInfo.photo_type.join(","));
-  uploadFormData.set("file",fileWaitForUpload);
+  uploadFormData.set("file",FILE);
 }
 
 function AutoFillSelect(aircraft:AircraftInfo){
@@ -318,7 +327,7 @@ async function AutoFill(){
 
         <el-form-item label="拍摄位置" prop="airportId">
           <AirportSelect
-              @change=" v => getAirportIcaoCode(v)"
+              @change=" (v:number) => getAirportIcaoCode(v)"
               v-model="uploadFormInfo.airportId"
           />
         </el-form-item>
