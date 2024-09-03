@@ -49,7 +49,14 @@ async function login() {
     const token = loginRequest.getData('token') as string;
     const expireTime = loginRequest.getData('expireTime') as number;
     const permission = loginRequest.getData('permission') as string;
-    user.setUserInfo(id, username, loginForm.email, token, expireTime, permission);
+    user.setUserInfo({
+      id, 
+      username, 
+      email:loginForm.email, 
+      token, 
+      expireTime, 
+      permission
+    });
 
     loginDialogVisible.value = false;
     router.go(0);
