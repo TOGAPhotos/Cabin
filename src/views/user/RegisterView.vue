@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {reactive,ref} from "vue";
 import type { FormInstance,FormRules } from "element-plus";
-import serverRequest from "../utils/request";
+import serverRequest from "@/utils/request";
 import userInfoStore from "@/stores/userInfo";
 
 const registerForm = ref<FormInstance>();
@@ -85,7 +85,14 @@ function register(){
         const token = registerRequest.getData('token') as string;
         const expireTime = registerRequest.getData('expireTime') as number;
         const permission = registerRequest.getData('permission') as string;
-        user.setUserInfo(id, username,token,expireTime,permission);
+        user.setUserInfo({
+            id, 
+            email: registerInfo.email,
+            username,
+            token,
+            expireTime,
+            permission
+        });
     }
 
     registerRequest.send()

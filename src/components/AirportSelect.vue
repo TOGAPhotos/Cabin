@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {onMounted, ref} from "vue";
-import serverRequest from "@/utils/request";
+import ServerRequest from "@/utils/request";
 import {ElMessage} from "element-plus";
 
 const value = defineModel({type: Number})
@@ -23,27 +23,26 @@ onMounted(async ()=>{
   if(!value.value){
     return;
   }
-  const airportReq = new serverRequest('GET', `/airport?search=${value.value}`)
+  const airportReq = new ServerRequest('GET', `/airport/${value.value}`)
   airportReq.success = () =>{
-    const airport = airportReq.getData('airport')
-    airportOptionsList.value[0].options=[{label: airport["cn_name"],value: airport["id"]}]
+    const airport = airportReq.getData()
+    airportOptionsList.value[0].options=[{label: airport["airport_cn"],value: airport["id"]}]
   }
   await airportReq.send();
 })
 
 const airportRemoteSearch = async (query: string) => {
-
   if ((!query) || query.length < 2) {
     return
   }
 
-  const searchReq = new serverRequest('GET', `/airports?search=${query}`)
+  const searchReq = new ServerRequest('GET', `/airport?search=${query}`)
   searchReq.success = () => {
     loading.value = true;
-    airportOptionsList.value[0].options = searchReq.getData('airport').map(
+    airportOptionsList.value[0].options = searchReq.getData().map(
         (item: any) => {
           return {
-            label: item['cn_name'],
+            label: item['airport_cn'],
             value: item['id']
           }
         })
@@ -54,8 +53,8 @@ const airportRemoteSearch = async (query: string) => {
     loading.value = false;
   }
   await searchReq.send();
-
 }
+
 
 </script>
 

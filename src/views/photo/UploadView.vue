@@ -20,7 +20,7 @@ import {
 import {ElMessage, genFileId,} from "element-plus";
 import {UploadFilled} from "@element-plus/icons-vue";
 
-import { ExifReader, type ExifData } from "@/utils/exif";
+import { ExifReader } from "@/utils/exif";
 import ServerRequest from "@/utils/request";
 import useUserInfoStore from "@/stores/userInfo";
 import type {AircraftInfo} from "@/utils/type/aircraft";
@@ -185,7 +185,7 @@ async function PreUpload(){
     ElMessage.error("图片未上传");
     return elemStatus.uploading = false;
   }
-  const exif = await ExifReader(FILE)
+  const exif = ExifReader(FILE)
 
   const validateResult = await uploadFormInstance.value!.validate(
     (isValid, invalidFields)=>{
@@ -199,6 +199,9 @@ async function PreUpload(){
     return;
   }
 
+  
+
+
   uploadFormData.set("register",uploadFormInfo.reg)
   uploadFormData.set("msn",uploadFormInfo.msn)
   uploadFormData.set("airline_id",uploadFormInfo.airlineId!.toString())
@@ -207,8 +210,6 @@ async function PreUpload(){
   uploadFormData.set("remark",uploadFormInfo.remark)
   uploadFormData.set("message",uploadFormInfo.message)
   uploadFormData.set("photo_type",uploadFormInfo.photo_type.join(","));
-  uploadFormData.set("queue",uploadFormInfo.queue);
-  uploadFormData.set("exif",JSON.stringify(exif));
   uploadFormData.set("file",FILE);
 }
 

@@ -1,55 +1,64 @@
 <script setup lang="ts">
-import {type CSSProperties, onMounted, ref} from "vue";
-import {STATIC_RESOURCE_URL} from "@/config";
-import serverRequest from "@/utils/request";
+import {onMounted, ref} from "vue";
+import ServerRequest from "@/utils/request";
+import Thumbnail from "@/components/Thumbnail.vue";
+import type {PhotoInfo} from "@/utils/type/photo";
 
+const activeTabName = ref("first")
 const headPhotoList = ref<PhotoInfo[]>([])
 
-const headPhotoReq = new serverRequest('GET', `/website`);
-headPhotoReq.success = () => headPhotoList.value = headPhotoReq.getData('homepageInfo', 'randomPhotoList');
+const headPhotoReq = new ServerRequest('GET', `/website`);
+headPhotoReq.success = () => {
+  headPhotoList.value = headPhotoReq.getData( 'randomPhotoList');
+  headPhotoList.value =  headPhotoList.value.splice(0,4)
+}
 
 onMounted(()=>headPhotoReq.send())
 
-function processHeadPhoto(imgId:number):CSSProperties{
-  return {
-    backgroundImage: `url(${STATIC_RESOURCE_URL}/photos/${imgId}.jpg)`,
-
-  }
-}
 </script>
 
 <template>
 <div class="head-photo-box">
-  <el-carousel type="card" class="head-photo" :autoplay="false" indicator-position="none">
-    <el-carousel-item v-for="img in headPhotoList" :key="img.id">
-      <a :href="'/photo/'+img.id">
-        <div class="img" :style="processHeadPhoto(img.id)"></div>
-      </a>
-    </el-carousel-item>
-  </el-carousel>
+  <el-tabs v-model="activeTabName" class="tabs">
+    <el-tab-pane label="随机图" name="first" class="tab">
+      <Thumbnail
+          class="thumbnail"
+          v-for="img in headPhotoList" :key="img.id"
+          :id="img.id"
+          :reg="img.ac_reg"
+          :airline="img.airline"
+          :username="img.username"
+          :airType="img.ac_type"
+      />
+    </el-tab-pane>
+  </el-tabs>
+
 </div>
 </template>
 
 <style scoped>
+
 .head-photo-box {
   margin: 0 0 36px 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.tabs{
+  width: 100%;
+}
+.tab{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 @media only screen and (max-width: 701px) {
-  .img{
-    width: 80vw;
-    height: 25vmin!important;
-  }
 }
 
 @media only screen and (min-width: 701px) {
-  .img{
-    height: 25vmin!important;
+  .head-photo-box .thumbnail{
+    width: 48%;
   }
 }
-.img{
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center center;
 
-}
 </style>

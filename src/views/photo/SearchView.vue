@@ -22,7 +22,7 @@ const searchLoading = ref(false);
 onMounted(async () => {
   const route = useRoute()
   searchInfo.type = route.query?.type as string || 'reg'
-  searchInfo.content = route.query?.content as string || ''
+  searchInfo.content = route.query?.ctx as string || ''
   if(searchInfo.content !== '') {
     await search(FUNC_CALL.FIRST)
   }
@@ -114,10 +114,10 @@ const searchOptions = [
       <div class="content-box-main">
         <Thumbnail v-for="photo in resultList" :key="photo.id"
                    :id="photo.id"
-                   :reg="photo.reg"
+                   :reg="photo.ac_reg"
                    :airline="photo.airline"
                    :username="photo.username"
-                   :airType="photo.airtype"
+                   :airType="photo.ac_type"
                    :airport="{
                      name: photo.cn_name,
                      icao: photo.icao,

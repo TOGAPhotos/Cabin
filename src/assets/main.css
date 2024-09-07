@@ -1,11 +1,13 @@
 @import 'base.css';
 @import "contentbox.css";
+@import "fontColor.css";
+
 a{
-    color: #409EFF;
+    color: var(--color-basic-link);
     text-decoration: none;
 }
 
-strong{
+h1,h2,h3,h4,strong{
     font-weight: bolder;
 }
 @media only screen and (max-width: 701px) {
