@@ -52,7 +52,4 @@ declare module 'vue' {
     StatisticInfoBox: typeof import('./src/components/StatisticInfoBox.vue')['default']
     Thumbnail: typeof import('./src/components/Thumbnail.vue')['default']
   }
-  export interface ComponentCustomProperties {
-    vLoading: typeof import('element-plus/es')['ElLoadingDirective']
-  }
 }
