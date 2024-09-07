@@ -6,6 +6,8 @@ import {UploadFilled} from "@element-plus/icons-vue";
 import type {UploadInstance, UploadProps, UploadRawFile,FormInstance,FormRules } from 'element-plus'
 import {ElMessage, genFileId,} from "element-plus";
 import AirlineSelect from "@/components/AirlineSelect.vue";
+import type { ExifData } from '@/utils/exif'
+import { ExifReader } from '@/utils/exif'
 
 type UploadInfo = {
   register: string,
@@ -19,6 +21,7 @@ const copyrightFont = new FontFace('copyright_font', 'url(https://source.cdn.794
 const upload = ref<UploadInstance>();
 let fileWaitForUpload:UploadRawFile;
 let IMAGE = new Image()
+let fileList = ref<UploadRawFile[]>([]);
 
 const uploadForm = ref<FormInstance>();
 const uploadInfo = reactive<UploadInfo>({
@@ -42,6 +45,8 @@ const uploadFormRules = reactive<FormRules<UploadInfo>>({
     {type:"number",message:'请选择航司/运营人',trigger:"blur"},
   ]
 })
+
+let exif = ''
 
 const handleExceed: UploadProps['onExceed'] = (files) => {
   upload.value!.clearFiles()
@@ -75,6 +80,13 @@ const checkFile: UploadProps['beforeUpload'] = async (rawFile) => {
   return false;
 }
 
+function handleChange(file: any, fileList: any[]){
+  ExifReader(file.raw).then((exifInfo:ExifData)=>{
+    exif = JSON.stringify(exifInfo)
+    console.log(exif)
+  })
+}
+
 async function preUpload(){
   if(!fileWaitForUpload){
     ElMessage.error('未选择文件');
@@ -91,8 +103,6 @@ async function preUpload(){
       uploadForm.value?.scrollToField(firstField)
     }
   })
-
-
 }
 
 </script>
@@ -127,6 +137,8 @@ async function preUpload(){
               :before-upload="checkFile"
               list-type="picture"
               :on-exceed="handleExceed"
+              :file-list="fileList"
+              :on-change="handleChange"
           >
             <el-icon class="el-icon--upload">
               <upload-filled/>
