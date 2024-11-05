@@ -19,19 +19,9 @@
    {label:"滑翔机",value:"G"}
  ]
 
- const onChange = (value:string[]) => {
-   let status = false;
-   for (const v of value) {
-     if(v==='A'){
-       status = true;
-       break;
-     }
-   }
-   emits('airportMode',status);
- }
  </script>
  <template>
-   <el-checkbox-group v-model="value" @change="onChange">
+   <el-checkbox-group v-model="value">
      <el-checkbox
          v-for="type in photoTypeList"
          :label="type.label" :value="type.value"
