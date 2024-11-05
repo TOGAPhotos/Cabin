@@ -6,11 +6,16 @@ import Footer from '@/components/Footer.vue'
 
 <template>
   <HeadBar />
-  <RouterView class="main" />
+  <main>
+    <RouterView class="main"/>
+  </main>
   <Footer />
 </template>
 
 <style scoped>
+main{
+  min-height: calc(100vh - 170px);
+}
 .main{
   max-width: var(--max-width);
   margin: 0 auto;
