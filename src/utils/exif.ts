@@ -17,7 +17,7 @@ export function ExifReader(file: File): Promise<ExifData> {
       exifr.parse(file).then(
         output => {
           const exifData: ExifData = {
-            DateTimeOriginal: output.DateTimeOriginal.toTimeString(),
+            DateTimeOriginal: output.DateTimeOriginal.toTimeString() ?? '',
             ExposureTime: output.ExposureTime,
             FNumber: output.FNumber,
             ISO: output.ISO,
