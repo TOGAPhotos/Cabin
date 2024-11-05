@@ -2,20 +2,18 @@
 import {ref} from 'vue'
 import userInfoStore from '../stores/userInfo'
 import {UserFilled} from '@element-plus/icons-vue'
-import LoginDialog from './LoginDialog.vue';
 import router from '@/router';
 
 const user = userInfoStore();
 const userPageText = ref("登录/注册");
 
 const mobileMenuVisible = ref(false);
-const loginDialogVisible = ref(false)
 
 if (user.isLoggedIn) {
   userPageText.value = user.username;
 }
 
-const goUserPage = () => user.isLoggedIn ? router.push(`/myself`) : loginDialogVisible.value = true;
+const goUserPage = () => user.isLoggedIn ? router.push(`/myself`) : router.push('/login');
 const showMobileMenu = () => mobileMenuVisible.value = (!mobileMenuVisible.value)
 
 </script>
@@ -34,7 +32,7 @@ const showMobileMenu = () => mobileMenuVisible.value = (!mobileMenuVisible.value
             搜索
           </div>
         </a>
-        <a href="https://blog.togaphotos.com">
+        <a href="/about">
           <div class="head-bar-item">
             关于
           </div>
@@ -63,7 +61,7 @@ const showMobileMenu = () => mobileMenuVisible.value = (!mobileMenuVisible.value
             搜索
           </div>
         </a>
-        <a href="https://blog.togaphotos.com">
+        <a href="/about">
           <div class="head-bar-menu-item">
             关于
           </div>
@@ -83,7 +81,7 @@ const showMobileMenu = () => mobileMenuVisible.value = (!mobileMenuVisible.value
       </div>
     </div>
   </header>
-  <LoginDialog v-model="loginDialogVisible"/>
+  <!-- <LoginDialog v-model="loginDialogVisible"/> -->
 </template>
 
 <style scoped>
