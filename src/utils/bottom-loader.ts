@@ -1,6 +1,6 @@
 export class BottomLoader {
     private timerList= <number[]>[];
-    private readonly waitSeconds:number;
+    // private readonly waitSeconds:number;
     private readonly scrollHandler:()=>void;
 
     private static isBottom(){
@@ -11,16 +11,16 @@ export class BottomLoader {
     }
 
     constructor(callback: Function,waitSeconds: number = 2) {
-        this.waitSeconds = waitSeconds;
         this.timerList = []
 
-        this.scrollHandler = ()=> {
-            if (BottomLoader.isBottom()) {
-                this.timerList.push(setTimeout(callback, this.waitSeconds * 1000))
-            } else {
+        this.scrollHandler = () => {
+            if (!BottomLoader.isBottom()) {
                 this.timerList.forEach(timer => clearTimeout(timer))
                 this.timerList = []
+                return;
             }
+            if(this.timerList.length > 0) return;
+            this.timerList.push(setTimeout(callback, 2 * 1000))
         }
         this.scrollHandler = this.scrollHandler.bind(this)
         window.addEventListener('scroll', this.scrollHandler)
@@ -28,11 +28,11 @@ export class BottomLoader {
 
     cancel(){
         console.log('cancel')
-        window.removeEventListener('scroll',this.scrollHandler)
+        // window.removeEventListener('scroll',)
     }
 
-    reset(){
-        window.addEventListener('scroll', this.scrollHandler)
-    }
+    // reset(){
+    //     window.addEventListener('scroll', this.scrollHandler)
+    // }
 
 }
