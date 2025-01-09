@@ -16,21 +16,19 @@ interface ThumbnailData{
 }
 
 const props = defineProps<ThumbnailData>();
-// https://cdn.photo.tp.794td.cn/min/photos/10878.jpg
 
-const showAirport = ref(false)
-const airportLine = ref();
 const url = computed(() => `${STATIC_RESOURCE_URL}/min/photos/${props.id}.jpg`);
 const href = computed(() => `/photo/${props.id}`);
-
-if (props.airport?.name) {
-  showAirport.value =true;
-  airportLine.value = `${props.airport.icao}-${props.airport?.name}`;
-  if (props.airport.iata) {
-    airportLine.value = `${props.airport.iata}/${airportLine.value}`
+const airportLine = computed(() => {
+  if (!props.airport?.name) {
+    return '';
   }
-
-}
+  let line = `${props.airport.icao}-${props.airport.name}`;
+  if (props.airport.iata) {
+    line = `${props.airport.iata}/${line}`;
+  }
+  return line;
+});
 
 
 </script>
@@ -51,9 +49,7 @@ if (props.airport?.name) {
               <div class="round inner blue">
               </div>
             </div>
-<!--            <span class="info-text">-->
               <span class="airline">{{ airline }}</span> | <span class="reg">{{ reg }}</span>
-<!--            </span>-->
         </div>
         <div class="info-area-row">
           <div class="round outer lightblue">
@@ -62,7 +58,7 @@ if (props.airport?.name) {
           </div>
           {{ airType }}
         </div>
-        <div class="info-area-row" v-if="showAirport">
+        <div class="info-area-row" v-if="airportLine !== ''">
           <div class="round outer blue">
             <div class="round inner blue">
             </div>
@@ -100,6 +96,7 @@ if (props.airport?.name) {
 
 .thumbnail img {
   width: 100%;
+  aspect-ratio: 16/9;
   border-radius: 3% 3% 0 0;
 }
 
@@ -115,6 +112,7 @@ if (props.airport?.name) {
   line-height: 1rem;
   align-items: center;
   min-height: 16px;
+  text-wrap: nowrap;
 }
 .blue{
   background: #0984e3;
