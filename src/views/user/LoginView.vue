@@ -47,10 +47,6 @@ async function login () {
       expireTime, 
       permission
     });
-    ElNotification.success({
-      title: '登陆成功',
-      message: '欢迎回来！'
-    });
     router.push('/');
   }
   loginRequest.error = (_,msg) => {
@@ -61,9 +57,7 @@ async function login () {
   }
   const loginRes = await loginRequest.send()
   
-  if (loginRes){
-    return router.push('/')
-  }
+  if (loginRes) return router.push('/')
 
 }
 
@@ -111,7 +105,7 @@ async function login () {
 }
 .login-container{
   width: 80vw;
-  max-width: 450px;
+  max-width: 450px!important;
   height: calc(100vh - 187px);
   display: flex;
   flex-direction: column;
