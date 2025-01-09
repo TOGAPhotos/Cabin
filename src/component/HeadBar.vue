@@ -1,17 +1,15 @@
 <script setup lang="ts">
-import {ref} from 'vue'
+import {computed, ref} from 'vue'
 import userInfoStore from '../stores/userInfo'
 import {UserFilled} from '@element-plus/icons-vue'
 import router from '@/router';
 
 const user = userInfoStore();
-const userPageText = ref("登录/注册");
+const userPageText = computed(() => user.isLoggedIn ? user.username : "登陆/注册");
 
 const mobileMenuVisible = ref(false);
 
-if (user.isLoggedIn) {
-  userPageText.value = user.username;
-}
+
 
 const goUserPage = () => user.isLoggedIn ? router.push(`/myself`) : router.push('/login');
 const showMobileMenu = () => mobileMenuVisible.value = (!mobileMenuVisible.value)
