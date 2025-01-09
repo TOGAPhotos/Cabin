@@ -1,73 +1,48 @@
 <script setup lang="ts">
-import {computed, ref} from "vue";
+import {computed} from "vue";
 import {STATIC_RESOURCE_URL} from "@/config";
 import { ThumbnailUrl } from "@/utils/photo-url";
 
 interface ThumbnailData{
   id: number,
   reg: string,
-  airline: string,
-  username?: string,
-  airType?:string,
-  airport?: {
-    name: string,
-    icao: string,
-    iata?: string,
-  }
+  // airline: string,
+  reason:string,
+  // airType?:string,
+  comment?:string,
 }
 
 const props = defineProps<ThumbnailData>();
-
 const url = computed(() => ThumbnailUrl(props.id));
-const href = computed(() => `/photo/${props.id}`);
-const airportLine = computed(() => {
-  if (!props.airport?.name) {
-    return '';
-  }
-  let line = `${props.airport.icao}-${props.airport.name}`;
-  if (props.airport.iata) {
-    line = `${props.airport.iata}/${line}`;
-  }
-  return line;
-});
-
+const _reason = computed(() => props.reason ? props.reason.split(',') : []);
 
 </script>
 <template>
   <div class="thumbnail">
-    <a :href="href">
       <img :src="url" :alt="props.reg" loading="lazy">
       <div class="info-area">
-        <div class="info-area-row" v-if="username">
-          <div class="round outer lightblue">
-            <div class="round inner lightblue">
-            </div>
-          </div>
-            由<strong>{{ username }}</strong>拍摄
-        </div>
         <div class="info-area-row">
             <div class="round outer blue">
-              <div class="round inner blue">
-              </div>
+              <div class="round inner blue"></div>
             </div>
-              <span class="airline">{{ airline }}</span> | <span class="reg">{{ reg }}</span>
+            ID:{{id}} | {{ reg }}
         </div>
         <div class="info-area-row">
-          <div class="round outer lightblue">
-            <div class="round inner lightblue">
+          <div class="round outer yellow">
+            <div class="round inner yellow">
             </div>
           </div>
-          {{ airType }}
+          原因：
+          <span v-for="r in _reason" :key="r" class="rej-reason">{{ r }}</span>
         </div>
-        <div class="info-area-row" v-if="airportLine !== ''">
-          <div class="round outer blue">
-            <div class="round inner blue">
+        <div class="info-area-row">
+          <div class="round outer yellow">
+            <div class="round inner yellow">
             </div>
           </div>
-          {{ airportLine }}
+          审图留言：{{ comment }}
         </div>
       </div>
-    </a>
   </div>
 </template>
 
@@ -77,10 +52,6 @@ const airportLine = computed(() => {
   border: 1px solid rgba(0, 0, 0, 0.3);
   border-radius: 3%;
   height: fit-content;
-}
-
-.thumbnail:hover {
-  box-shadow: 3px 3px 4px 4px rgba(0, 0, 0, 0.3);
 }
 
 @media only screen and (max-width: 701px) {
@@ -112,15 +83,12 @@ const airportLine = computed(() => {
   display: flex;
   line-height: 1rem;
   align-items: center;
-  min-height: 16px;
-  text-wrap: nowrap;
+  min-height: 1rem;
+  text-wrap: wrap;
+  flex-wrap: wrap;
 }
 .blue{
   background: #0984e3;
-}
-
-.lightblue{
-  background: #74b9ff;
 }
 
 .round{
@@ -143,17 +111,13 @@ const airportLine = computed(() => {
   border: 0.07rem solid white;
 }
 
-.airline{
-  max-width: 53%;
+.rej-reason,.yellow{
+  background-color: #E6A23C;
 }
-.reg{
-  max-width: 45%;
-}
-.airline, .reg{
-  display: inline-block;
-  line-height: 1em;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+.rej-reason{
+  color: white;
+  padding: 0 0.3rem;
+  margin: 0.1rem 0.1rem 0 0.1rem;
+  border-radius: 0.3rem;
 }
 </style>
