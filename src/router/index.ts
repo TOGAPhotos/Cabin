@@ -2,6 +2,16 @@ import { createRouter, createWebHistory } from 'vue-router'
 import userInfoStore from '@/stores/userInfo'
 import Permission from '../utils/permission'
 import { ElMessage } from 'element-plus'
+import HomeView from '@/views/HomeView.vue'
+import RegisterView from '@/views/user/RegisterView.vue'
+import PhotoView from '@/views/photo/PhotoView.vue'
+import SearchView from '@/views/photo/SearchView.vue'
+import LoginView from '@/views/user/LoginView.vue'
+import RejectList from '@/views/user/RejectList.vue'
+import UploadView from "@/views/photo/UploadView.vue";
+import Page404 from "@/views/other/Page404.vue";
+import Tos from "@/views/other/Tos.vue";
+import UploadList from "@/views/user/UploadList.vue";
 
 const router = createRouter({
   history: createWebHistory('/'),
@@ -9,22 +19,27 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: () => import('../views/HomeView.vue')
+      component: HomeView
     },
     {
       path:'/register',
       name:'register',
-      component: () => import('@/views/user/RegisterView.vue')
+      component: RegisterView
     },
     {
       path:'/photo/:id',
       name:'photo',
-      component: () => import('@/views/photo/PhotoView.vue')
+      component: PhotoView
     },
     {
       path:'/search',
       name:'search',
-      component: () => import('@/views/photo/SearchView.vue')
+      component: SearchView
+    },
+    {
+      path:'/login',
+      name:'login',
+      component: LoginView
     },
     {
       path:'/myself',
@@ -34,7 +49,22 @@ const router = createRouter({
     {
       path:'/upload',
       name:'upload',
-      component: () => import('@/views/photo/UploadView.vue')
+      component: UploadView
+    },
+    {
+      path:'/queue',
+      children:[
+        {
+          path:'reject',
+          name:'reject',
+          component: RejectList
+        },
+        {
+          path:'upload',
+          name:'upload',
+          component:UploadList
+        }
+      ]
     },
     {
       path:'/user/:id',
@@ -42,14 +72,24 @@ const router = createRouter({
       component: () => import('@/views/user/UserView.vue')
     },
     {
+      path:'/about',
+      name:'about',
+      component: () => import('@/views/other/About.vue')
+    },
+    {
       path:'/privacy',
       name:'privacy',
       component: () => import("@/views/other/Privacy.vue")
     },
     {
-      path:"/user-agreement",
-      name:'user-agreement',
-      component: () => import('@/views/other/UserAgreementView.vue')
+      path:"/tos",
+      name:'Tos',
+      component: Tos
+    },
+    {
+      path:'/:pathMatch(.*)*',
+      name:'not-found',
+      component: Page404
     }
   ]
 })
