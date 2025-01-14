@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>直方图</title>
+</head>
+
+<body>
+    <canvas id="histogramCanvas" style="border: 1px solid orange; background-color: white;"></canvas>
+
+    <script>
+        const params = new URLSearchParams(window.location.href.split("?")[1]);
+
+        const photoCanvas = document.createElement('canvas');
+        const histogramCanvas = document.getElementById('histogramCanvas');
+
+        const ptx = photoCanvas.getContext('2d');
+        const ctx = histogramCanvas.getContext('2d');
+
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+        img.src = params.get("image");
+
+        img.onload = () => {
+            photoCanvas.height = img.height;
+            photoCanvas.width = img.width;
+
+            ptx.drawImage(img, 0, 0);
+
+            let photoData = ptx.getImageData(0, 0, img.width, img.height - 20).data;
+
+            let lightness = Array(256).fill(0);
+
+            for (let i = 0; i < photoData.length; i += 4) {
+                let g = photoData[i] * 299 + photoData[i + 1] * 587 + photoData[i + 2] * 114;
+                g = Math.round(g / 1000);
+                lightness[g]++;
+            }
+
+            for (let i = 0; i < 256; i++) {
+                lightness[i] = lightness[i] / (Math.round(30 * (photoData.length / 4) / (1280 * 720)));
+                if (lightness[i] > 400) {
+                    lightness[i] = 400;
+                }
+                lightness[i] = Math.round(400 - lightness[i]);
+            }
+
+            histogramCanvas.height = 402;
+            histogramCanvas.width = 256 * 3 + 2;
+
+            ctx.fillStyle = 'red';
+            ctx.fillRect(0, 0, 256 * 3 + 2, 400 + 2);
+
+            ctx.fillStyle = 'black';
+            ctx.fillRect(1, 1, 256 * 3, 400);
+
+            ctx.fillStyle = "white";
+            for (let i = 0; i < 256; i++) {
+                let start = 3 * i + 1;
+
+                if (i === 0) {
+                    ctx.fillRect(start, 1, 1, Math.round((lightness[i] + 400) / 2));
+                } else {
+                    ctx.fillRect(start, 1, 1, Math.round((lightness[i] + lightness[i - 1]) / 2));
+                }
+
+                ctx.fillRect(start + 1, 1, 1, lightness[i]);
+
+                if (i === 255) {
+                    ctx.fillRect(start + 2, 1, 1, Math.round((lightness[i] + 400) / 2));
+                } else {
+                    ctx.fillRect(start + 2, 1, 1, Math.round((lightness[i] + lightness[i + 1]) / 2));
+                }
+            }
+        }
+
+
+
+    </script>
+</body>
+
+</html>
