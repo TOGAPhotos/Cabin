@@ -1,5 +1,10 @@
 @import 'base.css';
 @import "contentbox.css";
+
+body{
+    background-color: #F7F8FA;
+}
+
 a{
     color: #409EFF;
     text-decoration: none;
@@ -7,15 +12,43 @@ a{
 
 strong{
     font-weight: bolder;
-}
+} 
+
 @media only screen and (max-width: 701px) {
     .el-carousel__container,.el-carousel__item{
-        height: 25vmin!important;
+        /* height: 25vmin!important; */
     }
 }
 
 @media only screen and (min-width: 701px) {
     .el-carousel__container,.el-carousel__item{
-        height: 25vmin!important;
+        /* height: 25vmin!important; */
     }
 }
+
+/* .is-checked::after {
+  background-color: #001A38 !important;
+}
+.is-focus::after {
+  border: 1px solid #001A38 !important;
+  background-color: #001A38 !important;
+}
+.el-checkbox__inner:hover {
+  border-color: #001A38 !important;
+  box-shadow: 0 0 2px #001A38 !important;
+}
+.el-checkbox__input.is-checked .el-checkbox__inner {
+  border: 1px solid #001A38 !important;
+  background-color: var(--el-checkbox-checked-text-color) !important;
+}
+.el-checkbox__input.is-checked + .el-checkbox__label {
+  color: #001A38 !important;
+} */
+
+/* :deep(.el-input__wrapper.is-focus){
+  box-shadow: 0 0 0 1px rgba(0, 26, 56, 0.5);
+}
+:deep(.el-date-table td.current:not(.disabled) .el-date-table-cell__text) {
+    background-color: #001A38;
+    color: #ffffff;
+} */

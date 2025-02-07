@@ -4,11 +4,17 @@ import {STATIC_RESOURCE_URL} from "@/config";
 import serverRequest from "@/utils/request";
 
 const headPhotoList = ref<PhotoInfo[]>([])
+const currentImgIndex = ref(2)
 
 const headPhotoReq = new serverRequest('GET', `/website`);
-headPhotoReq.success = () => headPhotoList.value = headPhotoReq.getData('homepageInfo', 'randomPhotoList');
+headPhotoReq.success = () => {
+  headPhotoList.value = headPhotoReq.getData('homepageInfo', 'randomPhotoList');
+  console.log(headPhotoList.value)
+}
 
-onMounted(()=>headPhotoReq.send())
+onMounted(()=>{
+  headPhotoReq.send()
+})
 
 function processHeadPhoto(imgId:number):CSSProperties{
   return {
@@ -32,24 +38,32 @@ function processHeadPhoto(imgId:number):CSSProperties{
 
 <style scoped>
 .head-photo-box {
-  margin: 0 0 36px 0;
+  margin: 50px 0 36px 0;
 }
+ .img-box{
+  width: 100%;
+  height: 100%;
+ }
+ .el-carousel__item {
+  height: 500px !important;
+ }
 @media only screen and (max-width: 701px) {
   .img{
     width: 80vw;
-    height: 25vmin!important;
+    /* height: 25vmin!important; */
   }
 }
 
 @media only screen and (min-width: 701px) {
   .img{
-    height: 25vmin!important;
+    height: 25vmin;
+    width: 40vw;
+    /* height: 400px !important; */
   }
 }
 .img{
   background-repeat: no-repeat;
-  background-size: cover;
+  background-size: 100% auto;
   background-position: center center;
-
 }
 </style>

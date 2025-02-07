@@ -1,9 +1,13 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
+import screenPlugin from "@/plugins/screenPlugin";
+import '@/assets/iconfont/iconfont.css'
 
 import 'element-plus/dist/index.css';
-import './assets/main.css'
+
+import './assets/main.css';
+
 
 import App from './App.vue'
 import router from './router'
@@ -15,5 +19,6 @@ pinia.use(piniaPluginPersistedstate);
 
 app.use(pinia)
 app.use(router)
+app.use(screenPlugin)
 
 app.mount('#app')

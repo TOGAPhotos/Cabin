@@ -131,6 +131,7 @@ const searchOptions = [
 
 <style scoped>
 .search-box {
+  padding-top: 10rem;
   display: flex;
   justify-content: center;
 }

@@ -1,12 +1,16 @@
 <script setup lang="ts">
 
-import {onMounted, ref} from "vue";
+import {onMounted, ref, inject, type Ref} from "vue";
+import FirstScreen from "@/components/firstScreen/FirstScreen.vue";
+import FirstScreenMobile from "@/components/firstScreen/FirstScreenMobile.vue";
 import {BottomLoader} from '@/utils/bottomLoader';
 import serverRequest from "@/utils/request";
 import Thumbnail from "@/components/Thumbnail.vue";
 import {ElNotification} from "element-plus";
 import StatisticInfoBox from "@/components/StatisticInfoBox.vue";
-import HeadPhoto from "@/components/HeadPhoto.vue";
+import NewPhotos from "@/components/NewPhotos.vue";
+
+const screenWidth = inject("screenWidth") as Ref<number>;
 
 const photoList = ref<PhotoInfo[]>([]);
 
@@ -45,6 +49,7 @@ const bottomLoad = new BottomLoader(async () => {
 })
 
 onMounted(() => {
+  console.log('-----------------', screenWidth.value)
   Promise.allSettled([
     photoListReq.send(),
     notamReq.send(),
@@ -55,11 +60,13 @@ onMounted(() => {
 </script>
 <template>
   <div>
-    <HeadPhoto/>
+    <FirstScreen v-if="screenWidth >= 1024" />
+    <FirstScreenMobile v-else/>
     <!--    <Activity/>-->
     <StatisticInfoBox/>
+    <NewPhotos />
 
-    <div class="content-box">
+    <!-- <div class="content-box">
       <div class="content-box-title">
         <h2>最新图片</h2>
       </div>
@@ -72,7 +79,8 @@ onMounted(() => {
                    :airType="photo.airtype"
         />
       </div>
-    </div>
+    </div> -->
+
   </div>
 </template>
 

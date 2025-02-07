@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router'
-import HeadBar from '@/components/HeadBar.vue'
+import HeadBar from '@/components/header/HeadBar.vue'
+
 import Footer from '@/components/Footer.vue'
 </script>
 
@@ -12,8 +13,8 @@ import Footer from '@/components/Footer.vue'
 
 <style scoped>
 .main{
-  max-width: var(--max-width);
+  /* max-width: var(--max-width); */
   margin: 0 auto;
-  padding: 24px 15px;
+  /* padding: 24px 15px; */
 }
 </style>
