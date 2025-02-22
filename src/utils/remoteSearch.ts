@@ -1,9 +1,10 @@
 import ServerRequest from "@/utils/request";
 import {ElMessage} from "element-plus";
-import type {PhotoSearchResult, SearchType} from "@/utils/type/remoteSearch";
+import type { AcceptPhoto, PhotoSearchType } from "./type/photo";
+
 
 export class RemoteSearch{
-    static async photo(type: SearchType,ctx:string,lastId:number,num:number=50):Promise<PhotoSearchResult[]>{
+    static async photo(type: PhotoSearchType,ctx:string,lastId:number,num:number=50):Promise<AcceptPhoto[]>{
         if(num < 1){
             throw new Error('Request Number must be greater than 1');
         }
@@ -11,7 +12,7 @@ export class RemoteSearch{
         const searchUrl = `/search?keyword=${ctx}&type=${type}&lastId=${lastId}&num=${num}`
         const searchReq = new ServerRequest('GET', searchUrl)
 
-        let result:PhotoSearchResult[]=[];
+        let result:AcceptPhoto[]=[];
         searchReq.success = () => result = searchReq.getData();
         searchReq.error = () => {
             ElMessage.error('搜索失败');

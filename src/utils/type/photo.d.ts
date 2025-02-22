@@ -1,6 +1,6 @@
 import type {AirportData} from "@/utils/type/airport";
 
-declare type PhotoInfo = {
+declare type ThumbnailInfo = {
     airline:string,
     ac_type:string,
     id:number,
@@ -8,7 +8,9 @@ declare type PhotoInfo = {
     username:string,
 }
 
-interface FullPhotoInfo extends PhotoInfo {
+
+
+interface AcceptPhoto extends ThumbnailInfo {
     airport_id: number,
     airport_cn:string,
     airport_iata_code: string,
@@ -16,8 +18,8 @@ interface FullPhotoInfo extends PhotoInfo {
 
     allow_socialmedia: number,
 
-    // manufacturer_cn: string,
-    // manufacturer_en: string,
+    manufacturer_cn: string,
+    manufacturer_en: string,
     ac_msn: string,
 
     photo_time: string,
@@ -25,3 +27,10 @@ interface FullPhotoInfo extends PhotoInfo {
 
     upload_user_id: number,
 }
+
+interface RejectPhotoInfo extends AcceptPhoto {
+    reason: string;
+    comment: string;
+}
+
+export type PhotoSearchType =  "reg"|"airline"|"airtype"|"airport"|"user";
