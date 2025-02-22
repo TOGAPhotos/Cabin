@@ -2,7 +2,7 @@
 import {onMounted, ref} from "vue";
 import ServerRequest from "@/utils/request";
 import Thumbnail from "@/components/Thumbnail.vue";
-// import type {PhotoInfo} from "@/utils/type/photo";
+import type {AcceptPhoto} from "@/utils/type/photo";
 
 const activeTabName = ref("first")
 const headPhotoList = ref<AcceptPhoto[]>([])
