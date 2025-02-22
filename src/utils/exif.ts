@@ -1,7 +1,7 @@
 import exifr from 'exifr' 
 
 export interface ExifData {
-    DateTimeOriginal: string
+    DateOriginal: Date
     ExposureTime: number
     FNumber: number
     ISO: number
@@ -17,7 +17,11 @@ export function ExifReader(file: File): Promise<ExifData> {
       exifr.parse(file).then(
         output => {
           const exifData: ExifData = {
+<<<<<<< HEAD
             DateTimeOriginal: output.DateTimeOriginal.toTimeString() ?? '',
+=======
+            DateOriginal: new Date(output.DateTimeOriginal),
+>>>>>>> 2601dba578bd17b829cf21d7b0198add4980b953
             ExposureTime: output.ExposureTime,
             FNumber: output.FNumber,
             ISO: output.ISO,
