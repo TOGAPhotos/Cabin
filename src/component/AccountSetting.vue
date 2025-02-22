@@ -5,7 +5,7 @@ import ServerRequest from "@/utils/request";
 import useUserInfoStore from "@/stores/userInfo";
 import {ElMessage} from "element-plus";
 import router from "@/router";
-import type {FullPhotoInfo} from "@/utils/type/photo";
+import type {AcceptPhoto} from "@/utils/type/photo";
 
 const panelVisible = defineModel({type: Boolean})
 const user = useUserInfoStore();
@@ -29,7 +29,7 @@ onMounted(async () => {
     accountSetting.airportId = userInfo.airport_id;
     accountSetting.coverPhotoId = userInfo.cover_photo_id;
 
-    photoList.value = userInfoReq.getData("photoList").map( (photo:FullPhotoInfo) =>{
+    photoList.value = userInfoReq.getData("photoList").map( (photo:AcceptPhoto) =>{
       return {
         value: photo.id,
         label: `${photo.id}|${photo.airline}-${photo.ac_type}`
