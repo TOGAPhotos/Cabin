@@ -3,12 +3,13 @@ import { ref } from "vue";
 import ServerRequest from "@/utils/request";
 import type {Option} from "@/utils/type/option";
 import type {Airtype} from "@/utils/type/airtype";
+import { watch } from "fs";
 
-
-
+const props = defineProps({
+  'disabled': Boolean
+})
 const value = defineModel({type:String})
 const airTypeOptions = ref<Option[]>();
-
 
 async function searchAirtype(query:string) {
   if(query.length < 2){
@@ -35,6 +36,7 @@ async function searchAirtype(query:string) {
       reserve-keyword
       :remote-method="searchAirtype"
       placeholder="请输入关键词进行搜索"
+      :disabled="props.disabled"
   >
     <el-option
         v-for="item in airTypeOptions"
