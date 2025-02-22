@@ -1,14 +1,11 @@
 <script setup lang="ts">
 // import { PhotoUrl } from '@/utils/photo-url';
 import ServerRequest from '@/utils/request';
-import type { FullPhotoInfo } from '@/utils/type/photo';
+import type { RejectPhotoInfo } from '@/utils/type/photo';
 import { ref } from 'vue';
 import RejectThumbnail from "@/components/RejectThumbnail.vue";
 
-interface RejectPhotoInfo extends FullPhotoInfo {
-    reason: string;
-    comment: string;
-}
+
 
 const rejectPhotoList = ref<RejectPhotoInfo[]>([]);
 

@@ -10,6 +10,18 @@ a{
 h1,h2,h3,h4,strong{
     font-weight: bolder;
 }
+
+.right-align{
+    text-align: right;
+}
+.flex-row{
+    display: flex;
+    flex-direction: row;
+    
+}
+.cn-content{
+    text-indent: 2em;
+}
 @media only screen and (max-width: 701px) {
     .el-carousel__container,.el-carousel__item{
         height: 25vmin!important;
@@ -21,3 +33,5 @@ h1,h2,h3,h4,strong{
         height: 25vmin!important;
     }
 }
+
+

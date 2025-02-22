@@ -1,15 +1,14 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import ServerRequest from "@/utils/request";
-import type { FullPhotoInfo } from "@/utils/type/photo";
+import type { AcceptPhoto } from "@/utils/type/photo";
 import { PhotoUrl } from "@/utils/photo-url";
 import { OpenToolWindow } from "@/utils/tool-page";
 import InfoLabel from "@/components/InfoLabel.vue";
 
-interface _FullPhotoInfo extends FullPhotoInfo {
+interface _FullPhotoInfo extends AcceptPhoto {
   queueIndex: number
   airport:string
-
 }
 
 const uploadQueue = ref<_FullPhotoInfo[]>();

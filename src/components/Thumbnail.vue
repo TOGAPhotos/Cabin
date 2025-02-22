@@ -2,6 +2,7 @@
 import {computed, ref} from "vue";
 import {STATIC_RESOURCE_URL} from "@/config";
 import { ThumbnailUrl } from "@/utils/photo-url";
+import formatAirportString from "@/utils/airport";
 
 interface ThumbnailData{
   id: number,
@@ -21,14 +22,12 @@ const props = defineProps<ThumbnailData>();
 const url = computed(() => ThumbnailUrl(props.id));
 const href = computed(() => `/photo/${props.id}`);
 const airportLine = computed(() => {
-  if (!props.airport?.name) {
+  if(props.airport?.name){
+    console.log(formatAirportString(props.airport.name, props.airport.icao, props.airport.iata))
+    return formatAirportString(props.airport.name, props.airport.icao, props.airport.iata);
+  }else{
     return '';
   }
-  let line = `${props.airport.icao}-${props.airport.name}`;
-  if (props.airport.iata) {
-    line = `${props.airport.iata}/${line}`;
-  }
-  return line;
 });
 
 
