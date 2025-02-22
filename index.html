@@ -5,9 +5,51 @@
     <link rel="icon" href="/favicon.ico">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TOGAPhotos</title>
+    <style>
+      #loading{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        color: white;
+        background-color: #061936;
+        z-index: 1000;
+      }
+      #loading-text{
+        font-size: 2rem;
+      }
+    </style>
   </head>
   <body>
     <div id="app"></div>
+    <div id="loading">
+      <img src="/placeholder.png" alt="loading" />
+      <div id="l-t">
+      </div>
+    </div>
+    <script>
+      let loadedResources = 0;
+      const updateLoadRes = () =>{
+        document.getElementById('l-t').innerText = `${loadedResources}已登机`;
+        loadedResources++;
+      }
+      const observer = new PerformanceObserver((list) => {
+          const entries = list.getEntries();
+          entries.forEach((entry) => updateLoadRes());
+      });
+
+      observer.observe({ entryTypes: ['resource'] });
+      window.addEventListener('DOMContentLoaded', () =>{
+        observer.disconnect();
+        const loading = document.getElementById('loading');
+        loading.style.display = 'none';
+      });
+    </script>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
