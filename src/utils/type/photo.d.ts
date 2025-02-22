@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import type {AirportData} from "@/utils/type/airport";
 
 declare type ThumbnailInfo = {
@@ -34,3 +35,13 @@ interface RejectPhotoInfo extends AcceptPhoto {
 }
 
 export type PhotoSearchType =  "reg"|"airline"|"airtype"|"airport"|"user";
+=======
+declare type PhotoInfo = {
+    airline: string;
+    airtype: string;
+    id: number;
+    reg: string;
+    username: string;
+    [key: string]: any;
+};
+>>>>>>> 2601dba578bd17b829cf21d7b0198add4980b953

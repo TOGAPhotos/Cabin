@@ -1,7 +1,14 @@
 <script setup lang="ts">
+<<<<<<< HEAD
 import {CameraFilled, PictureFilled, UserFilled} from "@element-plus/icons-vue";
 import {onMounted, reactive,ref} from "vue";
 import ServerRequest from "@/utils/request";
+=======
+import {CameraFilled, PictureFilled, UserFilled, Promotion} from "@element-plus/icons-vue";
+import TransparentButton from "@/components/TransparentButton.vue"
+import {onMounted, reactive} from "vue";
+import serverRequest from "@/utils/request";
+>>>>>>> 2601dba578bd17b829cf21d7b0198add4980b953
 import router from "@/router";
 
 const statisticInfo = reactive({
@@ -32,14 +39,32 @@ websiteInfoReq.success = () =>{
 }
 websiteInfoReq.error = () => router.push('/maintenance');
 
+function daysSince(date: Date): number {
+  const today = new Date();
+  const timeDifference = today.getTime() - date.getTime();
+  const daysDifference = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+  return daysDifference;
+}
+
+const targetDate = new Date("2023-05-03");
+const daysPassed = daysSince(targetDate);
+
 onMounted(() => websiteInfoReq.send())
 </script>
 
 <template>
-  <div class="content-box">
+  <div class="content-box statistic-container">
     <div class="content-box-title">
-      <h2>统计数据</h2>
+      <h2>关于 TOGAPhotos</h2>
     </div>
+    <div class="content-box-desc">
+      <p>TOGAPhotos是一个由航空爱好者发起和维护的图库项目，我们诚挚的欢迎每一位新用户的到来，你们的支持是图库继续发展的最大动力</p>
+      <div class="btn-box">
+        <TransparentButton :isWhite="false"></TransparentButton>
+        <TransparentButton :isWhite="false" :href="'https://blog.togaphotos.com/'" :isNewPage="true">关于我们</TransparentButton>
+      </div>
+    </div>
+    
     <div class="content-box-main statistic-info">
 <!--      <div class="statistic">-->
 <!--        <div class="content">-->
@@ -51,7 +76,12 @@ onMounted(() => websiteInfoReq.send())
           <UserFilled />
         </div>
         <div class="content">
+<<<<<<< HEAD
           <strong>{{ statisticInfo.userNum }} 名用户</strong>
+=======
+          <h4>当前队列长度</h4>
+          <strong>{{ statisticInfo.uploadQueueLen }}</strong>
+>>>>>>> 2601dba578bd17b829cf21d7b0198add4980b953
         </div>
       </div>
       <div class="statistic">
@@ -59,7 +89,12 @@ onMounted(() => websiteInfoReq.send())
           <PictureFilled/>
         </div>
         <div class="content">
+<<<<<<< HEAD
           <strong>{{ statisticInfo.photoNum }} 张图片</strong>
+=======
+          <h4>注册用户数量</h4>
+          <strong>{{ statisticInfo.userNum }}</strong>
+>>>>>>> 2601dba578bd17b829cf21d7b0198add4980b953
         </div>
       </div>
       <div class="statistic">
@@ -67,13 +102,28 @@ onMounted(() => websiteInfoReq.send())
           <CameraFilled />
         </div>
         <div class="content">
+<<<<<<< HEAD
           <strong>{{ statisticInfo.uploadQueueLen }} 张待审核</strong>
+=======
+          <h4>收录图片数量</h4>
+          <strong>{{ statisticInfo.photoNum }}</strong>
+>>>>>>> 2601dba578bd17b829cf21d7b0198add4980b953
+        </div>
+      </div>
+      <div class="statistic">
+        <div class="icon">
+          <Promotion/>
+        </div>
+        <div class="content">
+          <h4>本站累计运行</h4>
+          <strong>{{ daysPassed }} <span>天</span></strong>
         </div>
       </div>
     </div>
   </div>
 </template>
 <style scoped>
+<<<<<<< HEAD
 .content-box{
   margin-left: 15px;
 }
@@ -93,9 +143,82 @@ onMounted(() => websiteInfoReq.send())
 }
 .statistic .icon {
   width: 1.4em;
+=======
+.statistic-container{
+  /* background-color: red; */
+  padding-top: 6rem;
+  padding-bottom: 6rem;
+}
+.statistic-info{
+  justify-content: space-between;
+}
+.statistic {
+  height: 6rem;
+  flex: 1;
+  padding: 0.9rem 1.2rem;
+  text-align: center;
+  display: flex;
+  background-color: #FFFFFF;
+  margin-right: 1rem;
+  border-radius: 6px;
+  transition: transform 0.3s ease;
+}
+.statistic:hover {
+  box-shadow: 0.15rem 0.3rem 0.6rem rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  transform: translateY(-0.15rem);
+}
+.statistic:last-child{
+  margin-right: 0;
+}
+.btn-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.5rem;
+}
+.statistic .icon {
+  width: 2rem;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+>>>>>>> 2601dba578bd17b829cf21d7b0198add4980b953
   margin-right: 0.5em;
 }
+.statistic .content {
+  padding-left: 0.8em;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
 .statistic strong {
+  text-align: left;
   font-weight: 500;
+<<<<<<< HEAD
+=======
+  font-size: 1.5rem;
+  /* vertical-align: middle; */
+  /* line-height: 1.5rem; */
+}
+.statistic strong span {
+  font-size: 1.1rem;
+  font-weight: 400;
+  display: inline-flex;
+  align-items: baseline;
+}
+@media only screen and (max-width: 841px){
+  .statistic-info{
+    flex-direction: column;
+  }
+  .statistic{
+    height: 6rem;
+    width: 100%;
+    margin-right: 0;
+    margin-bottom: 1rem;
+  }
+  .statistic:last-child{
+    margin-bottom: 0;
+  }
+>>>>>>> 2601dba578bd17b829cf21d7b0198add4980b953
 }
 </style>
