@@ -1,30 +1,28 @@
 <script setup lang="ts">
 
-import {onMounted, reactive, ref} from "vue";
+import {onMounted, reactive, ref, watch} from "vue";
 import Thumbnail from "@/components/Thumbnail.vue";
 import {useRoute} from "vue-router";
 import {ElMessage} from "element-plus";
 import router from "@/router";
 import {RemoteSearch,} from "@/utils/remoteSearch";
-import {BottomLoader} from "@/utils/bottomLoader";
-import type {PhotoSearchResult, SearchType} from "@/utils/type/remoteSearch";
+import {BottomLoader} from "@/utils/bottom-loader";
+import type { AcceptPhoto,PhotoSearchType } from "@/utils/type/photo";
 
-enum FUNC_CALL{
-  FIRST,
-  CONTINUE
-}
-
-const resultList = ref<PhotoSearchResult[]>();
+const resultList = ref<AcceptPhoto[]>([]);
 const searchInfo = reactive({type: "reg", content: ''});
 const showResult = ref(false);
 const searchLoading = ref(false);
+const useFuzzySearch = ref(true);
+const route = useRoute()
+
+watch( ()=> route.path, ()=> router.go(0))
 
 onMounted(async () => {
-  const route = useRoute()
   searchInfo.type = route.query?.type as string || 'reg'
   searchInfo.content = route.query?.ctx as string || ''
   if(searchInfo.content !== '') {
-    await search(FUNC_CALL.FIRST)
+    await search()
   }
 
 })
@@ -36,26 +34,23 @@ function getLastId(){
   return resultList.value[resultList.value.length-1].id
 }
 
-async function search(callType:number) {
+async function NewSearch() {
   if (searchInfo.content === '') {
     return ElMessage.warning('请输入查询内容')
   }
+  await router.push({path:'/search', query:{content:searchInfo.content, type:searchInfo.type}})
+  resultList.value = []
+  return search();
+}
 
-  let lastId = -1;
-  if(callType === FUNC_CALL.CONTINUE){
-    lastId = getLastId();
-  }
-
-  searchLoading.value = true;
+async function search() {
+  let lastId = getLastId()
 
   try{
-    const result = await RemoteSearch.photo(searchInfo.type as SearchType, searchInfo.content, lastId);
-    if(lastId === -1){
-      resultList.value = result;
-    }else{
-      resultList.value = resultList.value?.concat(result)
-    }
-    router.push(`/search?content=${searchInfo.content}&type=${searchInfo.type}`)
+    searchLoading.value = true;
+    const result = await RemoteSearch.photo(searchInfo.type as PhotoSearchType, searchInfo.content, lastId);
+    resultList.value = resultList.value.concat(result);
+    console.log(resultList.value, result)
     showResult.value = true;
   }catch(error){
     console.log(error);
@@ -65,7 +60,7 @@ async function search(callType:number) {
 
 }
 
-const bottomLoader = new BottomLoader(() => search(FUNC_CALL.CONTINUE))
+const bottomLoader = new BottomLoader(() => search())
 
 const searchOptions = [
   {
@@ -94,7 +89,12 @@ const searchOptions = [
 
 <template>
   <div class="search-view">
-    <div class="search-box">
+    <div v-if="useFuzzySearch" class="search-box">
+      <el-input class="input" v-model="searchInfo.content" placeholder="请输入搜索内容" @keyup.enter="NewSearch"/>
+      <el-button class="search-button" type="primary" @click="NewSearch">搜索</el-button>
+      <el-button class="search-button" @click="useFuzzySearch = false">高级搜索</el-button>
+    </div>
+    <div v-else class="search-box">
       <el-select class="selector" v-model="searchInfo.type">
         <el-option
             v-for="item in searchOptions"
@@ -104,8 +104,8 @@ const searchOptions = [
 
         />
       </el-select>
-      <el-input class="input" v-model="searchInfo.content"/>
-      <el-button id="search-button" type="primary" @click="search(FUNC_CALL.FIRST)">搜索</el-button>
+      <el-input class="input" v-model="searchInfo.content" @keyup.enter="NewSearch()"/>
+      <el-button class="search-button" type="primary" @click="NewSearch()">搜索</el-button>
     </div>
     <div class="content-box" v-loading="searchLoading">
       <div class="content-box-title" v-if="showResult">
@@ -119,9 +119,9 @@ const searchOptions = [
                    :username="photo.username"
                    :airType="photo.ac_type"
                    :airport="{
-                     name: photo.cn_name,
-                     icao: photo.icao,
-                     iata: photo.iata
+                     name: photo.airport_cn,
+                     icao: photo.airport_icao_code,
+                     iata: photo.airport_iata_code
                    }"
         />
       </div>
@@ -143,7 +143,7 @@ const searchOptions = [
   width: 20em;
 }
 
-#search-button, .input {
+.search-button, .input {
   margin-left: 1vw;
 }
 .content-box{

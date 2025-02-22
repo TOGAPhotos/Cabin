@@ -1,18 +1,18 @@
 <script setup lang="ts">
 
 import {onMounted, ref} from "vue";
-import {BottomLoader} from '@/utils/bottomLoader';
+import {BottomLoader} from '@/utils/bottom-loader';
 import ServerRequest from "@/utils/request";
 import Thumbnail from "@/components/Thumbnail.vue";
 import {ElNotification} from "element-plus";
 import StatisticInfoBox from "@/components/StatisticInfoBox.vue";
-import HeadPhoto from "@/components/HeadPhoto.vue";
+import HeadPhoto from "@/component/HeadPhoto.vue";
 import Activity from "@/components/Activity.vue";
-import type {PhotoInfo} from "@/utils/type/photo";
+import type {ThumbnailInfo} from "@/utils/type/photo";
 import useUserInfoStore from "@/stores/userInfo";
 
 const localUserInfo = useUserInfoStore();
-const photoList = ref<PhotoInfo[]>([]);
+const photoList = ref<ThumbnailInfo[]>([]);
 
 
 const photoListReq = new ServerRequest('GET', "/photos?lastId=-1");
@@ -45,7 +45,7 @@ const bottomLoad = new BottomLoader(async () => {
   const appendListReq = new ServerRequest('GET', `/photos?lastId=${lastImgId}`,);
   appendListReq.success = () => photoList.value = photoList.value?.concat(appendListReq.getData())
   await appendListReq.send();
-})
+},4)
 
 onMounted(() => {
   Promise.allSettled([

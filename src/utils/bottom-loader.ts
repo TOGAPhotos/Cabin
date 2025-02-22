@@ -1,5 +1,5 @@
 export class BottomLoader {
-    private timerList: number[] = [];
+    private timerList: NodeJS.Timeout[] = [];
     // private readonly waitSeconds:number;
     private readonly scrollHandler:()=>void;
     private counter = 0;
@@ -20,28 +20,42 @@ export class BottomLoader {
         
         this.scrollHandler = () => {
 
-            // if limit is 0 then it will run infinitely
-            if(runtimeLimit > 0) this.counter++
+            if (! BottomLoader.isBottom()) {
+                if(this.timerList.length > 1){
+                    this.counter -= this.timerList.length
+                }
+                this.clearTimerList()
+                return;
+            }
+
+            console.log(this.counter)
             if(this.counter > runtimeLimit){
                 return this.cancel()
             }
 
-            if (! BottomLoader.isBottom()) {
-                this.timerList.forEach(timer => clearTimeout(timer))
-                this.timerList = []
-                return;
-            }
             if(this.timerList.length > 0) return;
-            this.timerList.push(setTimeout(callback, waitSeconds * 1000))
+            
+            const timer = setTimeout( () =>{
+                    callback()
+                    this.counter ++;
+                    this.clearTimerList()
+                }
+                , waitSeconds * 1000
+            )
+            
+            this.timerList.push(timer)
         }
         this.scrollHandler = this.scrollHandler.bind(this)
         window.addEventListener('scroll', this.scrollHandler)
     }
 
-    cancel(){
-        console.log('cancel')
+    clearTimerList(){
         this.timerList.forEach(timer => clearTimeout(timer))
         this.timerList = []
+    }
+
+    cancel(){
+        this.clearTimerList()
         window.removeEventListener('scroll', this.scrollHandler)
     }
 
