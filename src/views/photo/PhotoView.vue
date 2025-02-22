@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {computed, onMounted, ref} from "vue";
+import {computed, watch, ref, useTemplateRef} from "vue";
 import {STATIC_RESOURCE_URL} from "@/config";
 import {useRoute} from "vue-router";
 import ServerRequest from "@/utils/request";
@@ -7,31 +7,42 @@ import router from "@/router";
 import {Checked, User} from "@element-plus/icons-vue";
 import InfoLabel from "@/components/InfoLabel.vue";
 import ContactPanel from "@/components/ContactPanel.vue";
-import type {FullPhotoInfo, PhotoInfo} from "@/utils/type/photo";
+import type {AcceptPhoto, PhotoSearchType} from "@/utils/type/photo";
 import {RemoteSearch} from "@/utils/remoteSearch";
-import type {PhotoSearchResult, SearchType} from "@/utils/type/remoteSearch";
 import Thumbnail from "@/components/Thumbnail.vue";
 import Device from "@/utils/device";
+import { ElMessage, ElMessageBox } from "element-plus";
+import useUserInfoStore from "@/stores/userInfo";
 
 const airportText = ref("")
 const showContactPanel = ref(false);
 const route = useRoute();
 const photoId = route.params.id;
 const url = computed(() => `${STATIC_RESOURCE_URL}/photos/${photoId}.jpg`);
-const photoInfo = ref<FullPhotoInfo>()
-const relatedPhotoList = ref<PhotoSearchResult[]>([]);
-
+const photoInfo = ref<AcceptPhoto>()
+const relatedPhotoList = ref<AcceptPhoto[]>([]);
+const imgBoxElm = useTemplateRef('_imgBox');
+const showEditOption = computed(()=>{
+  const user = useUserInfoStore();
+  return user.permission === 'ADMIN' || user.id === photoInfo.value?.upload_user_id;
+})
 async function SearchRelatedPhoto(){
   const searchGroup = await Promise.all([
       RemoteSearch.photo('reg',<string>photoInfo.value?.ac_reg,-1,5),
       RemoteSearch.photo('airport',<string>photoInfo.value?.airport_icao_code,-1,5),
       RemoteSearch.photo('user',<string>photoInfo.value?.username,-1,5),
   ]);
-
-  relatedPhotoList.value = searchGroup
-      .reduce( (list, item) => list.concat(item))
-      .filter( item => item.id !== Number(photoId))
-
+  const resultArray = searchGroup.reduce((list, item) => list.concat(item))
+  for(const item of resultArray){
+    if(item.id === Number(photoId)){
+      continue;
+    }
+    if(relatedPhotoList.value.find(value => value.id === item.id)){
+      continue;
+    }
+    relatedPhotoList.value.push(item);
+  }
+  
   const listLen = relatedPhotoList.value.length;
   if (Device.isPhone() && listLen > 2) {
     relatedPhotoList.value = relatedPhotoList.value.slice(0, listLen - ( listLen % 2 ));
@@ -39,10 +50,15 @@ async function SearchRelatedPhoto(){
     relatedPhotoList.value = relatedPhotoList.value.slice(0, listLen - ( listLen % 4 ));
   }
 }
+const setImgBoxPositon = () => {
+  // imgBoxElm.value!.style.width = `${window.innerWidth}px`;
+  imgBoxElm.value!.style.transform = `translateX(-${imgBoxElm.value!.offsetLeft}px)`;
+}
 
-onMounted(async () => {
+
+(async () => {
   const photoInfoReq = new ServerRequest('GET', `/photo/${photoId}`);
-  photoInfoReq.success = () => photoInfo.value = photoInfoReq.getData() as FullPhotoInfo;
+  photoInfoReq.success = () => photoInfo.value = photoInfoReq.getData() as AcceptPhoto;
   photoInfoReq.error = () => router.push('/')
   await photoInfoReq.send();
 
@@ -53,17 +69,53 @@ onMounted(async () => {
   if(photoInfo.value?.airport_iata_code){
     airportText.value = photoInfo.value.airport_iata_code + "/" + airportText.value
   }
+  airportText.value += `<br>${photoInfo.value?.airport_cn}`
   await SearchRelatedPhoto();
+  if(!Device.isPhone()){
+    setImgBoxPositon();
+    window.addEventListener('resize',setImgBoxPositon);
+  }
+})()
 
-})
+const searchLink = (type:PhotoSearchType,ctx:string|undefined) => ctx ? `/search?type=${type}&ctx=${ctx}` : " ";
 
-const searchLink = (type:SearchType,ctx:string|undefined) => ctx ? `/search?type=${type}&ctx=${ctx}` : " ";
+const deletePhoto = async () => {
+  try{
+    await ElMessageBox.prompt(
+      `请确认删除图片ID:${photoInfo.value?.id}`,
+      `删除图片`,
+      {
+        confirmButtonText: '删除',
+        cancelButtonText: '取消',
+        inputErrorMessage: 'ID输入错误',
+        type: 'warning',
+        inputValidator: v =>  v === photoInfo.value?.id.toString()
+      }
+    )
+  }catch{
+    return ElMessage.info('取消删除');
+  }
+  const req = new ServerRequest('DELETE', `/photo/${photoId}`);
+  req.success = () => {
+    ElMessage.success('删除成功');
+    return router.push('/')
+  }
+  req.error = (_,msg) => ElMessage.error(msg);
+  await req.send();
+}
+
+
+
+
 </script>
 
 <template>
   <div class="photo-view">
-    <div class="image-box">
-      <img :src="url" alt=""/>
+    <div class="image-box" ref="_imgBox">
+      <img :src="url" alt=""
+        oncontextmenu="return false"
+        ondragstart="return false"
+      />
     </div>
     <div class="info-box">
       <div class="info-area">
@@ -83,10 +135,10 @@ const searchLink = (type:SearchType,ctx:string|undefined) => ctx ? `/search?type
               label="航空公司/运营人" :value="photoInfo?.airline"
           />
           <InfoLabel
-              label="机场代码" :value="airportText"
+              label="机场" :value="airportText"
               :link="searchLink('airport',photoInfo?.airport_icao_code)"
           />
-          <InfoLabel label="机场" :value="photoInfo?.airport_cn"/>
+          <!-- <InfoLabel label="机场" :value="photoInfo?.airport_cn"/> -->
         </div>
         <div class="label-group user-info">
           <InfoLabel
@@ -105,9 +157,20 @@ const searchLink = (type:SearchType,ctx:string|undefined) => ctx ? `/search?type
           </el-button>
         </div>
         <div>
-          <el-button type="primary" @click="showContactPanel=true">
+          <el-button type="primary" @click="showContactPanel=true" v-if="!showEditOption">
             <el-icon><User /></el-icon>
             联系摄影师
+          </el-button>
+        </div>
+        <!-- <div style="height: 1px;background-color: black;"></div> -->
+        <div v-if="showEditOption">
+          <el-button type="primary" @click="router.push('/photo/'+photoInfo?.id+'/edit')">
+            编辑图片信息
+          </el-button>
+        </div>
+        <div v-if="showEditOption">
+          <el-button type="danger" @click="deletePhoto">
+            删除图片
           </el-button>
         </div>
       </div>
@@ -123,25 +186,35 @@ const searchLink = (type:SearchType,ctx:string|undefined) => ctx ? `/search?type
         :air-type="photo.ac_type"
       />
     </div>
-    <ContactPanel v-model="showContactPanel" v-bind:photoInfo="photoInfo as FullPhotoInfo" />
+    <ContactPanel v-model="showContactPanel" v-bind:photoInfo="photoInfo as AcceptPhoto" />
   </div>
 </template>
 
 <style scoped>
-.photo-view {
+div.photo-view.main {
   width: 100% !important;
-  max-width: none;
+  margin: 0 calc(100% - 100vw) 0 0;
+  max-width: none !important;
   padding: 0 !important;
-  margin: 0 auto 48px 0 !important;
 }
+
 .label-group{
   margin: 0 0.2rem;
 }
+
 .image-box {
+  min-height: 15vh;
   display: flex;
   justify-content: center;
   width: 100%;
   background: rgb(128, 128, 128);
+}
+
+.image-box img{
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
 }
 
 .info-box{
@@ -160,11 +233,18 @@ const searchLink = (type:SearchType,ctx:string|undefined) => ctx ? `/search?type
   flex-wrap: wrap;
   justify-content: space-evenly;
 }
-.action-area div{
-  margin: 1rem;
-}
+
 .action-area .el-button{
   width: 150px;
+}
+.action-area{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+
 }
 .related-photo-area{
   display: flex;
@@ -172,6 +252,9 @@ const searchLink = (type:SearchType,ctx:string|undefined) => ctx ? `/search?type
   flex-wrap: wrap;
   max-width: var(--max-width);
   margin: 0 auto;
+}
+.info-label{
+  min-width: 9em;
 }
 @media only screen and (max-width: 701px) {
   .image-box img {
@@ -186,11 +269,9 @@ const searchLink = (type:SearchType,ctx:string|undefined) => ctx ? `/search?type
   }
   .info-area{
     margin-bottom: 1rem;
-    justify-content: left;
   }
   .user-info.label-group{
     display: flex;
-    width: 100%;
     flex-direction: row;
   }
   .user-info .username{
@@ -204,8 +285,6 @@ const searchLink = (type:SearchType,ctx:string|undefined) => ctx ? `/search?type
   }
   .image-box img {
     width: auto;
-    height: 100%;
-    max-width: 100%;
     max-height: calc(100vh - 64px);
     object-fit: contain;
   }
