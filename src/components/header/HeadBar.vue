@@ -60,7 +60,7 @@ function windowScroll() {
   lastScrollTop.value = currentScrollTop;
 }
 
-const handleLoginClick = (value:boolean) => loginDialogVisible.value = value
+const handleLoginClick = (value:boolean) => router.push('/login')
 const handleMobileLoginClick = (value:boolean) => mobileMenuVisible.value = value
 const handleMouseEnter = () => isMouseOn.value = true
 const handleMouseLeave = () => isMouseOn.value = false
@@ -135,7 +135,7 @@ onUnmounted(() => {
       </div>
     </div>
   </header>
-  <LoginDialog v-model="loginDialogVisible"/>
+  <!-- <LoginDialog v-model="loginDialogVisible"/> -->
 </template>
 
 <style scoped>

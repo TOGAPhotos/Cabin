@@ -2,10 +2,10 @@
 import {type CSSProperties, onMounted, ref } from "vue";
 import {STATIC_RESOURCE_URL} from "@/config";
 import { CameraFilled } from '@element-plus/icons-vue';
-// import type { PhotoInfo } from "@/utils/type/photo";
+import type { AcceptPhoto } from "@/utils/type/photo";
 const props = withDefaults(
   defineProps<{
-    photoInfo: PhotoInfo;
+    photoInfo: AcceptPhoto;
     isMobile?: boolean;
 }>(),{
   isMobile: false
@@ -25,8 +25,8 @@ function processHeadPhoto(imgId:number):CSSProperties{
             <div class="photo-info-container">
               <div class="basic-info"><i class="iconfont toga-paizhao icon"></i> {{ photoInfo.username }}</div>
               <div class="extra-info">
-                <div class="extra-info-text"><i class="iconfont toga-plane icon"></i> {{ photoInfo.airline }} | {{ photoInfo.airtype }}</div>
-                <div class="extra-info-text"><i class="iconfont toga-bianhao icon"></i> {{ photoInfo.reg }}</div>
+                <div class="extra-info-text"><i class="iconfont toga-plane icon"></i> {{ photoInfo.airline }} | {{ photoInfo.ac_type }}</div>
+                <div class="extra-info-text"><i class="iconfont toga-bianhao icon"></i> {{ photoInfo.ac_reg }}</div>
               </div>
             </div>
           </div>
@@ -38,8 +38,8 @@ function processHeadPhoto(imgId:number):CSSProperties{
           </div>
           <ul class="photo-info-container-mobile">
             <li><i class="iconfont toga-paizhao icon-mobile"></i> {{ photoInfo.username }}</li>
-            <li><i class="iconfont toga-plane icon-mobile"></i> {{ photoInfo.airline }} | {{ photoInfo.airtype }}</li>
-            <li><i class="iconfont toga-bianhao icon-mobile"></i> {{ photoInfo.reg }}</li>
+            <li><i class="iconfont toga-plane icon-mobile"></i> {{ photoInfo.airline }} | {{ photoInfo.ac_type }}</li>
+            <li><i class="iconfont toga-bianhao icon-mobile"></i> {{ photoInfo.ac_reg }}</li>
           </ul>
         </a>
     </div>

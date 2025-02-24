@@ -1,29 +1,19 @@
 <script setup lang="ts">
 
-<<<<<<< HEAD
-import {onMounted, ref} from "vue";
-import {BottomLoader} from '@/utils/bottom-loader';
-import ServerRequest from "@/utils/request";
-import Thumbnail from "@/components/Thumbnail.vue";
-import {ElNotification} from "element-plus";
-import StatisticInfoBox from "@/components/StatisticInfoBox.vue";
-import HeadPhoto from "@/component/HeadPhoto.vue";
-import Activity from "@/components/Activity.vue";
-import type {ThumbnailInfo} from "@/utils/type/photo";
-import useUserInfoStore from "@/stores/userInfo";
-=======
 import {onMounted, ref, inject, type Ref} from "vue";
 import FirstScreen from "@/components/firstScreen/FirstScreen.vue";
 import FirstScreenMobile from "@/components/firstScreen/FirstScreenMobile.vue";
-import {BottomLoader} from '@/utils/bottomLoader';
+import {BottomLoader} from '@/utils/bottom-loader';
 import serverRequest from "@/utils/request";
 import Thumbnail from "@/components/Thumbnail.vue";
 import {ElNotification} from "element-plus";
 import StatisticInfoBox from "@/components/StatisticInfoBox.vue";
 import NewPhotos from "@/components/NewPhotos.vue";
+import ServerRequest from "@/utils/request";
+import useUserInfoStore from "@/stores/userInfo";
+import type {ThumbnailInfo} from "@/utils/type/photo";
 
 const screenWidth = inject("screenWidth") as Ref<number>;
->>>>>>> 2601dba578bd17b829cf21d7b0198add4980b953
 
 const localUserInfo = useUserInfoStore();
 const photoList = ref<ThumbnailInfo[]>([]);
@@ -73,24 +63,11 @@ onMounted(() => {
 </script>
 <template>
   <div>
-<<<<<<< HEAD
-    <div class="top">
-      <HeadPhoto class="head-photo"/>
-      <div class="top-side">
-        <Activity/>
-        <StatisticInfoBox/>
-      </div>
-
-
-    </div>
-
-=======
     <FirstScreen v-if="screenWidth >= 1024" />
     <FirstScreenMobile v-else/>
     <!--    <Activity/>-->
     <StatisticInfoBox/>
     <NewPhotos />
->>>>>>> 2601dba578bd17b829cf21d7b0198add4980b953
 
     <!-- <div class="content-box">
       <div class="content-box-title">

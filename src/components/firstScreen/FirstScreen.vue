@@ -1,20 +1,21 @@
 <script setup lang="ts">
 import {onMounted, ref} from "vue";
-import serverRequest from "@/utils/request";
+import ServerRequest from "@/utils/request";
 import TransparentButton from "@/components/TransparentButton.vue";
 import PhotoBox from "@/components/photo/PhotoBox.vue"
 import Carousel from "@/components/photo/Carousel.vue";
 import { DArrowLeft } from "@element-plus/icons-vue";
+import type { AcceptPhoto } from "@/utils/type/photo";
 
 const firstPageBlock = ref<HTMLElement | null>(null)
 const nextScreenArrow = ref<HTMLElement | null>(null)
 
-const headPhotoList = ref<PhotoInfo[]>([])
+const headPhotoList = ref<AcceptPhoto[]>([])
 const currentImgIndex = ref(2)
 
-const headPhotoReq = new serverRequest('GET', `/website`);
+const headPhotoReq = new ServerRequest('GET', `/website`);
 headPhotoReq.success = () => {
-  headPhotoList.value = headPhotoReq.getData('homepageInfo', 'randomPhotoList');
+  headPhotoList.value = headPhotoReq.getData('randomPhotoList');
 }
 
 onMounted(()=>{
