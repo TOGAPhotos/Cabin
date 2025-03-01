@@ -134,7 +134,6 @@ onUnmounted(() => {
       </div>
     </div>
   </header>
-  <!-- <LoginDialog v-model="loginDialogVisible"/> -->
 </template>
 
 <style scoped>
