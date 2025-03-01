@@ -13,7 +13,7 @@ import {UploadFilled, CameraFilled, Finished, Timer} from "@element-plus/icons-v
 type UploadInfo = {
   register: string,
   msn:string,
-  aircraftType: number | undefined,
+  aircraftType: string | undefined,
   airportId: number | undefined,
   airlineId: number | undefined,
   specialTypeList: string[],

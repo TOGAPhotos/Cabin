@@ -1,10 +1,12 @@
 <script setup lang="ts">
 
-import AirportSelect from "@/components/AirportSelect.vue";
-import AirlineSelect from "@/components/AirlineSelect.vue";
-import AirtypeSelect from "@/components/AirtypeSelect.vue";
+// import AirportSelect from "@/components/selector/AirportSelect.vue";
+// import AirlineSelect from "@/components/selector/AirlineSelect.vue";
+// import AirtypeSelect from "@/components/selector/AirtypeSelect.vue";
+import AircraftTypeSelect from "@/components/selector/AircraftTypeSelect.vue";
+import AirportSelect from "@/components/selector/AirportSelect.vue";
+import AirlineSelect from "@/components/selector/AirlineSelect.vue";
 import PhotoTypeSelect from "@/components/PhotoTypeSelect.vue";
-
 
 import {reactive, ref, watch} from "vue";
 import {useRoute} from "vue-router";
@@ -344,7 +346,7 @@ async function AutoFill(){
         </el-form-item>
 
         <el-form-item label="机型" prop="ac_type">
-          <AirtypeSelect 
+          <AircraftTypeSelect 
             v-model="uploadFormInfo.ac_type"
             :disabled="elemStatus.airtype"
           />

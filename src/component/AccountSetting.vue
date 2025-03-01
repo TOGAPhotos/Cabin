@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {onMounted, reactive, ref} from "vue";
-import AirportSelect from "@/components/AirportSelect.vue";
+import AirportSelect from "@/components/selector/AirportSelect.vue";
 import ServerRequest from "@/utils/request";
 import useUserInfoStore from "@/stores/userInfo";
 import {ElMessage} from "element-plus";

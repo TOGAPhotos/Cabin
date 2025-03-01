@@ -56,12 +56,12 @@ const router = createRouter({
       children:[
         {
           path:'reject',
-          name:'reject',
+          name:'reject-list',
           component: RejectList
         },
         {
           path:'upload',
-          name:'upload',
+          name:'upload-queue',
           component:UploadList
         }
       ]

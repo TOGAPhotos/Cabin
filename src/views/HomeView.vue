@@ -1,19 +1,21 @@
 <script setup lang="ts">
 
 import {onMounted, ref, inject, type Ref} from "vue";
-import FirstScreen from "@/components/firstScreen/FirstScreen.vue";
-import FirstScreenMobile from "@/components/firstScreen/FirstScreenMobile.vue";
-import {BottomLoader} from '@/utils/bottom-loader';
-import serverRequest from "@/utils/request";
-import Thumbnail from "@/components/Thumbnail.vue";
 import {ElNotification} from "element-plus";
-import StatisticInfoBox from "@/components/StatisticInfoBox.vue";
-import NewPhotos from "@/components/NewPhotos.vue";
-import ServerRequest from "@/utils/request";
-import useUserInfoStore from "@/stores/userInfo";
-import type {ThumbnailInfo} from "@/utils/type/photo";
 
-const screenWidth = inject("screenWidth") as Ref<number>;
+import FirstScreen from "@/component/firstScreen/FirstScreen.vue";
+import FirstScreenMobile from "@/component/firstScreen/FirstScreenMobile.vue";
+
+import StatisticInfoBox from "@/component/firstScreen/StatisticInfoBox.vue";
+import NewPhotos from "@/components/NewPhotos.vue";
+
+import {BottomLoader} from '@/utils/bottom-loader';
+import ServerRequest from "@/utils/request";
+import Device from "@/utils/device";
+
+import useUserInfoStore from "@/stores/userInfo";
+
+import type {ThumbnailInfo} from "@/utils/type/photo";
 
 const localUserInfo = useUserInfoStore();
 const photoList = ref<ThumbnailInfo[]>([]);
@@ -52,7 +54,7 @@ const bottomLoad = new BottomLoader(async () => {
 },4)
 
 onMounted(() => {
-  console.log('-----------------', screenWidth.value)
+  console.log('-----------------', Device.getWidth())
   Promise.allSettled([
     photoListReq.send(),
     notamReq.send(),
@@ -63,27 +65,10 @@ onMounted(() => {
 </script>
 <template>
   <div>
-    <FirstScreen v-if="screenWidth >= 1024" />
+    <FirstScreen v-if="Device.isDesktop()" />
     <FirstScreenMobile v-else/>
-    <!--    <Activity/>-->
     <StatisticInfoBox/>
     <NewPhotos />
-
-    <!-- <div class="content-box">
-      <div class="content-box-title">
-        <h2>最新图片</h2>
-      </div>
-      <div class="content-box-main">
-        <Thumbnail v-for="photo in photoList" :key="photo.id"
-                   :id="photo.id"
-                   :reg="photo.ac_reg"
-                   :airline="photo.airline"
-                   :username="photo.username"
-                   :airType="photo.ac_type"
-        />
-      </div>
-    </div> -->
-
   </div>
 </template>
 

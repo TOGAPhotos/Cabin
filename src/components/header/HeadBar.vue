@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import {computed, onMounted, onUnmounted, ref} from 'vue'
 import userInfoStore from '@/stores/userInfo'
-import LoginDialog from '@/components/LoginDialog.vue';
 import router from '@/router';
 import { useRoute } from 'vue-router';
 import { transparentNameList, floatNameList } from './config';
