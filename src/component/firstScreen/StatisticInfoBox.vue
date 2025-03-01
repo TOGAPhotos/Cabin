@@ -1,14 +1,8 @@
 <script setup lang="ts">
-<<<<<<< HEAD
-import {CameraFilled, PictureFilled, UserFilled} from "@element-plus/icons-vue";
-import {onMounted, reactive,ref} from "vue";
-import ServerRequest from "@/utils/request";
-=======
 import {CameraFilled, PictureFilled, UserFilled, Promotion} from "@element-plus/icons-vue";
-import TransparentButton from "@/components/TransparentButton.vue"
+import TransparentButton from "@/component/firstScreen/TransparentButton.vue"
 import {onMounted, reactive} from "vue";
-import serverRequest from "@/utils/request";
->>>>>>> 2601dba578bd17b829cf21d7b0198add4980b953
+import ServerRequest from "@/utils/request";
 import router from "@/router";
 
 const statisticInfo = reactive({
@@ -76,12 +70,8 @@ onMounted(() => websiteInfoReq.send())
           <UserFilled />
         </div>
         <div class="content">
-<<<<<<< HEAD
-          <strong>{{ statisticInfo.userNum }} 名用户</strong>
-=======
           <h4>当前队列长度</h4>
           <strong>{{ statisticInfo.uploadQueueLen }}</strong>
->>>>>>> 2601dba578bd17b829cf21d7b0198add4980b953
         </div>
       </div>
       <div class="statistic">
@@ -89,12 +79,8 @@ onMounted(() => websiteInfoReq.send())
           <PictureFilled/>
         </div>
         <div class="content">
-<<<<<<< HEAD
-          <strong>{{ statisticInfo.photoNum }} 张图片</strong>
-=======
           <h4>注册用户数量</h4>
           <strong>{{ statisticInfo.userNum }}</strong>
->>>>>>> 2601dba578bd17b829cf21d7b0198add4980b953
         </div>
       </div>
       <div class="statistic">
@@ -102,12 +88,8 @@ onMounted(() => websiteInfoReq.send())
           <CameraFilled />
         </div>
         <div class="content">
-<<<<<<< HEAD
-          <strong>{{ statisticInfo.uploadQueueLen }} 张待审核</strong>
-=======
           <h4>收录图片数量</h4>
           <strong>{{ statisticInfo.photoNum }}</strong>
->>>>>>> 2601dba578bd17b829cf21d7b0198add4980b953
         </div>
       </div>
       <div class="statistic">
@@ -123,27 +105,6 @@ onMounted(() => websiteInfoReq.send())
   </div>
 </template>
 <style scoped>
-<<<<<<< HEAD
-.content-box{
-  margin-left: 15px;
-}
-.statistic-info {
-  justify-content: left;
-  flex-direction: column;
-}
-
-@media only screen and (max-width: 701px){
-
-}
-.statistic {
-  font-size: 1rem;
-  display: flex;
-  align-items: center;
-  margin-bottom: 0.4em;
-}
-.statistic .icon {
-  width: 1.4em;
-=======
 .statistic-container{
   /* background-color: red; */
   padding-top: 6rem;
@@ -182,7 +143,6 @@ onMounted(() => websiteInfoReq.send())
   height: 100%;
   display: flex;
   justify-content: center;
->>>>>>> 2601dba578bd17b829cf21d7b0198add4980b953
   margin-right: 0.5em;
 }
 .statistic .content {
@@ -194,8 +154,6 @@ onMounted(() => websiteInfoReq.send())
 .statistic strong {
   text-align: left;
   font-weight: 500;
-<<<<<<< HEAD
-=======
   font-size: 1.5rem;
   /* vertical-align: middle; */
   /* line-height: 1.5rem; */
@@ -219,6 +177,5 @@ onMounted(() => websiteInfoReq.send())
   .statistic:last-child{
     margin-bottom: 0;
   }
->>>>>>> 2601dba578bd17b829cf21d7b0198add4980b953
 }
 </style>

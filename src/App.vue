@@ -2,7 +2,7 @@
 import { RouterView } from 'vue-router'
 import HeadBar from '@/components/header/HeadBar.vue'
 
-import Footer from '@/components/Footer.vue'
+import Footer from '@/component/Footer.vue'
 </script>
 
 <template>

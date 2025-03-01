@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {onMounted, ref} from "vue";
 import ServerRequest from "@/utils/request";
-import TransparentButton from "@/components/TransparentButton.vue";
+import TransparentButton from "@/component/firstScreen/TransparentButton.vue";
 import PhotoBox from "@/components/photo/PhotoBox.vue"
 import Carousel from "@/components/photo/Carousel.vue";
 import { DArrowLeft } from "@element-plus/icons-vue";

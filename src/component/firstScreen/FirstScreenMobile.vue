@@ -1,16 +1,17 @@
 <script setup lang="ts">
 import {onMounted, ref} from "vue";
 import serverRequest from "@/utils/request";
-import TransparentButton from "@/components/TransparentButton.vue";
+import TransparentButton from "@/component/firstScreen/TransparentButton.vue";
 import PhotoBox from "@/components/photo/PhotoBox.vue"
-import Carousel from "@/components/photo/Carousel.vue";
+// import Carousel from "@/components/photo/Carousel.vue";
+import type { AcceptPhoto } from "@/utils/type/photo";
 
-const headPhotoList = ref<PhotoInfo[]>([])
+const headPhotoList = ref<AcceptPhoto[]>([])
 const currentImgIndex = ref(2)
 
 const headPhotoReq = new serverRequest('GET', `/website`);
 headPhotoReq.success = () => {
-  headPhotoList.value = headPhotoReq.getData('homepageInfo', 'randomPhotoList');
+  headPhotoList.value = headPhotoReq.getData('randomPhotoList');
 }
 
 onMounted(()=>{

@@ -1,35 +1,32 @@
 <script setup lang="ts">
-import serverRequest from "@/utils/request";
-import {ElMessage, type ListItem} from "element-plus";
-import {ref} from "vue";
+import { RemoteSearch } from "@/utils/remoteSearch";
 
-const value = defineModel({type: Number})
+import {onMounted, ref} from "vue";
+
+const value = defineModel({default: ''})
 const loading = ref(false)
-const aircraftTypeOptions = ref<ListItem[]>([])
+const aircraftTypeOptions = ref<{value:string,label:string}[]>([])
+onMounted(()=> _remoteMethod(value.value))
 
-const aircraftTypeRemoteSearch = async (query: string) => {
-
-  if ((!query) || query.length < 2) {
+const _remoteMethod = async (query:string) => {
+  if(query.length < 2){
     return
   }
+  loading.value = true
+  const resutl = await RemoteSearch.airtype(query)
+  loading.value = false
 
-  const searchReq = new serverRequest('GET', `/aircraftType/${query}`)
-  searchReq.success = () => {
-    loading.value = true;
-    aircraftTypeOptions.value = searchReq.getData('aircraftType').map(
-        (item: any) => {
-          return {
-            label: item['aircraft_type'] ,
-            value: item['id']
-          }
-        })
-    loading.value = false;
+  if(resutl.length === 0){
+    aircraftTypeOptions.value = []
+    return
   }
-  searchReq.error = () => {
-    ElMessage.error('搜索出错')
-    loading.value = false;
-  }
-  await searchReq.send();
+  aircraftTypeOptions.value = resutl.map((item) => {
+    return {
+      value: item.sub_type,
+      label: `${item.manufacturer_cn}/${item.sub_type}`
+    }
+  })
+  
 }
 
 </script>
@@ -40,7 +37,7 @@ const aircraftTypeRemoteSearch = async (query: string) => {
            remote
            reserve-keyword
            placeholder="请输入关键词进行搜索"
-           :remote-method="aircraftTypeRemoteSearch"
+           :remote-method="_remoteMethod"
            :loading="loading">
   <el-option v-for="option in aircraftTypeOptions"
              :key="option.value"
