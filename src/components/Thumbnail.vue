@@ -2,6 +2,7 @@
 import {computed, ref} from "vue";
 import { ThumbnailUrl } from "@/utils/photo-url";
 import formatAirportString from "@/utils/airport";
+import ImgLoader from "./ImgLoader.vue";
 
 interface ThumbnailData{
   id: number,
@@ -34,7 +35,7 @@ const airportLine = computed(() => {
 <template>
   <div class="thumbnail">
     <a :href="href">
-      <img :src="url" :alt="props.reg" loading="lazy">
+      <ImgLoader :src="url" className="img"/>
       <div class="info-area">
         <div class="info-area-row" v-if="username">
           <div class="round outer lightblue">
@@ -69,7 +70,7 @@ const airportLine = computed(() => {
   </div>
 </template>
 
-<style scoped>
+<style>
 .thumbnail {
   margin: 3px 6px;
   border: 1px solid rgba(0, 0, 0, 0.3);
@@ -93,7 +94,7 @@ const airportLine = computed(() => {
   }
 }
 
-.thumbnail img {
+.thumbnail .img {
   width: 100%;
   aspect-ratio: 16/9;
   border-radius: 3% 3% 0 0;
