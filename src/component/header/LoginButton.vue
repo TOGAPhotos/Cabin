@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import router from '@/router';
 import userInfoStore from '@/stores/userInfo'
 import {UserFilled} from '@element-plus/icons-vue'
@@ -21,8 +21,18 @@ const showMobileMenu = () => {
   mobileMenuVisible.value = (!mobileMenuVisible.value)
   emit('mobileMenuVisible', mobileMenuVisible.value)
 }
+onMounted(()=>{
+  updateUserPageText()
+})
+const updateUserPageText = ()=>{
+  if(user.isLoggedIn){
+    userPageText.value = user.username;
+  }else{
+    userPageText.value = "登录/注册";
+  }
+}
 
-
+watch(()=>user.isLoggedIn, ()=>updateUserPageText())
 </script>
 
 <template>
