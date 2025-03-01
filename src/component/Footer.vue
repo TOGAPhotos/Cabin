@@ -1,9 +1,9 @@
 <template>
     <footer>
-      <div class="link">
+      <!-- <div class="link">
         <a href="/privacy">隐私政策</a>
         <a href="/user-agreement">用户协议</a>
-      </div>
+      </div> -->
         <div class="footer-info">
             由TO/GAPhotos Team维护<br>
             Maintenance by TO/GAPhotos Team

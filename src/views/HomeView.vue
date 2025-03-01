@@ -1,18 +1,24 @@
 <script setup lang="ts">
 
-import {onMounted, ref} from "vue";
-import {BottomLoader} from '@/utils/bottomLoader';
-import ServerRequest from "@/utils/request";
-import Thumbnail from "@/components/Thumbnail.vue";
+import {onMounted, ref, inject, type Ref} from "vue";
 import {ElNotification} from "element-plus";
-import StatisticInfoBox from "@/components/StatisticInfoBox.vue";
-import HeadPhoto from "@/components/HeadPhoto.vue";
-import Activity from "@/components/Activity.vue";
-import type {PhotoInfo} from "@/utils/type/photo";
+
+import FirstScreen from "@/component/firstScreen/FirstScreen.vue";
+import FirstScreenMobile from "@/component/firstScreen/FirstScreenMobile.vue";
+
+import StatisticInfoBox from "@/component/firstScreen/StatisticInfoBox.vue";
+import NewPhotos from "@/components/NewPhotos.vue";
+
+import {BottomLoader} from '@/utils/bottom-loader';
+import ServerRequest from "@/utils/request";
+import Device from "@/utils/device";
+
 import useUserInfoStore from "@/stores/userInfo";
 
+import type {ThumbnailInfo} from "@/utils/type/photo";
+
 const localUserInfo = useUserInfoStore();
-const photoList = ref<PhotoInfo[]>([]);
+const photoList = ref<ThumbnailInfo[]>([]);
 
 
 const photoListReq = new ServerRequest('GET', "/photos?lastId=-1");
@@ -45,9 +51,10 @@ const bottomLoad = new BottomLoader(async () => {
   const appendListReq = new ServerRequest('GET', `/photos?lastId=${lastImgId}`,);
   appendListReq.success = () => photoList.value = photoList.value?.concat(appendListReq.getData())
   await appendListReq.send();
-})
+},4)
 
 onMounted(() => {
+  console.log('-----------------', Device.getWidth())
   Promise.allSettled([
     photoListReq.send(),
     notamReq.send(),
@@ -58,31 +65,10 @@ onMounted(() => {
 </script>
 <template>
   <div>
-    <div class="top">
-      <HeadPhoto class="head-photo"/>
-      <div class="top-side">
-        <Activity/>
-        <StatisticInfoBox/>
-      </div>
-
-
-    </div>
-
-
-    <div class="content-box">
-      <div class="content-box-title">
-        <h2>最新图片</h2>
-      </div>
-      <div class="content-box-main">
-        <Thumbnail v-for="photo in photoList" :key="photo.id"
-                   :id="photo.id"
-                   :reg="photo.ac_reg"
-                   :airline="photo.airline"
-                   :username="photo.username"
-                   :airType="photo.ac_type"
-        />
-      </div>
-    </div>
+    <FirstScreen v-if="Device.isDesktop()" />
+    <FirstScreenMobile v-else/>
+    <StatisticInfoBox/>
+    <NewPhotos />
   </div>
 </template>
 

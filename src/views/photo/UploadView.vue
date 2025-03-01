@@ -1,33 +1,33 @@
 <script setup lang="ts">
-
-import AirportSelect from "@/components/AirportSelect.vue";
-import AirlineSelect from "@/components/AirlineSelect.vue";
-import AirtypeSelect from "@/components/AirtypeSelect.vue";
-import PhotoTypeSelect from "@/components/PhotoTypeSelect.vue";
-
-
-import {onMounted, reactive, ref} from "vue";
+import {reactive, ref, watch} from "vue";
 import {useRoute} from "vue-router";
 
-import {
-  type UploadInstance,
-  type UploadProps,
-  type UploadRawFile,
-  type FormInstance,
-  type FormRules,
-  ElNotification
+import type {
+   UploadInstance,
+   UploadProps,
+   UploadRawFile,
+   FormInstance,
+   FormRules,
 } from 'element-plus'
-import {ElMessage, genFileId,} from "element-plus";
+import {ElNotification, ElMessage, genFileId, ElLoading,} from "element-plus";
 import {UploadFilled} from "@element-plus/icons-vue";
 
-import { ExifReader } from "@/utils/exif";
-import ServerRequest from "@/utils/request";
-import useUserInfoStore from "@/stores/userInfo";
-import type {AircraftInfo} from "@/utils/type/aircraft";
+import AircraftTypeSelect from "@/components/selector/AircraftTypeSelect.vue";
+import AirportSelect from "@/components/selector/AirportSelect.vue";
+import AirlineSelect from "@/components/selector/AirlineSelect.vue";
+import PhotoTypeSelect from "@/components/PhotoTypeSelect.vue";
 import CreateAirport from "@/components/CreateAirport.vue";
 import CreateAirline from "@/components/CreateAirline.vue";
 import CreateAirtype from "@/components/CreateAirtype.vue";
 
+import type {AircraftInfo} from "@/utils/type/aircraft";
+import { ExifReader } from "@/utils/exif";
+import ServerRequest from "@/utils/request";
+import { getAirportById } from "@/utils/info";
+import { checkImage } from "@/utils/check-image";
+import CosStrorage from "@/utils/cos";
+
+import useUserInfoStore from "@/stores/userInfo";
 
 interface UploadFormInfo {
   reg: string,
@@ -35,7 +35,7 @@ interface UploadFormInfo {
   airportId: number | undefined,
   airlineId: number | undefined,
   ac_type: string,
-  photo_type: string[],
+  photoType: string[],
   remark: string,
   message:string,
   queue:string
@@ -49,11 +49,11 @@ const elemStatus = reactive({
   reg:false,
   msn:false,
   airline:false,
+  airtype:false,
   prioQueue:false,
   normQueueText:'',
   prioQueueText:'',
   showSelectPanel:'',
-  uploading:false,
   airportPanel:false,
   airlinePanel:false,
   airtypePanel:false,
@@ -61,24 +61,22 @@ const elemStatus = reactive({
 const localUserInfo = useUserInfoStore();
 const route = useRoute();
 
-onMounted(async ()=>{
-  if(route.query.activate){
-    console.log(route.query.activate);
-  }
+const init = async ()=>{
   const userInfoReq = new ServerRequest('GET',`/user/${localUserInfo.id}`);
   userInfoReq.success = () => {
     const u = userInfoReq.getData('userInfo');
     elemStatus.normQueueText = `普通队列（空余${u.free_queue}张）`;
     elemStatus.prioQueueText = `优先队列（空余${u.free_priority_queue}张）`;
-    if(u.free_priority_queue === 0){
+    if(u.free_priority_queue <= 0){
       elemStatus.prioQueue = true;
     }
-    if(u.free_queue === 0){
+    if(u.free_queue <= 0){
       elemStatus.upload = true;
     }
   }
   await userInfoReq.send();
-})
+}
+(async () => await init())();
 
 const fileUpload = ref<UploadInstance>();
 const uploadFormInstance = ref<FormInstance>();
@@ -109,12 +107,11 @@ const uploadFormInfo = reactive<UploadFormInfo>({
   airportId: undefined,
   airlineId: undefined,
   ac_type: "",
-  photo_type:[],
+  photoType:[],
   remark:"",
   message:"",
   queue:'NORM'
 })
-const uploadFormData = new FormData();
 
 const handleExceed: UploadProps['onExceed'] = (files) => {
   fileUpload.value!.clearFiles()
@@ -123,94 +120,123 @@ const handleExceed: UploadProps['onExceed'] = (files) => {
   fileUpload.value!.handleStart(file)
 }
 
-async function CheckImage (rawFile:UploadRawFile){
-  if (rawFile.type !== 'image/jpeg') {
-    ElMessage.error('格式错误');
-    return Promise.reject();
-  }
-  if (rawFile.size / 1024 / 1024 > 4) {
-    ElMessage.error('图片大于4MB');
-    return Promise.reject();
-  }
 
-  const fileReader = new FileReader()
-  fileReader.readAsDataURL(rawFile)
-  await new Promise<void>(resolve => fileReader.onload = () => resolve());
-
-  IMAGE.crossOrigin = 'anonymous';
-  IMAGE.src = fileReader.result as string;
-  await new Promise<void>(resolve => IMAGE.onload = () => resolve())
-  const longSide = Math.max(IMAGE.width, IMAGE.height);
-  if(longSide< 1279 || longSide > 1920){
-    ElMessage.warning('尺寸超限')
-    return Promise.reject()
-  }
-
+const beforeUpload = (rawFile:UploadRawFile) => {
   FILE = rawFile;
-  return Promise.reject()
+  return false;
+  
+
 }
 
-const airportMode = (status:boolean):void =>{
+
+
+watch(()=>uploadFormInfo.photoType,async (newValue:string[])=>{
+  let status = newValue.join("").includes("A") 
   elemStatus.msn = status;
+  elemStatus.airtype = status;
   elemStatus.airline = status;
   elemStatus.reg = status;
   if(status){
     uploadFormInfo.ac_type = "机场";
     uploadFormInfo.msn = "";
+    if(uploadFormInfo.airportId){
+      const { icao_code } = await getAirportById(uploadFormInfo.airportId)
+      uploadFormInfo.reg = icao_code;
+    }
   }else{
     uploadFormInfo.reg = "";
     uploadFormInfo.ac_type = "";
   }
+})
 
-
-}
-
-const getAirportIcaoCode = async (value:number)=>{
-  if(!elemStatus.reg){
-    return;
-  }
-  const airportInfoReq = new ServerRequest('GET', `/airport/${value}`);
-  airportInfoReq.success = () =>{
-    uploadFormInfo.reg = airportInfoReq.getData().icao_code;
-  }
-  await airportInfoReq.send();
-}
+watch(()=>uploadFormInfo.airportId, async (newValue:number|undefined)=>{
+  if(!newValue) return;
+  if(!elemStatus.reg) return;
+  const { icao_code } = await getAirportById(newValue)
+  uploadFormInfo.reg = icao_code;
+})
 
 async function PreUpload(){
-  elemStatus.uploading = true;
+  let uploading = ElLoading.service({
+    text:'正在创建图片',
+    target:'#upload-form',
+  })
+  
+  const validateResult = await uploadFormInstance.value!.validate(
+    (isValid, invalidFields)=>{
+      if(isValid)return;
+      const firstField = Object.values(invalidFields!)[0][0].field as string
+      uploadFormInstance.value?.scrollToField(firstField)
+    })
+    
+  if(!validateResult){
+    uploading.close();
+    return;
+  }
+    
   fileUpload.value!.submit();
-
   if(!FILE){
     uploadFormInstance.value!.scrollToField("file")
     ElMessage.error("图片未上传");
-    return elemStatus.uploading = false;
+    return uploading.close();
   }
-  const exif = ExifReader(FILE)
 
-  const validateResult = await uploadFormInstance.value!.validate(
-    (isValid, invalidFields)=>{
-      if(!invalidFields)return;
-      const firstField = Object.values(invalidFields)[0][0].field as string
-      uploadFormInstance.value?.scrollToField(firstField)
-  })
+  if( !(await checkImage(FILE)) ) return;
+  // const exif = ExifReader(FILE)
 
-  if(!validateResult){
-    elemStatus.uploading = false;
+  const uploadData = {
+    reg:uploadFormInfo.reg,
+    msn:uploadFormInfo.msn,
+    airline:uploadFormInfo.airlineId,
+    airport:uploadFormInfo.airportId,
+    ac_type:uploadFormInfo.ac_type,
+    remark:uploadFormInfo.remark,
+    message:uploadFormInfo.message,
+    picType:uploadFormInfo.photoType.join(','),
+    queue:uploadFormInfo.queue
+  }
+  const uploadReq = new ServerRequest('POST','/photo',uploadData);
+  uploadReq.success = () => {
+    uploading.close();
+  }
+  let uploadError = false;
+  uploadReq.error = (_,msg) => {
+    ElNotification.error({
+      title:"创建失败",
+      message:msg
+    })
+    uploadError = true;
+  }
+  await uploadReq.send()
+
+  if(uploadError){
+    fileUpload.value!.clearFiles();
+    uploadFormInstance.value!.resetFields();
+    uploading.close();
     return;
   }
 
-  
+  uploading = ElLoading.service({
+    text:'正在上传图片',
+    target:'#upload-form',
+  })
+  const {uploadUrl, photoId} = uploadReq.getData()
 
+  try{
+    const buffer = await FILE.arrayBuffer();
+    await CosStrorage.uploadFile(uploadUrl,buffer);
+    ElNotification.success({title:"上传成功"})
+  }catch(e){
+    ElNotification.error({
+      title:"上传失败",
+    })
+  }finally{
+    fileUpload.value!.clearFiles();
+    uploadFormInstance.value!.resetFields();
+    uploading.close();
+    await init();
+  }
 
-  uploadFormData.set("register",uploadFormInfo.reg)
-  uploadFormData.set("msn",uploadFormInfo.msn)
-  uploadFormData.set("airline_id",uploadFormInfo.airlineId!.toString())
-  uploadFormData.set("airport_id",uploadFormInfo.airportId!.toString())
-  uploadFormData.set("ac_type",uploadFormInfo.ac_type)
-  uploadFormData.set("remark",uploadFormInfo.remark)
-  uploadFormData.set("message",uploadFormInfo.message)
-  uploadFormData.set("photo_type",uploadFormInfo.photo_type.join(","));
-  uploadFormData.set("file",FILE);
 }
 
 function AutoFillSelect(aircraft:AircraftInfo){
@@ -218,7 +244,6 @@ function AutoFillSelect(aircraft:AircraftInfo){
   uploadFormInfo.msn = aircraft.msn;
   uploadFormInfo.airlineId = aircraft.airlineId;
   uploadFormInfo.ac_type = aircraft.air_type;
-
 }
 
 async function AutoFill(){
@@ -244,19 +269,22 @@ async function AutoFill(){
 </script>
 
 <template>
-  <div id="upload-page">
+  <div id="upload-page" class="page-box">
     <div class="intro-box">
       <h4>TOGAPhotos</h4>
       <p>
         TOGAPhotos是一个由航空爱好者发起和维护的图库项目，我们诚挚的欢迎每一位新用户的到来，你们的支持是图库继续发展的最大动力。</p>
       <h4>补充信息</h4>
-      <p>如果数据库中缺少您所需要的信息，请通过:
-        <a @click="elemStatus.airportPanel=true">添加机场</a>，
-        <a @click="elemStatus.airlinePanel = true">添加航司/运营人</a>，
-        <a @click="elemStatus.airtypePanel = true">添加机型</a>
+      <div>如果数据库中缺少您所需要的信息，请通过:
+        <div style="padding: 0.2rem 0;">
+          <el-button type="primary" @click="elemStatus.airportPanel=true">添加机场</el-button>
+          <el-button type="primary" @click="elemStatus.airlinePanel=true">添加航司/运营人</el-button>
+          <el-button type="primary" @click="elemStatus.airtypePanel=true">添加机型</el-button>
+        </div>
         进行补充。
-      </p>
-
+      </div>
+      <p></p>
+      <!-- Empty Tag for style   -->
       <h4>有限的授权使用</h4>
       <p>TOGAPhotos <strong>可能在未事先通知您的情况下</strong>，将您上传的图片发布在TOGAPhotos的社交媒体账号上（遵循<a
           href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh-Hans">CC BY-NC-ND
@@ -266,7 +294,6 @@ async function AutoFill(){
     </div>
     <div id="upload-form">
       <el-form
-          v-loading="elemStatus.uploading"
           label-position="top"
           :model="uploadFormInfo"
           ref="uploadFormInstance"
@@ -280,7 +307,7 @@ async function AutoFill(){
               ref="fileUpload"
               :limit="1"
               :auto-upload="false"
-              :before-upload="CheckImage"
+              :before-upload="beforeUpload"
               list-type="picture"
               :on-exceed="handleExceed"
           >
@@ -316,7 +343,10 @@ async function AutoFill(){
         </el-form-item>
 
         <el-form-item label="机型" prop="ac_type">
-          <AirtypeSelect v-model="uploadFormInfo.ac_type"/>
+          <AircraftTypeSelect 
+            v-model="uploadFormInfo.ac_type"
+            :disabled="elemStatus.airtype"
+          />
         </el-form-item>
 
         <el-form-item label="航空公司/运营人" prop="airlineId">
@@ -327,15 +357,13 @@ async function AutoFill(){
 
         <el-form-item label="拍摄位置" prop="airportId">
           <AirportSelect
-              @change=" (v:number) => getAirportIcaoCode(v)"
               v-model="uploadFormInfo.airportId"
           />
         </el-form-item>
 
         <el-form-item label="图片分类" >
           <PhotoTypeSelect
-              v-model="uploadFormInfo.photo_type"
-              @airportMode="s => airportMode(s)"
+              v-model="<string[]>uploadFormInfo.photoType"
           />
         </el-form-item>
 

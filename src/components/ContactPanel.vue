@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import {reactive} from "vue";
-import type {FullPhotoInfo} from "@/utils/type/photo";
+import type {AcceptPhoto} from "@/utils/type/photo";
 
 const showPanel = defineModel({type:Boolean});
-const props = defineProps<{photoInfo:FullPhotoInfo}>();
+const props = defineProps<{photoInfo:AcceptPhoto}>();
 
 const formData = reactive({
   commercial:false,

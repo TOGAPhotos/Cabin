@@ -15,12 +15,25 @@ export default defineConfig({
       resolvers: [ElementPlusResolver()],
     }),
     Components({
-      resolvers: [ElementPlusResolver()],
+      resolvers: [ElementPlusResolver({ importStyle: "sass" })],
     }),
   ],
   resolve: {
     alias: {
       '@/': new URL('./src/', import.meta.url).pathname
     }
-  }
+  },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        additionalData: `@use "@/styles/element/index.scss" as *;`,
+        sassOptions: {
+          quietDeps: true, // 忽略 Sass 警告
+        }
+      },
+    },
+  },
+  define: {
+    'process.env.SASS_DISABLE_DEPRECATION_WARNINGS': '1',
+  },
 })

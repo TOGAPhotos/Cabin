@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TOGA|CFD</title>
+    <style>
+        body{
+            background-color: rgb(128,128,128);
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <script>
+        const imageUrl = new URLSearchParams(window.location.href.split("?")[1]).get('image');
+
+        const img = new Image();
+        img.src = imageUrl
+        img.crossOrigin = 'anonymous'
+        
+        img.onload = () => {
+        
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+
+            const baseHeight = Math.max(Math.round(window.screen.height / 2), 400);
+            const scaleRatio = baseHeight/img.height
+            canvas.height = baseHeight;
+            canvas.width = scaleRatio*img.width;
+
+            window.resizeTo(canvas.width,canvas.height+20)
+
+            ctx.scale(scaleRatio,scaleRatio)
+
+            ctx.drawImage(img, 0, 0);
+
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const pixels = imageData.data;
+
+            const histograms = {
+                R: new Array(256).fill(0),
+                G: new Array(256).fill(0),
+                B: new Array(256).fill(0),
+            };
+
+            for (let i = 0; i < pixels.length; i += 4) {
+                histograms.R[pixels[i]]++;
+                histograms.G[pixels[i + 1]]++;
+                histograms.B[pixels[i + 2]]++;
+            }
+
+            const cdfs = {};
+            for (const channel in histograms) {
+                const histogram = histograms[channel];
+                const cdf = [];
+                let sum = 0;
+
+                for (let i = 0; i < 256; i++) {
+                    sum += histogram[i];
+                    cdf.push(sum);
+                }
+
+                const cdfMin = cdf.find((val) => val > 0);
+                const totalPixels = canvas.width * canvas.height;
+                cdfs[channel] = cdf.map((val) => Math.round(((val - cdfMin) / (totalPixels - cdfMin)) * 255));
+            }
+
+            for (let i = 0; i < pixels.length; i += 4) {
+                pixels[i] = cdfs.R[pixels[i]];
+                pixels[i + 1] = cdfs.G[pixels[i + 1]];
+                pixels[i + 2] = cdfs.B[pixels[i + 2]];
+            }
+            ctx.putImageData(imageData,0,0)
+            document.body.appendChild(canvas);
+        
+        };
+
+    </script>
+</body>
+</html>

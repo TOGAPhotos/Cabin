@@ -4,7 +4,7 @@ import Device from "@/utils/device";
 import {ElMessage} from "element-plus";
 import ServerRequest from "@/utils/request";
 
-const show = defineModel({type:Boolean});
+const show = defineModel({type:Boolean,default:false});
 const status = reactive({
   nonCode: false,
   loading: false,
@@ -74,7 +74,7 @@ async function submit(){
       <el-form-item label="IATA代码">
         <el-input v-model="form.iata_code" :disabled="status.nonCode" placeholder="例：PEK"/>
       </el-form-item>
-      <a @click="nonCodeMode">无代码地点</a>
+      <el-button @click="nonCodeMode">无代码地点</el-button>
     </el-form>
     <template #footer>
       <div class="dialog-footer">

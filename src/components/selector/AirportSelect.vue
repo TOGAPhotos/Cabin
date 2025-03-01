@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import {onMounted, ref} from "vue";
+import {onMounted, ref, type Ref} from "vue";
 import ServerRequest from "@/utils/request";
 import {ElMessage} from "element-plus";
 
-const value = defineModel({type: Number})
+const value = defineModel<number | undefined>() as Ref<number | undefined>
 
 const airportOptionsList = ref([
   {
@@ -19,16 +19,20 @@ const airportOptionsList = ref([
 ])
 const loading = ref(false);
 
-onMounted(async ()=>{
-  if(!value.value){
-    return;
-  }
-  const airportReq = new ServerRequest('GET', `/airport/${value.value}`)
+const getAirportById = async (id: number) => {
+  const airportReq = new ServerRequest('GET', `/airport/${id}`)
   airportReq.success = () =>{
     const airport = airportReq.getData()
     airportOptionsList.value[0].options=[{label: airport["airport_cn"],value: airport["id"]}]
   }
   await airportReq.send();
+}
+
+onMounted(async ()=>{
+  if(!value.value){
+    return;
+  }
+  await getAirportById(value.value)
 })
 
 const airportRemoteSearch = async (query: string) => {
@@ -54,7 +58,6 @@ const airportRemoteSearch = async (query: string) => {
   }
   await searchReq.send();
 }
-
 
 </script>
 

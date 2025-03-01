@@ -3,7 +3,7 @@ import {useRoute} from "vue-router";
 import router from "@/router";
 import useUserInfoStore from "@/stores/userInfo";
 import Thumbnail from "@/components/Thumbnail.vue";
-import {ref,onMounted} from "vue";
+import {ref, onMounted, useTemplateRef} from "vue";
 import ServerRequest from "@/utils/request";
 import type {AirportData} from "@/utils/type/airport";
 import type {BasicUserInfo} from "@/utils/type/user";
@@ -22,7 +22,7 @@ if (Number(userId) === useUserInfoStore().id){
 
 const userInfo = ref<BasicUserInfo>();
 const photoList = ref();
-const backgroundCssConfig = ref("")
+const headerElm = useTemplateRef<HTMLElement>("header-photo")
 const airportText = ref("");
 
 onMounted(async ()=>{
@@ -30,8 +30,8 @@ onMounted(async ()=>{
   userInfoReq.success = () => {
     photoList.value = userInfoReq.getData('photoList')
     userInfo.value = userInfoReq.getData('userInfo')
-    backgroundCssConfig.value = `linear-gradient(rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%),
-  url("https://cdn.photo.tp.794td.cn/photos/${userInfo.value?.cover_photo_id}.jpg") no-repeat center`;
+    headerElm.value!.style.background = `linear-gradient(rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%),
+    url("https://cdn.photo.tp.794td.cn/photos/${userInfo.value?.cover_photo_id}.jpg") no-repeat center`;
   }
   await userInfoReq.send();
 
@@ -47,9 +47,9 @@ onMounted(async ()=>{
 })
 </script>
 <template>
-  <div class="myself-page">
+  <div id="user-page" class="page-box">
     <div class="self-intro">
-      <div class="myself-header"></div>
+      <div ref="header-photo" class="myself-header"></div>
       <div class="myself-content">
         <h2 id="username">{{ userInfo?.username }}</h2>
         <div id="home-base">
@@ -106,7 +106,7 @@ onMounted(async ()=>{
 </template>
 
 <style scoped>
-.myself-page {
+#user-page {
   display: flex;
   flex-wrap: wrap;
 }
@@ -117,7 +117,7 @@ onMounted(async ()=>{
 
 .myself-header {
   width: 100%;
-  background: v-bind(backgroundCssConfig) ;
+  /*background: v-bind(backgroundCssConfig) ;*/
   background-size: cover;
 }
 
@@ -139,12 +139,12 @@ onMounted(async ()=>{
   .self-intro{
     width: 40%;
   }
-  .photo-box{
-    width: 60%;
-  }
 
   .photo-box {
+    width: 60%;
     margin: 24px 0 0 0;
+    height: calc(100vh - 190px);
+    overflow-y: auto;
   }
   .thumbnail{
     width: calc(100%/3 - 12px)!important;

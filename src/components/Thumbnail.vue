@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import {computed, ref} from "vue";
-import {STATIC_RESOURCE_URL} from "@/config";
+import { ThumbnailUrl } from "@/utils/photo-url";
+import formatAirportString from "@/utils/airport";
+import ImgLoader from "./ImgLoader.vue";
 
 interface ThumbnailData{
   id: number,
@@ -16,28 +18,24 @@ interface ThumbnailData{
 }
 
 const props = defineProps<ThumbnailData>();
-// https://cdn.photo.tp.794td.cn/min/photos/10878.jpg
 
-const showAirport = ref(false)
-const airportLine = ref();
-const url = computed(() => `${STATIC_RESOURCE_URL}/min/photos/${props.id}.jpg`);
+const url = computed(() => ThumbnailUrl(props.id));
 const href = computed(() => `/photo/${props.id}`);
-
-if (props.airport?.name) {
-  showAirport.value =true;
-  airportLine.value = `${props.airport.icao}-${props.airport?.name}`;
-  if (props.airport.iata) {
-    airportLine.value = `${props.airport.iata}/${airportLine.value}`
+const airportLine = computed(() => {
+  if(props.airport?.name){
+    console.log(formatAirportString(props.airport.name, props.airport.icao, props.airport.iata))
+    return formatAirportString(props.airport.name, props.airport.icao, props.airport.iata);
+  }else{
+    return '';
   }
-
-}
+});
 
 
 </script>
 <template>
   <div class="thumbnail">
     <a :href="href">
-      <img :src="url" :alt="props.reg" loading="lazy">
+      <ImgLoader :src="url" className="img"/>
       <div class="info-area">
         <div class="info-area-row" v-if="username">
           <div class="round outer lightblue">
@@ -51,9 +49,7 @@ if (props.airport?.name) {
               <div class="round inner blue">
               </div>
             </div>
-<!--            <span class="info-text">-->
               <span class="airline">{{ airline }}</span> | <span class="reg">{{ reg }}</span>
-<!--            </span>-->
         </div>
         <div class="info-area-row">
           <div class="round outer lightblue">
@@ -62,7 +58,7 @@ if (props.airport?.name) {
           </div>
           {{ airType }}
         </div>
-        <div class="info-area-row" v-if="showAirport">
+        <div class="info-area-row" v-if="airportLine !== ''">
           <div class="round outer blue">
             <div class="round inner blue">
             </div>
@@ -74,7 +70,7 @@ if (props.airport?.name) {
   </div>
 </template>
 
-<style scoped>
+<style>
 .thumbnail {
   margin: 3px 6px;
   border: 1px solid rgba(0, 0, 0, 0.3);
@@ -98,8 +94,9 @@ if (props.airport?.name) {
   }
 }
 
-.thumbnail img {
+.thumbnail .img {
   width: 100%;
+  aspect-ratio: 16/9;
   border-radius: 3% 3% 0 0;
 }
 
@@ -115,6 +112,7 @@ if (props.airport?.name) {
   line-height: 1rem;
   align-items: center;
   min-height: 16px;
+  text-wrap: nowrap;
 }
 .blue{
   background: #0984e3;

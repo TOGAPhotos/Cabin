@@ -39,10 +39,3 @@
     let photoId = 1;
     ```
    
-5. 使用`interface`关键字而非`type`
-
-    根据TypeScript团队负责人Daniel Rosenwasser的说法`type`关键字除了与`interface`显而易见的问题之外（无法声明合并和用于声明类）还有潜在的性能问题。
-    > Honestly, my take is that it should really just be interfaces for anything that they can model. There is no benefit to type aliases when there are so many issues around display/perf. 
-    >
-    > We tried for a long time to paper over the distinction because of people’s personal choices, but ultimately unless we actually simplify the types internally (could happen) they’re not really the same, and interfaces behave better.
-   

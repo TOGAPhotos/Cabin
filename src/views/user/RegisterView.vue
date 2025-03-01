@@ -101,7 +101,7 @@ function register(){
 </script>
 
 <template>
-    <div id="register-page">
+    <div id="register-page" class="page-box">
         <div class="intro-box">
             <h4>TOGAPhotos</h4>
             <p>TOGAPhotos是一个由航空爱好者发起和维护的图库项目，我们诚挚的欢迎每一位新用户的到来，你们的支持是图库继续发展的最大动力。</p>

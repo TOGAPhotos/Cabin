@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import {onMounted, reactive, ref} from "vue";
-import AirportSelect from "@/components/AirportSelect.vue";
+import AirportSelect from "@/components/selector/AirportSelect.vue";
 import ServerRequest from "@/utils/request";
 import useUserInfoStore from "@/stores/userInfo";
 import {ElMessage} from "element-plus";
 import router from "@/router";
-import type {FullPhotoInfo} from "@/utils/type/photo";
+import type {AcceptPhoto} from "@/utils/type/photo";
 
-const panelVisible = defineModel({type: Boolean})
+const panelVisible = defineModel({type: Boolean, default: false});
 const user = useUserInfoStore();
 const loading = ref(false);
 const accountSetting = reactive({
@@ -15,7 +15,7 @@ const accountSetting = reactive({
   email:user.email,
   toga:false,
   thirdParty: false,
-  airportId: undefined,
+  airportId: undefined as number | undefined,
   coverPhotoId:undefined,
 })
 const photoList = ref<{label:string,value:string}[]>([]);
@@ -29,7 +29,7 @@ onMounted(async () => {
     accountSetting.airportId = userInfo.airport_id;
     accountSetting.coverPhotoId = userInfo.cover_photo_id;
 
-    photoList.value = userInfoReq.getData("photoList").map( (photo:FullPhotoInfo) =>{
+    photoList.value = userInfoReq.getData("photoList").map( (photo:AcceptPhoto) =>{
       return {
         value: photo.id,
         label: `${photo.id}|${photo.airline}-${photo.ac_type}`

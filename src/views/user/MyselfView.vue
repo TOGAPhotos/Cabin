@@ -1,27 +1,29 @@
 <script setup lang="ts">
 import useUserInfoStore from "@/stores/userInfo";
 import Thumbnail from "@/components/Thumbnail.vue";
-import {onMounted, ref} from "vue";
+import {onMounted, ref, useTemplateRef, type Ref} from "vue";
 import ServerRequest from "@/utils/request";
 import router from "@/router";
-import AccountSetting from "@/components/AccountSetting.vue";
+import AccountSetting from "@/component/AccountSetting.vue";
 import type {UserSelfInfo} from "@/utils/type/user";
 import type {AirportData} from "@/utils/type/airport";
-import type {PhotoInfo} from "@/utils/type/photo";
+import type {AcceptPhoto} from "@/utils/type/photo";
+import { PhotoUrl } from "@/utils/photo-url";
 
 const user = useUserInfoStore();
 
-const photoList = ref<PhotoInfo[]>([]);
+const photoList = ref<AcceptPhoto[]>([]);
 const userInfo = ref<UserSelfInfo>();
 const airportText = ref("");
-const backgroundCssConfig = ref("");
+const headerElm = useTemplateRef<HTMLElement>("header-photo")
 onMounted(async () => {
   const userInfoReq = new ServerRequest('GET', `/user/${user.id}`,);
   userInfoReq.success = () => {
     photoList.value = userInfoReq.getData('photoList')
     userInfo.value = userInfoReq.getData('userInfo')
-    backgroundCssConfig.value = `linear-gradient(rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%),
-  url("https://cdn.photo.tp.794td.cn/photos/${userInfo.value?.cover_photo_id}.jpg") no-repeat center`;
+    if( !userInfo.value ) return;
+    headerElm.value!.style.background = `linear-gradient(rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%),
+    url("${PhotoUrl(userInfo.value.cover_photo_id)}") no-repeat center/cover`;
   }
   await userInfoReq.send();
 
@@ -36,8 +38,7 @@ onMounted(async () => {
   await airportInfoReq.send();
 })
 
-const settingPanelVisible = ref(false)
-const showProfilePanel = () => settingPanelVisible.value = true;
+const settingPanelVisible = ref<boolean>(false);
 
 const logout = async () =>{
   user.clearUserInfo();
@@ -47,9 +48,9 @@ const logout = async () =>{
 </script>
 
 <template>
-  <div class="myself-page">
+  <div id="myself-page" class="page-box">
     <div class="self-intro">
-      <div class="myself-header"></div>
+      <div ref="header-photo" class="myself-header"></div>
       <div class="myself-content">
         <h2 id="username">{{ user.username }}</h2>
         <div id="home-base">
@@ -103,11 +104,11 @@ const logout = async () =>{
         <div class="action-item">
           <a href="/upload">上传图片</a>
           <div class="explain">从这里上传您的照片到TOGAPhotos</div>
-          <a>上传队列</a>
+          <a href="/queue/upload">上传队列</a>
           <div class="explain">查看正在等待审核的图片，您可以利用TOGAPhotos提供的工具自行检查您上传的图片。</div>
-          <a>未过审队列</a>
+          <a href="/queue/reject">未过审队列</a>
           <div class="explain">查看您最近10张没有通过TOGAPhotos审核的图片，了解您的图片没能通过审核的原因</div>
-          <a @click="showProfilePanel">账户设置</a>
+          <a @click="settingPanelVisible = true;">账户设置</a>
           <div class="explain">更改账户信息，调整您对第三方的授权</div>
           <a style="color: #ff4d4a;" @click="logout()">退出登陆</a>
           <div class="explain">退出当前账户，注销本地存储的凭据</div>
@@ -127,7 +128,7 @@ const logout = async () =>{
 </template>
 
 <style scoped>
-.myself-page {
+#myself-page {
   display: flex;
   flex-wrap: wrap;
 }
@@ -138,8 +139,6 @@ const logout = async () =>{
 
 .myself-header {
   width: 100%;
-  background: v-bind(backgroundCssConfig) ;
-  background-size: cover;
 }
 
 .myself-content {

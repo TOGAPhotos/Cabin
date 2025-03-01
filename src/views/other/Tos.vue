@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <div class="agreement-page">
+  <div id="agreement-view" class="page-box">
     <h1>TOGAPhotos用户协议</h1>
     <p>
       欢迎您使用TOGAPhotos（以下简称“本网站”）提供的服务。
