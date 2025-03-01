@@ -4,8 +4,8 @@ import userInfoStore from '@/stores/userInfo'
 import router from '@/router';
 import { useRoute } from 'vue-router';
 import { transparentNameList, floatNameList } from './config';
-import SearchBox from '@/components/header/SearchBox.vue';
-import LoginButton from '@/components/header/LoginButton.vue';
+import SearchBox from '@/component/header/SearchBox.vue';
+import LoginButton from '@/component/header/LoginButton.vue';
 
 const header = ref<HTMLElement|null>(null);
 const user = userInfoStore();
