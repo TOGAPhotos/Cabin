@@ -74,7 +74,7 @@ async function submit(){
       <el-form-item label="IATA代码">
         <el-input v-model="form.iata_code" :disabled="status.nonCode" placeholder="例：PEK"/>
       </el-form-item>
-      <a @click="nonCodeMode">无代码地点</a>
+      <el-button @click="nonCodeMode">无代码地点</el-button>
     </el-form>
     <template #footer>
       <div class="dialog-footer">
