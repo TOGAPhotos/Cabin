@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import PhotoBox from "@/components/photo/PhotoBox.vue"
+import PhotoBox from "@/component/firstScreen/PhotoBox.vue"
 import type { AcceptPhoto } from '@/utils/type/photo';
 const props = defineProps<{
     photoList: AcceptPhoto[];
