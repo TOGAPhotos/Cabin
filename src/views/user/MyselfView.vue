@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import useUserInfoStore from "@/stores/userInfo";
 import Thumbnail from "@/components/Thumbnail.vue";
-import {onMounted, ref, useTemplateRef} from "vue";
+import {onMounted, ref, useTemplateRef, type Ref} from "vue";
 import ServerRequest from "@/utils/request";
 import router from "@/router";
 import AccountSetting from "@/component/AccountSetting.vue";
 import type {UserSelfInfo} from "@/utils/type/user";
 import type {AirportData} from "@/utils/type/airport";
 import type {AcceptPhoto} from "@/utils/type/photo";
+import { PhotoUrl } from "@/utils/photo-url";
 
 const user = useUserInfoStore();
 
@@ -22,7 +23,7 @@ onMounted(async () => {
     userInfo.value = userInfoReq.getData('userInfo')
     if( !userInfo.value ) return;
     headerElm.value!.style.background = `linear-gradient(rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%),
-    url("https://cdn.photo.tp.794td.cn/photos/${userInfo.value.cover_photo_id}.jpg") no-repeat center/cover`;
+    url("${PhotoUrl(userInfo.value.cover_photo_id)}") no-repeat center/cover`;
   }
   await userInfoReq.send();
 
@@ -37,7 +38,7 @@ onMounted(async () => {
   await airportInfoReq.send();
 })
 
-const settingPanelVisible = ref(false)
+const settingPanelVisible = ref<boolean>(false);
 
 const logout = async () =>{
   user.clearUserInfo();

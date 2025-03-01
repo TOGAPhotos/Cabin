@@ -7,7 +7,7 @@ import {ElMessage} from "element-plus";
 import router from "@/router";
 import type {AcceptPhoto} from "@/utils/type/photo";
 
-const panelVisible = defineModel({type: Boolean})
+const panelVisible = defineModel({type: Boolean, default: false});
 const user = useUserInfoStore();
 const loading = ref(false);
 const accountSetting = reactive({
@@ -15,7 +15,7 @@ const accountSetting = reactive({
   email:user.email,
   toga:false,
   thirdParty: false,
-  airportId: undefined,
+  airportId: undefined as number | undefined,
   coverPhotoId:undefined,
 })
 const photoList = ref<{label:string,value:string}[]>([]);

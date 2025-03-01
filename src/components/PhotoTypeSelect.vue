@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-const value = defineModel({type:Array});
+const value = defineModel({type:Array,default:[]});
 const emits = defineEmits(["airportMode"])
 interface PhotoType{
   label:string,

@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import {onMounted, ref} from "vue";
+import {onMounted, ref, type Ref} from "vue";
 import ServerRequest from "@/utils/request";
 import {ElMessage} from "element-plus";
 
-const value = defineModel({type: Number})
+const value = defineModel<number | undefined>() as Ref<number | undefined>
 
 const airportOptionsList = ref([
   {

@@ -4,7 +4,7 @@ import Device from "@/utils/device";
 import {ElMessage} from "element-plus";
 import ServerRequest from "@/utils/request";
 
-const show = defineModel({type:Boolean});
+const show = defineModel({type:Boolean,default:false});
 const status = reactive({
   loading: false,
 })

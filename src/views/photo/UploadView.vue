@@ -363,7 +363,7 @@ async function AutoFill(){
 
         <el-form-item label="图片分类" >
           <PhotoTypeSelect
-              v-model="uploadFormInfo.photoType"
+              v-model="<string[]>uploadFormInfo.photoType"
           />
         </el-form-item>
 
