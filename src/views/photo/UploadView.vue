@@ -1,13 +1,4 @@
 <script setup lang="ts">
-
-// import AirportSelect from "@/components/selector/AirportSelect.vue";
-// import AirlineSelect from "@/components/selector/AirlineSelect.vue";
-// import AirtypeSelect from "@/components/selector/AirtypeSelect.vue";
-import AircraftTypeSelect from "@/components/selector/AircraftTypeSelect.vue";
-import AirportSelect from "@/components/selector/AirportSelect.vue";
-import AirlineSelect from "@/components/selector/AirlineSelect.vue";
-import PhotoTypeSelect from "@/components/PhotoTypeSelect.vue";
-
 import {reactive, ref, watch} from "vue";
 import {useRoute} from "vue-router";
 
@@ -21,16 +12,22 @@ import type {
 import {ElNotification, ElMessage, genFileId, ElLoading,} from "element-plus";
 import {UploadFilled} from "@element-plus/icons-vue";
 
-import { ExifReader } from "@/utils/exif";
-import ServerRequest from "@/utils/request";
-import useUserInfoStore from "@/stores/userInfo";
-import type {AircraftInfo} from "@/utils/type/aircraft";
+import AircraftTypeSelect from "@/components/selector/AircraftTypeSelect.vue";
+import AirportSelect from "@/components/selector/AirportSelect.vue";
+import AirlineSelect from "@/components/selector/AirlineSelect.vue";
+import PhotoTypeSelect from "@/components/PhotoTypeSelect.vue";
 import CreateAirport from "@/components/CreateAirport.vue";
 import CreateAirline from "@/components/CreateAirline.vue";
 import CreateAirtype from "@/components/CreateAirtype.vue";
+
+import type {AircraftInfo} from "@/utils/type/aircraft";
+import { ExifReader } from "@/utils/exif";
+import ServerRequest from "@/utils/request";
 import { getAirportById } from "@/utils/info";
 import { checkImage } from "@/utils/check-image";
 import CosStrorage from "@/utils/cos";
+
+import useUserInfoStore from "@/stores/userInfo";
 
 interface UploadFormInfo {
   reg: string,
