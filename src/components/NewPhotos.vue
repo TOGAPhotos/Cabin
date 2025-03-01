@@ -2,12 +2,8 @@
 import {onMounted, ref } from "vue";
 import ServerRequest from "@/utils/request";
 import Thumbnail from "@/components/Thumbnail.vue";
-import PhotoBox from "@/components/photo/PhotoBox.vue";
 
 import type { AcceptPhoto } from "@/utils/type/photo";
-import Device from "@/utils/device";
-
-
 
 const photoList = ref<AcceptPhoto[]>([]);
 const photoListReq = new ServerRequest('GET', "/photos");
