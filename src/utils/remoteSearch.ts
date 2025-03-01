@@ -1,6 +1,7 @@
 import ServerRequest from "@/utils/request";
 import {ElMessage} from "element-plus";
 import type { AcceptPhoto, PhotoSearchType } from "./type/photo";
+import type { Airtype } from "./type/airtype";
 
 
 export class RemoteSearch{
@@ -20,5 +21,10 @@ export class RemoteSearch{
         }
         await searchReq.send();
         return result;
+    }
+    static async airtype(ctx:string){
+        const searchReq = new ServerRequest('GET', `/airtype?search=${ctx}`);
+        await searchReq.send();
+        return searchReq.getData() as Airtype[];
     }
 }
