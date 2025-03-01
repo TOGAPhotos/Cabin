@@ -272,18 +272,18 @@ async function AutoFill(){
 </script>
 
 <template>
-  <div id="upload-page">
+  <div id="upload-page" class="page-box">
     <div class="intro-box">
       <h4>TOGAPhotos</h4>
       <p>
         TOGAPhotos是一个由航空爱好者发起和维护的图库项目，我们诚挚的欢迎每一位新用户的到来，你们的支持是图库继续发展的最大动力。</p>
       <h4>补充信息</h4>
       <div>如果数据库中缺少您所需要的信息，请通过:
-        <ul>
-          <li><a @click="elemStatus.airportPanel=true">添加机场</a></li>
-          <li><a @click="elemStatus.airlinePanel=true">添加航司/运营人</a></li>
-          <li><a @click="elemStatus.airtypePanel=true">添加机型</a></li>
-        </ul>
+        <div style="padding: 0.2rem 0;">
+          <el-button type="primary" @click="elemStatus.airportPanel=true">添加机场</el-button>
+          <el-button type="primary" @click="elemStatus.airlinePanel=true">添加航司/运营人</el-button>
+          <el-button type="primary" @click="elemStatus.airtypePanel=true">添加机型</el-button>
+        </div>
         进行补充。
       </div>
       <p></p>

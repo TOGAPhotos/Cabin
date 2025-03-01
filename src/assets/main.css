@@ -14,17 +14,22 @@ h1,h2,h3,h4,strong{
     font-weight: bolder;
 } 
 
-@media only screen and (max-width: 701px) {
+.page-box{
+  max-width: var(--max-width);
+}
+
+/* @media only screen and (max-width: 701px) {
     .el-carousel__container,.el-carousel__item{
-        /* height: 25vmin!important; */
+        height: 25vmin!important;
     }
 }
 
 @media only screen and (min-width: 701px) {
     .el-carousel__container,.el-carousel__item{
-        /* height: 25vmin!important; */
+        height: 25vmin!important;
     }
-}
+} */
+
 
 /* .is-checked::after {
   background-color: #001A38 !important;

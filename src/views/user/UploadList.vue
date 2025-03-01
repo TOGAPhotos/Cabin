@@ -31,7 +31,7 @@ const uploadQueue = ref<_FullPhotoInfo[]>();
 
 
 <template>
-  <div class="upload-photo-list">
+  <div class="upload-photo-list page-box">
     <div>
       <h1>上传队列</h1>
       <p>TOGAPhotos会对您上传的图片进行检查，以确保您的图片符合我们的要求</p>

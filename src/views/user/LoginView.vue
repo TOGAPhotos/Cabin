@@ -63,7 +63,7 @@ async function login () {
 
 </script>
 <template>
-  <div class="login-container">
+  <div id="login-view" class="page-box">
     <img id="login-logo-img" src="https://source.cdn.794td.cn/TOGA/n_logo_b.jpg"/>
     <form @submit.prevent="login">
       <div class="form-group">

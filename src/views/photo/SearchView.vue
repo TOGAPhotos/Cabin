@@ -88,7 +88,7 @@ const searchOptions = [
 </script>
 
 <template>
-  <div class="search-view">
+  <div class="search-view page-box">
     <div v-if="useFuzzySearch" class="search-box">
       <el-input class="input" v-model="searchInfo.content" placeholder="请输入搜索内容" @keyup.enter="NewSearch"/>
       <el-button class="search-button" type="primary" @click="NewSearch">搜索</el-button>

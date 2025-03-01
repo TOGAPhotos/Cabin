@@ -47,7 +47,7 @@ onMounted(async ()=>{
 })
 </script>
 <template>
-  <div class="myself-page">
+  <div id="user-page" class="page-box">
     <div class="self-intro">
       <div ref="header-photo" class="myself-header"></div>
       <div class="myself-content">
@@ -106,7 +106,7 @@ onMounted(async ()=>{
 </template>
 
 <style scoped>
-.myself-page {
+#user-page {
   display: flex;
   flex-wrap: wrap;
 }

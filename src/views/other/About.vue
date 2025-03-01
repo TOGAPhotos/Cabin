@@ -4,7 +4,7 @@ import InfoLabel from '@/components/InfoLabel.vue';
 
 </script>
 <template>
-    <div id="about-view">
+    <div id="about-view" class="page-box">
         <div class="flex-row title">
             <h2>TOGA | 关于页面</h2>
             <InfoLabel class="inline" label="最后更新于" value="2024.10.12"/>

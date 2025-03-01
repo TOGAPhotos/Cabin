@@ -18,7 +18,7 @@ const rejectPhotoList = ref<RejectPhotoInfo[]>([]);
 )()
 </script>
 <template>
-    <div>
+    <div class="page-box">
         <h1>未过审队列</h1>
         <div>
             <p class="cn-content">

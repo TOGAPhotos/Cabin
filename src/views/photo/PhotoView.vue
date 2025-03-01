@@ -1,24 +1,28 @@
 <script setup lang="ts">
 import {computed, watch, ref, useTemplateRef} from "vue";
-import {STATIC_RESOURCE_URL} from "@/config";
 import {useRoute} from "vue-router";
-import ServerRequest from "@/utils/request";
-import router from "@/router";
 import {Checked, User} from "@element-plus/icons-vue";
+import { ElMessage, ElMessageBox } from "element-plus";
+
+import router from "@/router";
+
+import ImgLoader from "@/components/ImgLoader.vue";
 import InfoLabel from "@/components/InfoLabel.vue";
 import ContactPanel from "@/components/ContactPanel.vue";
-import type {AcceptPhoto, PhotoSearchType} from "@/utils/type/photo";
-import {RemoteSearch} from "@/utils/remoteSearch";
 import Thumbnail from "@/components/Thumbnail.vue";
+
+import type {AcceptPhoto, PhotoSearchType} from "@/utils/type/photo";
+import ServerRequest from "@/utils/request";
+import {RemoteSearch} from "@/utils/remoteSearch";
 import Device from "@/utils/device";
-import { ElMessage, ElMessageBox } from "element-plus";
+import { PhotoUrl } from "@/utils/photo-url";
+
 import useUserInfoStore from "@/stores/userInfo";
 
 const airportText = ref("")
 const showContactPanel = ref(false);
 const route = useRoute();
-const photoId = route.params.id;
-const url = computed(() => `${STATIC_RESOURCE_URL}/photos/${photoId}.jpg`);
+const photoId = <string>route.params.id;
 const photoInfo = ref<AcceptPhoto>()
 const relatedPhotoList = ref<AcceptPhoto[]>([]);
 const imgBoxElm = useTemplateRef('_imgBox');
@@ -51,7 +55,6 @@ async function SearchRelatedPhoto(){
   }
 }
 const setImgBoxPositon = () => {
-  // imgBoxElm.value!.style.width = `${window.innerWidth}px`;
   imgBoxElm.value!.style.transform = `translateX(-${imgBoxElm.value!.offsetLeft}px)`;
 }
 
@@ -104,17 +107,13 @@ const deletePhoto = async () => {
   await req.send();
 }
 
-
-
-
 </script>
 
 <template>
-  <div class="photo-view">
+  <div id="photo-view">
     <div class="image-box" ref="_imgBox">
-      <img :src="url" alt=""
-        oncontextmenu="return false"
-        ondragstart="return false"
+      <ImgLoader :src="PhotoUrl(photoId)" :alt="photoInfo?.ac_reg" 
+        :protect="true"
       />
     </div>
     <div class="info-box">
@@ -191,7 +190,7 @@ const deletePhoto = async () => {
 </template>
 
 <style scoped>
-div.photo-view.main {
+#photo-view {
   width: 100% !important;
   margin: 0 calc(100% - 100vw) 0 0;
   max-width: none !important;
@@ -208,13 +207,6 @@ div.photo-view.main {
   justify-content: center;
   width: 100%;
   background: rgb(128, 128, 128);
-}
-
-.image-box img{
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  user-select: none;
 }
 
 .info-box{
@@ -256,8 +248,10 @@ div.photo-view.main {
 .info-label{
   min-width: 9em;
 }
+</style>
+<style>
 @media only screen and (max-width: 701px) {
-  .image-box img {
+  .image-box .img {
     width: 100%;
     height: auto;
   }

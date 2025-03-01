@@ -47,7 +47,7 @@ const logout = async () =>{
 </script>
 
 <template>
-  <div class="myself-page">
+  <div id="myself-page" class="page-box">
     <div class="self-intro">
       <div ref="header-photo" class="myself-header"></div>
       <div class="myself-content">
@@ -127,7 +127,7 @@ const logout = async () =>{
 </template>
 
 <style scoped>
-.myself-page {
+#myself-page {
   display: flex;
   flex-wrap: wrap;
 }
