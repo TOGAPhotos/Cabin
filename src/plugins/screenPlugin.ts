@@ -1,23 +1,23 @@
-import { ref } from "vue";
-import type { App } from "vue";
+// import { ref } from "vue";
+// import type { App } from "vue";
 
-export default {
-  install(app: App) {
-    const screenWidth = ref(window.innerWidth);
+// export default {
+//   install(app: App) {
+//     const screenWidth = ref(window.innerWidth);
 
-    const updateScreenWidth = () => {
-      screenWidth.value = window.innerWidth;
-    };
+//     const updateScreenWidth = () => {
+//       screenWidth.value = window.innerWidth;
+//     };
 
-    window.addEventListener("resize", updateScreenWidth);
+//     window.addEventListener("resize", updateScreenWidth);
 
-    app.config.globalProperties.$screenWidth = screenWidth;
-    app.provide("screenWidth", screenWidth);
-  }
-};
+//     app.config.globalProperties.$screenWidth = screenWidth;
+//     app.provide("screenWidth", screenWidth);
+//   }
+// };
 
-declare module "@vue/runtime-core" {
-  interface ComponentCustomProperties {
-    $screenWidth: typeof ref;
-  }
-}
+// declare module "@vue/runtime-core" {
+//   interface ComponentCustomProperties {
+//     $screenWidth: typeof ref;
+//   }
+// }
