@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {reactive, ref, watch} from "vue";
+import {onMounted, reactive, ref, watch} from "vue";
 import {useRoute} from "vue-router";
 
 import type {
@@ -76,7 +76,9 @@ const init = async ()=>{
   }
   await userInfoReq.send();
 }
-(async () => await init())();
+onMounted(async ()=>{
+  await init();
+})
 
 const fileUpload = ref<UploadInstance>();
 const uploadFormInstance = ref<FormInstance>();
@@ -96,6 +98,9 @@ const uploadFormRules = reactive<FormRules<UploadFormInfo>>({
   ],
   ac_type:[
     {required:true,message:'请选择机型',trigger:"blur"},
+  ],
+  remark:[
+    {max:100,message:'备注不能超过100字',trigger:"blur"}
   ],
   message:[
     {max:100,message:'留言不能超过100字',trigger:"blur"}
@@ -124,12 +129,10 @@ const handleExceed: UploadProps['onExceed'] = (files) => {
 const beforeUpload = (rawFile:UploadRawFile) => {
   FILE = rawFile;
   return false;
-  
-
 }
 
 
-
+// Watching for airportMode
 watch(()=>uploadFormInfo.photoType,async (newValue:string[])=>{
   let status = newValue.join("").includes("A") 
   elemStatus.msn = status;
@@ -339,7 +342,6 @@ async function AutoFill(){
               v-model="uploadFormInfo.msn"
               :disabled="elemStatus.msn"
           />
-<!--          <a @click="uploadFormInfo.msn='UNKNOWN MSN'">不知道MSN</a>-->
         </el-form-item>
 
         <el-form-item label="机型" prop="ac_type">
