@@ -26,6 +26,14 @@ const uploadQueue = ref<_FullPhotoInfo[]>();
     item.airport += '-' + item.airport_cn
   })
 })()
+
+const deletePhoto = (photoId: number) => {
+  const deleteReq = new ServerRequest('DELETE', `/photo/${photoId}`)
+  deleteReq.success = () => {
+    uploadQueue.value = uploadQueue.value?.filter((item) => item.id !== photoId)
+  }
+  deleteReq.send()
+}
 </script>
 
 
@@ -57,14 +65,14 @@ const uploadQueue = ref<_FullPhotoInfo[]>();
         </div>
         <div class="row">
           <InfoLabel label="队列位置" value="0" />
-          <el-button size="small" type="danger">
-            删除
-          </el-button>
           <el-button size="small" type="primary" @click="OpenToolWindow('cfd', PhotoUrl(photo.id))">
             对比度检查
           </el-button>
           <el-button size="small" type="primary" @click="OpenToolWindow('histogram', PhotoUrl(photo.id))">
             直方图
+          </el-button>
+          <el-button size="small" type="danger" @click="deletePhoto(photo.id)">
+            删除
           </el-button>
         </div>
       </div>
