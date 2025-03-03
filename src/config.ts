@@ -3,7 +3,8 @@
 const siteUrl = "http://localhost:3000";
 export const API_URL = siteUrl + '/api/v2';
 
-export const STATIC_RESOURCE_URL = 'https://photo-tp-cdn.794td.cn'
+// export const STATIC_RESOURCE_URL = 'https://photo-tp-cdn.794td.cn'
+export const STATIC_RESOURCE_URL = "https://cos-0688-tp-cdn.794td.cn"
 
 export const consoleStr = `
   _______ ____   _____            _____  _           _            
