@@ -28,6 +28,7 @@ import { checkImage } from "@/utils/check-image";
 import CosStrorage from "@/utils/cos";
 
 import useUserInfoStore from "@/stores/userInfo";
+import WatermarkDailog from "@/component/WatermarkDailog.vue";
 
 interface UploadFormInfo {
   reg: string,
@@ -57,6 +58,7 @@ const elemStatus = reactive({
   airportPanel:false,
   airlinePanel:false,
   airtypePanel:false,
+  watermark:false,
 })
 const localUserInfo = useUserInfoStore();
 const route = useRoute();
@@ -158,6 +160,8 @@ watch(()=>uploadFormInfo.airportId, async (newValue:number|undefined)=>{
   const { icao_code } = await getAirportById(newValue)
   uploadFormInfo.reg = icao_code;
 })
+
+
 
 async function PreUpload(){
   let uploading = ElLoading.service({
@@ -269,6 +273,11 @@ async function AutoFill(){
   }
   await infoReq.send()
 }
+
+const watermarkTest = () => {
+  fileUpload.value!.submit();
+  elemStatus.watermark = true;
+}
 </script>
 
 <template>
@@ -328,7 +337,13 @@ async function AutoFill(){
           </el-upload>
         </el-form-item>
 
-        <el-form-item label="注册号/机身编号" prop="register">
+        <el-form-item>
+          <el-button type="primary" style="width: 100%" @click="watermarkTest" :disabled="elemStatus.upload">
+            上传测试
+          </el-button>
+        </el-form-item>
+
+        <el-form-item label="注册号/机身编号" prop="reg">
           <el-input
               v-model="uploadFormInfo.reg"
               :disabled="elemStatus.reg"
@@ -401,6 +416,7 @@ async function AutoFill(){
     <CreateAirline v-model="elemStatus.airlinePanel"/>
     <CreateAirtype v-model="elemStatus.airtypePanel"/>
   </div>
+  <WatermarkDailog v-model="elemStatus.watermark" :file="FILE"/>
 </template>
 
 <style scoped>
