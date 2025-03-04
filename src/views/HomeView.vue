@@ -54,7 +54,6 @@ const bottomLoad = new BottomLoader(async () => {
 },4)
 
 onMounted(() => {
-  console.log('-----------------', Device.getWidth())
   Promise.allSettled([
     photoListReq.send(),
     notamReq.send(),
