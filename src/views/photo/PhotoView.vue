@@ -202,7 +202,7 @@ const deletePhoto = async () => {
 }
 
 .image-box {
-  min-height: 15vh;
+  min-height: 15dvh;
   display: flex;
   justify-content: center;
   width: 100%;
@@ -279,7 +279,7 @@ const deletePhoto = async () => {
   }
   .image-box img {
     width: auto;
-    max-height: calc(100vh - 64px);
+    max-height: calc(100dvh - 64px);
     object-fit: contain;
   }
   .label-group{

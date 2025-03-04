@@ -14,7 +14,7 @@ const loading = ref(true);
 </script>
 <template>
     <img 
-        src="/placeholder.png" alt="loading" :class="prop.className"
+        src="/placeholder.png" alt="loading" :class="prop.className+' loading'"
         v-show="loading"
     />
     <img 

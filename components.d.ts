@@ -32,6 +32,7 @@ declare module 'vue' {
     ElRadioGroup: typeof import('element-plus/es')['ElRadioGroup']
     ElResult: typeof import('element-plus/es')['ElResult']
     ElSelect: typeof import('element-plus/es')['ElSelect']
+    ElSlider: typeof import('element-plus/es')['ElSlider']
     ElStatistic: typeof import('element-plus/es')['ElStatistic']
     ElUpload: typeof import('element-plus/es')['ElUpload']
     ImgLoader: typeof import('./src/components/ImgLoader.vue')['default']
