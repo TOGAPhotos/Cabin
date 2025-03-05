@@ -30,7 +30,7 @@ interface AcceptPhoto extends ThumbnailInfo {
 
 interface RejectPhotoInfo extends AcceptPhoto {
     reason: string;
-    comment: string;
+    screener_message: string;
 }
 
 export type PhotoSearchType =  "reg"|"airline"|"airtype"|"airport"|"user";

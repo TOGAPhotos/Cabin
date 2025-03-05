@@ -37,7 +37,7 @@ const rejectPhotoList = ref<RejectPhotoInfo[]>([]);
               :id="photo.id"
               :reg="photo.ac_reg"
               :reason="photo.reason"
-              :comment="photo.comment"
+              :comment="photo.screener_message"
           />
         </div>
     </div>
