@@ -37,6 +37,7 @@ interface UploadFormInfo {
   airlineId: number | undefined,
   ac_type: string,
   photoType: string[],
+  date:string,
   remark: string,
   message:string,
   queue:string
@@ -115,6 +116,7 @@ const uploadFormInfo = reactive<UploadFormInfo>({
   airlineId: undefined,
   ac_type: "",
   photoType:[],
+  date:"",
   remark:"",
   message:"",
   queue:'NORM'
@@ -275,8 +277,9 @@ async function AutoFill(){
 }
 
 const watermarkTest = () => {
-  fileUpload.value!.submit();
-  elemStatus.watermark = true;
+  // fileUpload.value!.submit();
+  // elemStatus.watermark = true;
+  // console.log(uploadFormInfo.date)
 }
 </script>
 
@@ -383,7 +386,17 @@ const watermarkTest = () => {
               v-model="<string[]>uploadFormInfo.photoType"
           />
         </el-form-item>
-
+        <el-form-item label="拍摄日期" >
+          <el-date-picker
+              style="width: 100%;"
+              size="large"
+              v-model="uploadFormInfo.date"
+              type="date"
+              format="YYYY-MM-DD"
+              value-format="YYYY-MM-DD"
+              placeholder="选择日期"
+          />
+        </el-form-item>
         <el-form-item label="图片备注" prop="remark">
           <el-input type="textarea" :rows="2" v-model="uploadFormInfo.remark"/>
         </el-form-item>
