@@ -13,9 +13,9 @@ const nextScreenArrow = ref<HTMLElement | null>(null)
 const headPhotoList = ref<AcceptPhoto[]>([])
 const currentImgIndex = ref(2)
 
-const headPhotoReq = new ServerRequest('GET', `/website`);
+const headPhotoReq = new ServerRequest('GET', `/website?type=random`);
 headPhotoReq.success = () => {
-  headPhotoList.value = headPhotoReq.getData('randomPhotoList');
+  headPhotoList.value = headPhotoReq.getData();
 }
 
 onMounted(()=>{
