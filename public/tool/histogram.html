@@ -4,7 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>直方图</title>
+    <title>TOGA|直方图</title>
+    <style>
+        body{
+            background-color: rgb(128,128,128);
+            margin: 0;
+            padding: 0;
+        }
+    </style>
 </head>
 
 <body>
@@ -12,10 +19,10 @@
 
     <script>
         const params = new URLSearchParams(window.location.href.split("?")[1]);
-
+        const mode = params.get("mode") || "0";
+        
         const photoCanvas = document.createElement('canvas');
         const histogramCanvas = document.getElementById('histogramCanvas');
-
         const ptx = photoCanvas.getContext('2d');
         const ctx = histogramCanvas.getContext('2d');
 
@@ -24,12 +31,13 @@
         img.src = params.get("image");
 
         img.onload = () => {
+            const __height = mode === '0' ? img.height : img.height - 20;
             photoCanvas.height = img.height;
             photoCanvas.width = img.width;
 
             ptx.drawImage(img, 0, 0);
 
-            let photoData = ptx.getImageData(0, 0, img.width, img.height - 20).data;
+            let photoData = ptx.getImageData(0, 0, img.width, __height).data;
 
             let lightness = Array(256).fill(0);
 
@@ -47,11 +55,9 @@
                 lightness[i] = Math.round(400 - lightness[i]);
             }
 
-            window.resizeTo(256 * 3 + 2, 510);
-
             histogramCanvas.height = 402;
             histogramCanvas.width = 256 * 3 + 2;
-
+            window.resizeTo(histogramCanvas.width,histogramCanvas.height+40)
             ctx.fillStyle = 'red';
             ctx.fillRect(0, 0, 256 * 3 + 2, 400 + 2);
 

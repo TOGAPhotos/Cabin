@@ -71,6 +71,15 @@ const deletePhoto = (photoId: number) => {
           <el-button size="small" type="primary" @click="OpenToolWindow('histogram', PhotoUrl(photo.id))">
             直方图
           </el-button>
+          <el-button size="small" type="primary" @click="OpenToolWindow('histogramRGB', PhotoUrl(photo.id))">
+            RGB直方图
+          </el-button>
+          <el-button size="small" type="primary" @click="OpenToolWindow('center', PhotoUrl(photo.id))">
+            中心检查
+          </el-button>
+          <el-button size="small" type="primary" @click="OpenToolWindow('horizon', PhotoUrl(photo.id))">
+            水平检查
+          </el-button>
           <el-button size="small" type="danger" @click="deletePhoto(photo.id)">
             删除
           </el-button>
