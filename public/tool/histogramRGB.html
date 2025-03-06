@@ -16,6 +16,15 @@
 
 <body>
 <canvas id="histogramCanvas" style="border: 1px solid orange; background-color: white;"></canvas>
+<!-- checkbox, select RGB or all -->
+ <!-- <div>
+    <input type="checkbox" id="mode" name="mode" value="0" checked>
+    <label for="mode">R</label>
+    <input type="checkbox" id="mode" name="mode" value="1">
+    <label for="mode">G</label> 
+    <input type="checkbox" id="mode" name="mode" value="2">
+    <label for="mode">B</label>
+ </div> -->
 
 <script>
     const params = new URLSearchParams(window.location.href.split("?")[1]);
@@ -114,7 +123,7 @@
             if (channel[i] > 400) {
                 channel[i] = 400;
             }
-            channel[i] = Math.round(-channel[i]);
+            channel[i] = -channel[i];
         }
         return channel
     }
