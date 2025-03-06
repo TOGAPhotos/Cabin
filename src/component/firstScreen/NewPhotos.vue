@@ -6,7 +6,7 @@ import Thumbnail from "@/components/Thumbnail.vue";
 import type { AcceptPhoto } from "@/utils/type/photo";
 
 const photoList = ref<AcceptPhoto[]>([]);
-const photoListReq = new ServerRequest('GET', "/photos");
+const photoListReq = new ServerRequest('GET', "/website");
 photoListReq.success = () => photoList.value = photoListReq.getData()
 
 onMounted(async () => {
