@@ -77,11 +77,11 @@
             console.log(redCounts[i])
             if (i === 0) {
                 ctx.fillStyle = 'red'
-                ctx.fillRect(start, 401, 1, Math.round((redCounts[i] + 400) / 2));
+                ctx.fillRect(start, 401, 1, Math.round((redCounts[i]) / 2));
                 ctx.fillStyle = 'green'
-                ctx.fillRect(start, 401, 1, Math.round((greenCounts[i] + 400) / 2));
+                ctx.fillRect(start, 401, 1, Math.round((greenCounts[i]) / 2));
                 ctx.fillStyle = 'blue'
-                ctx.fillRect(start, 401, 1, Math.round((blueCounts[i] + 400) / 2));
+                ctx.fillRect(start, 401, 1, Math.round((blueCounts[i]) / 2));
             } else {
                 ctx.fillStyle = 'red'
                 ctx.fillRect(start, 401, 1, Math.round((redCounts[i] + redCounts[i - 1]) / 2));
@@ -100,11 +100,11 @@
 
             if (i === 255) {
                 ctx.fillStyle = 'red'
-                ctx.fillRect(start+2, 401, 1, Math.round((redCounts[i] + 400) / 2));
+                ctx.fillRect(start+2, 401, 1, Math.round((redCounts[i]) / 2));
                 ctx.fillStyle = 'green'
-                ctx.fillRect(start+2, 401, 1, Math.round((greenCounts[i] + 400) / 2));
+                ctx.fillRect(start+2, 401, 1, Math.round((greenCounts[i]) / 2));
                 ctx.fillStyle = 'blue'
-                ctx.fillRect(start+2, 401, 1, Math.round((blueCounts[i] + 400) / 2));
+                ctx.fillRect(start+2, 401, 1, Math.round((blueCounts[i]) / 2));
             } else {
                 ctx.fillStyle = 'red'
                 ctx.fillRect(start+2, 401, 1, Math.round((redCounts[i] + redCounts[i + 1]) / 2));
