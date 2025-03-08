@@ -112,6 +112,12 @@ const uploadFormRules = reactive<FormRules<UploadFormInfo>>({
     {max:100,message:'留言不能超过100字',trigger:"blur"}
   ],
 })
+const watermark = reactive({
+  x:0,
+  y:0,
+  s:0,
+  a:0
+})
 const uploadFormData = reactive<UploadFormInfo>({
   reg:'',
   msn:'',
@@ -203,7 +209,8 @@ async function PreUpload(){
     message:uploadFormData.message,
     picType:uploadFormData.photoType.join(','),
     queue:uploadFormData.queue,
-    exif:uploadFormData.exifData
+    exif:uploadFormData.exifData,
+    watermark:JSON.stringify(watermark)
   }
   const uploadReq = new ServerRequest('POST','/photo',uploadData);
   uploadReq.success = () => {
@@ -363,11 +370,11 @@ const readExifDate = async (file:UploadFile) => {
           </el-upload>
         </el-form-item>
 
-        <el-form-item>
+        <!-- <el-form-item>
           <el-button type="primary" style="width: 100%" @click="watermarkTest" :disabled="elemStatus.upload">
             上传测试
           </el-button>
-        </el-form-item>
+        </el-form-item> -->
 
         <el-form-item label="注册号/机身编号" prop="reg">
           <el-input
@@ -452,7 +459,10 @@ const readExifDate = async (file:UploadFile) => {
     <CreateAirline v-model="elemStatus.airlinePanel"/>
     <CreateAirtype v-model="elemStatus.airtypePanel"/>
   </div>
-  <WatermarkDailog v-model="elemStatus.watermark" :file="FILE"/>
+  <WatermarkDailog 
+    v-model="elemStatus.watermark" :file="FILE"
+    v-model:watermark="watermark"
+  />
 </template>
 
 <style scoped>
