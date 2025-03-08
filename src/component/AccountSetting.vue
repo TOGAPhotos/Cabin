@@ -43,7 +43,7 @@ onMounted(async () => {
 async function submit(){
   loading.value = true;
   const updateInfo = {
-    username:user.username,
+    username:accountSetting.username,
     airport_id: accountSetting.airportId,
     allow_toga_use: accountSetting.toga,
     allow_third_use: accountSetting.thirdParty,
