@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import router from '@/router';
 import { Search } from '@element-plus/icons-vue';
 import { ref, onMounted, onBeforeUnmount } from 'vue';
 
@@ -35,6 +36,10 @@ onBeforeUnmount(() => {
   document.removeEventListener('click', handleClickOutside);
 });
 
+const search = () => {
+  return router.push({path:'/search', query:{content:inputContent.value, type:'blurry'}})
+}
+
 </script>
 
 <template>
@@ -46,7 +51,7 @@ onBeforeUnmount(() => {
         class="input-with-select"
       >
         <template #append>
-          <el-button :icon="Search"/>
+          <el-button :icon="Search" @click="search"/>
         </template>
       </el-input>
     </div>
@@ -61,7 +66,7 @@ onBeforeUnmount(() => {
             class="input-with-select mobile-input"
             >
             <template #append>
-                <el-button :icon="Search"/>
+                <el-button :icon="Search" @click="search"/>
             </template>
             </el-input>
         </div>
