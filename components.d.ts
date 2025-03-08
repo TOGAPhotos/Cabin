@@ -38,7 +38,6 @@ declare module 'vue' {
     ElUpload: typeof import('element-plus/es')['ElUpload']
     ImgLoader: typeof import('./src/components/ImgLoader.vue')['default']
     InfoLabel: typeof import('./src/components/InfoLabel.vue')['default']
-    NewPhotos: typeof import('./src/components/NewPhotos.vue')['default']
     PhotoTypeSelect: typeof import('./src/components/PhotoTypeSelect.vue')['default']
     RejectThumbnail: typeof import('./src/components/RejectThumbnail.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']

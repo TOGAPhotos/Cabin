@@ -145,20 +145,23 @@ const beforeUpload = (rawFile:UploadRawFile) => {
 }
 
 // Watching for airportMode
-watch(()=>uploadFormData.photoType,async (newValue:string[])=>{
-  let status = newValue.join("").includes("A") 
-  elemStatus.msn = status;
-  elemStatus.airtype = status;
-  elemStatus.airline = status;
-  elemStatus.reg = status;
-  if(status){
+watch(()=>uploadFormData.photoType,async (newValue:string[],oldValue:string[])=>{
+  const current = newValue.join("").includes("A") 
+  const previous = oldValue.join("").includes("A")
+
+  elemStatus.msn = current;
+  elemStatus.airtype = current;
+  elemStatus.airline = current;
+  elemStatus.reg = current;
+  if(current){
     uploadFormData.ac_type = "机场";
     uploadFormData.msn = "";
+    uploadFormData.airlineId = 5241;
     if(uploadFormData.airportId){
       const { icao_code } = await getAirportById(uploadFormData.airportId)
       uploadFormData.reg = icao_code;
     }
-  }else{
+  }else if(current && !previous){
     uploadFormData.reg = "";
     uploadFormData.ac_type = "";
   }
@@ -402,6 +405,7 @@ const readExifDate = async (file:UploadFile) => {
         <el-form-item label="航空公司/运营人" prop="airlineId">
           <AirlineSelect
               v-model="uploadFormData.airlineId"
+              :disabled="elemStatus.airline"
           />
         </el-form-item>
 
