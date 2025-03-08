@@ -119,7 +119,7 @@ const logout = async () =>{
       <Thumbnail v-for="photo in photoList" :key="photo.id"
                  :id="photo.id"
                  :reg="photo.ac_reg"
-                 :airline="photo.airline"
+                 :airline="photo.airline_cn || photo.airline_en"
                  :airType="photo.ac_type"
       />
     </div>
