@@ -279,6 +279,7 @@ const deletePhoto = async () => {
   }
   .image-box img {
     width: auto;
+    max-width: 100%;
     max-height: calc(100dvh - 64px);
     object-fit: contain;
   }
