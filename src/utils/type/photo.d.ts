@@ -1,8 +1,10 @@
 import type {AirportData} from "@/utils/type/airport";
 
 declare type ThumbnailInfo = {
-    airline:string,
+    airline_cn:string,
+    airline_en:string,
     ac_type:string,
+
     id:number,
     ac_reg:string,
     username:string,
@@ -33,4 +35,4 @@ interface RejectPhotoInfo extends AcceptPhoto {
     screener_message: string;
 }
 
-export type PhotoSearchType =  "reg"|"airline"|"airtype"|"airport"|"user";
+export type PhotoSearchType = "blurry"|"reg"|"airline"|"airtype"|"airport"|"user";
