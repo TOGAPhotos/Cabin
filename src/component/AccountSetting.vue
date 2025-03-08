@@ -32,7 +32,7 @@ onMounted(async () => {
     photoList.value = userInfoReq.getData("photoList").map( (photo:AcceptPhoto) =>{
       return {
         value: photo.id,
-        label: `${photo.id}|${photo.airline}-${photo.ac_type}`
+        label: `${photo.id}|${photo.airline_cn || photo.airline_en}-${photo.ac_type}`
       }
     })
   }
