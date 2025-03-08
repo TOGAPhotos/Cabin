@@ -23,12 +23,13 @@ const props = defineProps({
   min-height: 1em;
 }
 .label{
-  font-size: 0.8em;
+  font-size: 0.8rem;
   font-weight: bolder;
-  margin-bottom: 0.4em;
+  margin-bottom: 0.4rem;
   color: white;
 }
 .value a{
+  font-size: 0.8rem;
   color: black;
 }
 .value a.link:hover{
