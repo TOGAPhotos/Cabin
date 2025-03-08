@@ -7,7 +7,7 @@ import { ElLoading } from 'element-plus';
 
 const dialogVisible = defineModel({default: false});
 const finalPosition = defineModel("watermark",{
-    default: {x: -1, y: -1, s: 0}
+    default: {x: -1, y: -1, s: 0, a:0}
 })
 const props = defineProps<{file:File|undefined}>()
 const PHOTO = new Image();
@@ -15,12 +15,13 @@ const PHOTO = new Image();
 const confirmWatermark = (add:Boolean) =>{
     dialogVisible.value = false;
     if(!add){
-        finalPosition.value = {x: -1, y: -1, s: 0};
+        finalPosition.value = {x: -1, y: -1, s: 0, a:0};
         return;
     }else{
         finalPosition.value.x = watermark.position.x / canvasInfo.scale;
         finalPosition.value.y = watermark.position.y / canvasInfo.scale;
         finalPosition.value.s = watermark.scale;
+        finalPosition.value.a = watermark.alpha;
     }
 }
 
