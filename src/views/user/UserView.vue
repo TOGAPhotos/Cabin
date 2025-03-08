@@ -31,8 +31,10 @@ onMounted(async ()=>{
   userInfoReq.success = () => {
     photoList.value = userInfoReq.getData('photoList')
     userInfo.value = userInfoReq.getData('userInfo')
-    headerElm.value!.style.background = `linear-gradient(rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%),
-    url("${PhotoUrl(userInfo.value!.cover_photo_id)}") no-repeat center`;
+    if(userInfo.value!.cover_photo_id){
+      headerElm.value!.style.background = `linear-gradient(rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%),
+      url("${PhotoUrl(userInfo.value!.cover_photo_id)}") no-repeat center/cover`;
+    }
   }
   await userInfoReq.send();
 
