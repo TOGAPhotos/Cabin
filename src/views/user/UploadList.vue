@@ -53,7 +53,7 @@ const deletePhoto = (photoId: number) => {
           <InfoLabel label="注册号" :value="photo.ac_reg" />
           <InfoLabel label="制造商序列号" :value="photo.ac_msn" />
           <InfoLabel label="机型" :value="photo.ac_type" />
-          <InfoLabel label="航空公司/运营人" value="中国国际航空公司" />
+          <InfoLabel label="航空公司/运营人" :value="photo.airline_cn || photo.airline_en" />
         </div>
         <div class="row">
           <InfoLabel label="拍摄地点" :value="photo.airport" />
