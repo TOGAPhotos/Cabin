@@ -3,6 +3,7 @@ import {reactive,ref} from "vue";
 import type { FormInstance,FormRules } from "element-plus";
 import serverRequest from "@/utils/request";
 import userInfoStore from "@/stores/userInfo";
+import router from "@/router";
 
 const registerForm = ref<FormInstance>();
 
@@ -62,17 +63,22 @@ const registerButton = reactive({
 
 const allowRegister = () => registerButton.status = !(registerInfo.Tos && registerInfo.Notice)
 
-function register(){
+async function register(){
     
     if(!registerForm.value){
         return
     }
 
-    if(!registerForm.value.validate()){
-        return
-    }
+    const validateResult = await registerForm.value.validate(
+        (isValid, invalidFields) => {
+            if (isValid) return;
+            const firstField = Object.values(invalidFields!)[0][0].field as string
+            registerForm.value?.scrollToField(firstField)
+        }
+    );
+    if (!validateResult) return;
 
-    const registerRequest = new serverRequest('POST', '/register', {
+    const registerRequest = new serverRequest('POST', '/user/register', {
         username: registerInfo.username,
         email: registerInfo.email,
         password: registerInfo.password
@@ -93,9 +99,10 @@ function register(){
             expireTime,
             permission
         });
+        return router.push("/")
     }
 
-    registerRequest.send()
+    await registerRequest.send()
 
 }
 </script>
@@ -137,7 +144,10 @@ function register(){
                     </el-checkbox>
                 </el-form-item>
                 <el-form-item>
-                    <el-button style="width: 80%;margin: 0 auto;" type="primary" :disabled="registerButton.status">
+                    <el-button style="width: 80%;margin: 0 auto;" 
+                        type="primary" :disabled="registerButton.status"
+                        @click="register"
+                    >
                         {{ registerButton.text }}
                     </el-button>
                 </el-form-item>
