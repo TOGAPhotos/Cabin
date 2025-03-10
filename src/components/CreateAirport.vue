@@ -25,8 +25,8 @@ const setWidth = computed(()=> Device.isPhone() ? '100%' : 500)
 async function submit(){
   if(status.loading) return;
 
-  if(form.airport_cn === ""){
-    ElMessage.error("中文名不能为空");
+  if(form.airport_cn === "" && form.airport_en === ""){
+    ElMessage.error("名称不能为空");
     return;
   }
   if(form.icao_code === ""){
@@ -56,7 +56,7 @@ async function submit(){
       <h3 style="margin-bottom: 0.8rem">填写说明</h3>
       <p></p>
       <p>如机场没无ICAO代码，请使用无代码地点。</p>
-      <p>英文名称为选填。</p>
+      <p>中文名称和英文名称至少填写一个。</p>
     </div>
     <el-divider/>
     <el-form
@@ -66,7 +66,7 @@ async function submit(){
         <el-input v-model="form.airport_cn" placeholder="例：北京首都国际机场"/>
       </el-form-item>
       <el-form-item label="英文名">
-        <el-input v-model="form.airport_en" placeholder="例：Beijing Capital Internation Airport（选填）"/>
+        <el-input v-model="form.airport_en" placeholder="例：Beijing Capital Internation Airport"/>
       </el-form-item>
       <el-form-item label="ICAO代码">
         <el-input v-model="form.icao_code" :disabled="status.nonCode" placeholder="例：ZBAA"/>
@@ -74,7 +74,8 @@ async function submit(){
       <el-form-item label="IATA代码">
         <el-input v-model="form.iata_code" :disabled="status.nonCode" placeholder="例：PEK"/>
       </el-form-item>
-      <el-button @click="nonCodeMode">无代码地点</el-button>
+      <el-button v-if="!status.nonCode" @click="nonCodeMode">无代码地点</el-button>
+      <el-button v-else @click="nonCodeMode">有代码地点</el-button>
     </el-form>
     <template #footer>
       <div class="dialog-footer">
