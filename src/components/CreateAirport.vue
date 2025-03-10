@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import {computed, reactive, ref} from "vue";
+import {computed, reactive, ref, useTemplateRef} from "vue";
 import Device from "@/utils/device";
-import {ElMessage} from "element-plus";
+import {ElMessage, type FormInstance} from "element-plus";
 import ServerRequest from "@/utils/request";
 
 const show = defineModel({type:Boolean,default:false});
@@ -11,10 +11,10 @@ const status = reactive({
 })
 function nonCodeMode(){
   status.nonCode = !status.nonCode;
-  form.icao_code = status.nonCode ? "OTHER" : "";
+  formData.icao_code = status.nonCode ? "OTHER" : "";
 }
-
-const form = reactive({
+const form = useTemplateRef<FormInstance>("form");
+const formData = reactive({
   airport_cn:"",
   airport_en:"",
   icao_code:"",
@@ -25,18 +25,19 @@ const setWidth = computed(()=> Device.isPhone() ? '100%' : 500)
 async function submit(){
   if(status.loading) return;
 
-  if(form.airport_cn === "" && form.airport_en === ""){
+  if(formData.airport_cn === "" && formData.airport_en === ""){
     ElMessage.error("名称不能为空");
     return;
   }
-  if(form.icao_code === ""){
+  if(formData.icao_code === ""){
     ElMessage.error("ICAO 不能为空");
     return;
   }
   status.loading=true;
-  const req = new ServerRequest("POST","/airport",form);
+  const req = new ServerRequest("POST","/airport",formData);
   req.success = (msg) => {
     ElMessage.success(msg);
+    form.value!.resetFields();
     show.value = false;
   }
   req.error = (code,msg) => {
@@ -51,6 +52,7 @@ async function submit(){
   <el-drawer
       v-model="show" title="添加机场"
       :size="setWidth" direction="ltr"
+      ref="form"
   >
     <div>
       <h3 style="margin-bottom: 0.8rem">填写说明</h3>
@@ -63,16 +65,16 @@ async function submit(){
         label-position="top"
     >
       <el-form-item label="中文名">
-        <el-input v-model="form.airport_cn" placeholder="例：北京首都国际机场"/>
+        <el-input v-model="formData.airport_cn" placeholder="例：北京首都国际机场"/>
       </el-form-item>
       <el-form-item label="英文名">
-        <el-input v-model="form.airport_en" placeholder="例：Beijing Capital Internation Airport"/>
+        <el-input v-model="formData.airport_en" placeholder="例：Beijing Capital Internation Airport"/>
       </el-form-item>
       <el-form-item label="ICAO代码">
-        <el-input v-model="form.icao_code" :disabled="status.nonCode" placeholder="例：ZBAA"/>
+        <el-input v-model="formData.icao_code" :disabled="status.nonCode" placeholder="例：ZBAA"/>
       </el-form-item>
       <el-form-item label="IATA代码">
-        <el-input v-model="form.iata_code" :disabled="status.nonCode" placeholder="例：PEK"/>
+        <el-input v-model="formData.iata_code" :disabled="status.nonCode" placeholder="例：PEK"/>
       </el-form-item>
       <el-button v-if="!status.nonCode" @click="nonCodeMode">无代码地点</el-button>
       <el-button v-else @click="nonCodeMode">有代码地点</el-button>
