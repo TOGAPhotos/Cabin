@@ -93,10 +93,10 @@ const airportLine = computed(() => {
     width: calc(25% - 12px);
   }
 }
-
 .thumbnail .img {
   width: 100%;
-  aspect-ratio: 16/9;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
   border-radius: 3% 3% 0 0;
 }
 
