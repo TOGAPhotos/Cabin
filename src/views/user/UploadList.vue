@@ -8,7 +8,8 @@ import InfoLabel from "@/components/InfoLabel.vue";
 
 interface _FullPhotoInfo extends AcceptPhoto {
   queueIndex: number
-  airport:string
+  airport:string,
+  message:string,
 }
 
 const uploadQueue = ref<_FullPhotoInfo[]>();
@@ -61,7 +62,7 @@ const deletePhoto = (photoId: number) => {
         </div>
         <div class="row">
           <InfoLabel label="备注" :value="photo.user_remark" />
-          <InfoLabel label="留言" value="MSG" />
+          <InfoLabel label="留言" :value="photo.message" />
         </div>
         <div class="row">
           <InfoLabel label="队列位置" value="0" />
