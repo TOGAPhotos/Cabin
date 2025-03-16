@@ -9,37 +9,37 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: import('@/views/HomeView.vue')
+      component: () => import('@/views/HomeView.vue')
     },
     {
       path:'/register',
       name:'register',
-      component: import('@/views/user/RegisterView.vue')
+      component: () => import('@/views/user/RegisterView.vue')
     },
     {
       path:'/photo/:id',
       name:'photo',
-      component: import('@/views/photo/PhotoView.vue')
+      component: () => import('@/views/photo/PhotoView.vue')
     },
     {
       path:'/search',
       name:'search',
-      component: import('@/views/photo/SearchView.vue')
+      component: () => import('@/views/photo/SearchView.vue')
     },
     {
       path:'/login',
       name:'login',
-      component: import('@/views/user/LoginView.vue')
+      component: () => import('@/views/user/LoginView.vue')
     },
     {
       path:'/myself',
       name:'myself',
-      component: () => import('@/views/user/MyselfView.vue')
+      component:() => import('@/views/user/MyselfView.vue')
     },
     {
       path:'/upload',
       name:'upload',
-      component: import('@/views/photo/UploadView.vue')
+      component: () => import('@/views/photo/UploadView.vue')
     },
     {
       path:'/queue',
@@ -47,19 +47,19 @@ const router = createRouter({
         {
           path:'reject',
           name:'reject-list',
-          component: import('@/views/user/RejectList.vue')
+          component: () => import('@/views/user/RejectList.vue')
         },
         {
           path:'upload',
           name:'upload-queue',
-          component:import('@/views/user/UploadList.vue')
+          component:() => import('@/views/user/UploadList.vue')
         }
       ]
     },
     {
       path:'/user/:id',
       name:'user',
-      component: () => import('@/views/user/UserView.vue')
+      component:() => import('@/views/user/UserView.vue')
     },
     {
       path:'/about',
@@ -74,12 +74,12 @@ const router = createRouter({
     {
       path:"/tos",
       name:'Tos',
-      component: import("@/views/other/Tos.vue")
+      component: () => import("@/views/other/Tos.vue")
     },
     {
       path:'/:pathMatch(.*)*',
       name:'not-found',
-      component: import('@/views/other/Page404.vue')
+      component: () => import('@/views/other/Page404.vue')
     }
   ]
 })
