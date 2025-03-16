@@ -8,7 +8,7 @@ import AccountSetting from "@/component/AccountSetting.vue";
 import type {UserSelfInfo} from "@/utils/type/user";
 import type {AirportData} from "@/utils/type/airport";
 import type {AcceptPhoto} from "@/utils/type/photo";
-import { PhotoUrl } from "@/utils/photo-url";
+import { ThumbnailUrl } from "@/utils/photo-url";
 
 const user = useUserInfoStore();
 
@@ -21,21 +21,24 @@ onMounted(async () => {
   userInfoReq.success = () => {
     photoList.value = userInfoReq.getData('photoList')
     userInfo.value = userInfoReq.getData('userInfo')
-    if( !userInfo.value ) return;
-    headerElm.value!.style.background = `linear-gradient(rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%),
-    url("${PhotoUrl(userInfo.value.cover_photo_id)}") no-repeat center/cover`;
+    user.username = userInfo.value!.username;
   }
   await userInfoReq.send();
-
-  const airportInfoReq = new ServerRequest('GET', `/airport/${userInfo.value?.airport_id}`,);
-  airportInfoReq.success = () => {
-    const airportData = airportInfoReq.getData() as AirportData;
-    airportText.value = airportData.icao_code + " " + airportData.airport_cn;
-    if(airportData.iata_code){
-      airportText.value = `${airportData.iata_code}/${airportText.value}`;
-    }
+  if(userInfo.value?.cover_photo_id){
+      headerElm.value!.style.background = `linear-gradient(rgba(247, 248, 250, 0) 0%, rgba(247, 248, 250, 1) 100%),
+      url("${ThumbnailUrl(userInfo.value.cover_photo_id)}") no-repeat center/cover`;
   }
-  await airportInfoReq.send();
+  if(userInfo.value?.airport_id){
+    const airportInfoReq = new ServerRequest('GET', `/airport/${userInfo.value.airport_id}`,);
+    airportInfoReq.success = () => {
+      const airportData = airportInfoReq.getData() as AirportData;
+      airportText.value = airportData.icao_code + " " + airportData.airport_cn;
+      if(airportData.iata_code){
+        airportText.value = `${airportData.iata_code}/${airportText.value}`;
+      }
+    }
+    await airportInfoReq.send();
+  }
 })
 
 const settingPanelVisible = ref<boolean>(false);
@@ -52,11 +55,11 @@ const logout = async () =>{
     <div class="self-intro">
       <div ref="header-photo" class="myself-header"></div>
       <div class="myself-content">
-        <h2 id="username">{{ user.username }}</h2>
+        <h2 id="username">{{ userInfo?.username }}</h2>
         <div id="home-base">
           <div class="airport">{{ airportText }}</div>
         </div>
-        <div class="badge-box">
+        <!-- <div class="badge-box">
           <el-popover class="badge" :width="300">
             <template #default>
               <img class="badge-big" src="https://cdn.photo.tp.794td.cn/badge/Badge_IB.jpg" alt=""/>
@@ -89,7 +92,7 @@ const logout = async () =>{
               <img class="badge-small" src="https://cdn.photo.tp.794td.cn/badge/Badge_IB.jpg" alt=""/>
             </template>
           </el-popover>
-        </div>
+        </div> -->
       </div>
       <div class="statistic-box">
         <el-statistic class="statistic-item" title="入库数量" :value="userInfo?.total_photo"/>
@@ -119,7 +122,7 @@ const logout = async () =>{
       <Thumbnail v-for="photo in photoList" :key="photo.id"
                  :id="photo.id"
                  :reg="photo.ac_reg"
-                 :airline="photo.airline"
+                 :airline="photo.airline_cn || photo.airline_en"
                  :airType="photo.ac_type"
       />
     </div>
@@ -146,7 +149,9 @@ const logout = async () =>{
   flex-direction: column;
   justify-content: center;
 }
-
+.action-item a{
+  font-weight: bolder;
+}
 @media only screen and (min-width: 701px) {
   .myself-page {
     padding: 0 15px;

@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <div id="privacy-view" class="page-box">
+  <div class="privacy-page">
     <h1>
       TOGAPhotos 隐私声明
     </h1>

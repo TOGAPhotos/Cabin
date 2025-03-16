@@ -27,9 +27,6 @@ export default defineConfig({
     preprocessorOptions: {
       scss: {
         additionalData: `@use "@/styles/element/index.scss" as *;`,
-        sassOptions: {
-          quietDeps: true, // 忽略 Sass 警告
-        }
       },
     },
   },

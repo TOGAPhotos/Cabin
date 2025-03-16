@@ -26,7 +26,7 @@ onMounted(()=>headPhotoReq.send())
           v-for="img in headPhotoList" :key="img.id"
           :id="img.id"
           :reg="img.ac_reg"
-          :airline="img.airline"
+          :airline="img.airline_cn || img.airline_en"
           :username="img.username"
           :airType="img.ac_type"
       />

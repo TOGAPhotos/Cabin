@@ -7,6 +7,7 @@ import {ref, onMounted, useTemplateRef} from "vue";
 import ServerRequest from "@/utils/request";
 import type {AirportData} from "@/utils/type/airport";
 import type {BasicUserInfo} from "@/utils/type/user";
+import { PhotoUrl } from "@/utils/photo-url";
 
 const route = useRoute();
 const userId = route.params.id;
@@ -30,8 +31,10 @@ onMounted(async ()=>{
   userInfoReq.success = () => {
     photoList.value = userInfoReq.getData('photoList')
     userInfo.value = userInfoReq.getData('userInfo')
-    headerElm.value!.style.background = `linear-gradient(rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%),
-    url("https://cdn.photo.tp.794td.cn/photos/${userInfo.value?.cover_photo_id}.jpg") no-repeat center`;
+    if(userInfo.value!.cover_photo_id){
+      headerElm.value!.style.background = `linear-gradient(rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%),
+      url("${PhotoUrl(userInfo.value!.cover_photo_id)}") no-repeat center/cover`;
+    }
   }
   await userInfoReq.send();
 
@@ -98,7 +101,7 @@ onMounted(async ()=>{
       <Thumbnail v-for="photo in photoList" :key="photo.id"
                  :id="photo.id"
                  :reg="photo.ac_reg"
-                 :airline="photo.airline"
+                 :airline="photo.airline_cn || photo.airline_en"
                  :airType="photo.ac_type"
       />
     </div>

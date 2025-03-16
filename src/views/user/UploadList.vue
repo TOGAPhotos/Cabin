@@ -8,7 +8,8 @@ import InfoLabel from "@/components/InfoLabel.vue";
 
 interface _FullPhotoInfo extends AcceptPhoto {
   queueIndex: number
-  airport:string
+  airport:string,
+  message:string,
 }
 
 const uploadQueue = ref<_FullPhotoInfo[]>();
@@ -26,6 +27,14 @@ const uploadQueue = ref<_FullPhotoInfo[]>();
     item.airport += '-' + item.airport_cn
   })
 })()
+
+const deletePhoto = (photoId: number) => {
+  const deleteReq = new ServerRequest('DELETE', `/photo/${photoId}`)
+  deleteReq.success = () => {
+    uploadQueue.value = uploadQueue.value?.filter((item) => item.id !== photoId)
+  }
+  deleteReq.send()
+}
 </script>
 
 
@@ -45,7 +54,7 @@ const uploadQueue = ref<_FullPhotoInfo[]>();
           <InfoLabel label="注册号" :value="photo.ac_reg" />
           <InfoLabel label="制造商序列号" :value="photo.ac_msn" />
           <InfoLabel label="机型" :value="photo.ac_type" />
-          <InfoLabel label="航空公司/运营人" value="中国国际航空公司" />
+          <InfoLabel label="航空公司/运营人" :value="photo.airline_cn || photo.airline_en" />
         </div>
         <div class="row">
           <InfoLabel label="拍摄地点" :value="photo.airport" />
@@ -53,18 +62,27 @@ const uploadQueue = ref<_FullPhotoInfo[]>();
         </div>
         <div class="row">
           <InfoLabel label="备注" :value="photo.user_remark" />
-          <InfoLabel label="留言" value="MSG" />
+          <InfoLabel label="留言" :value="photo.message" />
         </div>
         <div class="row">
           <InfoLabel label="队列位置" value="0" />
-          <el-button size="small" type="danger">
-            删除
-          </el-button>
           <el-button size="small" type="primary" @click="OpenToolWindow('cfd', PhotoUrl(photo.id))">
             对比度检查
           </el-button>
           <el-button size="small" type="primary" @click="OpenToolWindow('histogram', PhotoUrl(photo.id))">
             直方图
+          </el-button>
+          <el-button size="small" type="primary" @click="OpenToolWindow('histogramRGB', PhotoUrl(photo.id))">
+            RGB直方图
+          </el-button>
+          <el-button size="small" type="primary" @click="OpenToolWindow('center', PhotoUrl(photo.id))">
+            中心检查
+          </el-button>
+          <el-button size="small" type="primary" @click="OpenToolWindow('horizon', PhotoUrl(photo.id))">
+            水平检查
+          </el-button>
+          <el-button size="small" type="danger" @click="deletePhoto(photo.id)">
+            删除
           </el-button>
         </div>
       </div>

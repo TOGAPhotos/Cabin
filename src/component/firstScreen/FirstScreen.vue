@@ -13,9 +13,9 @@ const nextScreenArrow = ref<HTMLElement | null>(null)
 const headPhotoList = ref<AcceptPhoto[]>([])
 const currentImgIndex = ref(2)
 
-const headPhotoReq = new ServerRequest('GET', `/website`);
+const headPhotoReq = new ServerRequest('GET', `/website?type=random`);
 headPhotoReq.success = () => {
-  headPhotoList.value = headPhotoReq.getData('randomPhotoList');
+  headPhotoList.value = headPhotoReq.getData();
 }
 
 onMounted(()=>{
@@ -35,13 +35,13 @@ onMounted(()=>{
 
 <template>
   <div class="first-screen-background" ref="firstPageBlock">
-    <img src="@/assets/first-screen-bg.png" alt="" class="first-screen-bg">
+    <img src="https://cos-0688-tp-cdn.794td.cn/photos/2359.jpg" alt="" class="first-screen-bg">
     <div class="content-box first-screen-content">
       <div class="head-title head-title-container">
         <h3>加入TOGAPhotos</h3>
         <h3>与广大航空爱好者分享你的作品</h3>
         <TransparentButton :isWhite="true"></TransparentButton>
-        <p class="copyright">PHOTO BY @SHAskylens</p>
+        <p class="copyright">PHOTO BY @Baigiver-0764</p>
       </div>
       <div class="head-photo-container" v-if="headPhotoList.length > 0">
         <div class="top-photo-container" >
@@ -72,13 +72,13 @@ onMounted(()=>{
   width: 100%;
   height: 100%;
   z-index: 1;
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.7) 50%, rgba(0, 0, 0, 0) 100%);
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.5) 50%, rgba(0, 0, 0, 0) 100%);
 }
 .first-screen-bg{
   width: 100%;
   height: 100%;
   object-fit: cover;
-  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 50%, rgba(0, 0, 0, 0) 100%);
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.7) 50%, rgba(0, 0, 0, 0) 100%);
   z-index: -1;
 }
 .first-screen-content{

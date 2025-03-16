@@ -5,7 +5,7 @@ import type { Airtype } from "./type/airtype";
 
 
 export class RemoteSearch{
-    static async photo(type: PhotoSearchType,ctx:string,lastId:number,num:number=50):Promise<AcceptPhoto[]>{
+    static async photo(type: PhotoSearchType,ctx:string,lastId:number,num:number=40):Promise<AcceptPhoto[]>{
         if(num < 1){
             throw new Error('Request Number must be greater than 1');
         }

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Histogram-RGB</title>
+    <style>
+        body{
+            background-color: rgb(128,128,128);
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+
+<body>
+<canvas id="histogramCanvas" style="border: 1px solid orange; background-color: white;"></canvas>
+<!-- checkbox, select RGB or all -->
+ <!-- <div>
+    <input type="checkbox" id="mode" name="mode" value="0" checked>
+    <label for="mode">R</label>
+    <input type="checkbox" id="mode" name="mode" value="1">
+    <label for="mode">G</label> 
+    <input type="checkbox" id="mode" name="mode" value="2">
+    <label for="mode">B</label>
+ </div> -->
+
+<script>
+    const params = new URLSearchParams(window.location.href.split("?")[1]);
+    const mode = params.get("mode") || "0";
+    const photoCanvas = document.createElement('canvas')
+    const histogramCanvas = document.getElementById('histogramCanvas')
+
+    const ptx = photoCanvas.getContext('2d')
+    const ctx = histogramCanvas.getContext('2d')
+
+    const img = new Image()
+    img.crossOrigin = 'anonymous'
+    img.src = params.get("image");
+
+    img.onload = () => {
+        photoCanvas.width = img.width
+        photoCanvas.height = img.height
+
+        const __height = mode === '0' ? img.height : img.height - 20
+
+        ptx.drawImage(img, 0, 0, img.width, img.height)
+
+        let photoData = ptx.getImageData(0, 0, photoCanvas.width, __height).data
+
+        let redCounts = new Array(256).fill(0)
+        let greenCounts = new Array(256).fill(0)
+        let blueCounts = new Array(256).fill(0)
+
+        for (let i = 0; i < photoData.length; i += 4) {
+            redCounts[photoData[i]]++
+            greenCounts[photoData[i + 1]]++
+            blueCounts[photoData[i + 2]]++
+        }
+
+        histogramCanvas.width = 256 * 3 + 2
+        histogramCanvas.height = 402
+
+        ctx.fillStyle = 'black';
+        ctx.fillRect(0, 0, 256 * 3 + 2, 400 + 2);
+        ctx.fillStyle = 'white';
+        ctx.fillRect(1, 1, 256 * 3, 400);
+
+        redCounts = channelCompresion(redCounts, photoData.length)
+        greenCounts = channelCompresion(greenCounts, photoData.length)
+        blueCounts = channelCompresion(blueCounts, photoData.length)
+
+        console.log(redCounts)
+        for (let i = 0; i < 256; i++) {
+            let start = 3 * i + 1;
+            console.log(redCounts[i])
+            if (i === 0) {
+                ctx.fillStyle = 'red'
+                ctx.fillRect(start, 401, 1, Math.round((redCounts[i]) / 2));
+                ctx.fillStyle = 'green'
+                ctx.fillRect(start, 401, 1, Math.round((greenCounts[i]) / 2));
+                ctx.fillStyle = 'blue'
+                ctx.fillRect(start, 401, 1, Math.round((blueCounts[i]) / 2));
+            } else {
+                ctx.fillStyle = 'red'
+                ctx.fillRect(start, 401, 1, Math.round((redCounts[i] + redCounts[i - 1]) / 2));
+                ctx.fillStyle = 'green'
+                ctx.fillRect(start, 401, 1, Math.round((greenCounts[i] + greenCounts[i - 1]) / 2));
+                ctx.fillStyle = 'blue'
+                ctx.fillRect(start, 401, 1, Math.round((blueCounts[i] + blueCounts[i - 1]) / 2));
+            }
+
+            ctx.fillStyle = 'red'
+            ctx.fillRect(start+1, 401, 1, Math.round((redCounts[i])));
+            ctx.fillStyle = 'green'
+            ctx.fillRect(start+1, 401, 1, Math.round((greenCounts[i])));
+            ctx.fillStyle = 'blue'
+            ctx.fillRect(start+1, 401, 1, Math.round((blueCounts[i])));
+
+            if (i === 255) {
+                ctx.fillStyle = 'red'
+                ctx.fillRect(start+2, 401, 1, Math.round((redCounts[i]) / 2));
+                ctx.fillStyle = 'green'
+                ctx.fillRect(start+2, 401, 1, Math.round((greenCounts[i]) / 2));
+                ctx.fillStyle = 'blue'
+                ctx.fillRect(start+2, 401, 1, Math.round((blueCounts[i]) / 2));
+            } else {
+                ctx.fillStyle = 'red'
+                ctx.fillRect(start+2, 401, 1, Math.round((redCounts[i] + redCounts[i + 1]) / 2));
+                ctx.fillStyle = 'green'
+                ctx.fillRect(start+2, 401, 1, Math.round((greenCounts[i] + greenCounts[i + 1]) / 2));
+                ctx.fillStyle = 'blue'
+                ctx.fillRect(start+2, 401, 1, Math.round((blueCounts[i] + blueCounts[i + 1]) / 2));
+            }
+        }
+        window.resizeTo(histogramCanvas.width, histogramCanvas.height + 40)
+    }
+
+    const channelCompresion = (channel, pLen) => {
+        for (let i = 0; i < 256; i++) {
+            channel[i] = Math.round( channel[i] / (60 * (pLen / 4) / (1280 * 720)));
+            if (channel[i] > 400) {
+                channel[i] = 400;
+            }
+            channel[i] = -channel[i];
+        }
+        return channel
+    }
+
+
+</script>
+</body>
+
+</html>

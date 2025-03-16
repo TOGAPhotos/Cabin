@@ -32,7 +32,7 @@ onMounted(async () => {
     photoList.value = userInfoReq.getData("photoList").map( (photo:AcceptPhoto) =>{
       return {
         value: photo.id,
-        label: `${photo.id}|${photo.airline}-${photo.ac_type}`
+        label: `${photo.id}|${photo.airline_cn || photo.airline_en}-${photo.ac_type}`
       }
     })
   }
@@ -43,7 +43,7 @@ onMounted(async () => {
 async function submit(){
   loading.value = true;
   const updateInfo = {
-    username:user.username,
+    username:accountSetting.username,
     airport_id: accountSetting.airportId,
     allow_toga_use: accountSetting.toga,
     allow_third_use: accountSetting.thirdParty,

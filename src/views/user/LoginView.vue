@@ -104,6 +104,7 @@ async function login () {
   margin: 0 auto 2em auto;
 }
 .login-container{
+  margin: 0 auto;
   width: 80vw;
   max-width: 450px!important;
   height: calc(100vh - 187px);

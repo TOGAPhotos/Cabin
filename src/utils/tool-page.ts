@@ -1,8 +1,8 @@
-type Tool = 'cfd' | 'histogram' | 'RGBhistogram' | 'horizon' | 'center'
+type Tool = 'cfd' | 'histogram' | 'histogramRGB' | 'horizon' | 'center'
 
-export function OpenToolWindow(tool:Tool,imageUrl:string){
+export function OpenToolWindow(tool:Tool,imageUrl:string,mode:number=0){
     open(
-        `/tool/${tool}.html?image=${imageUrl}`,
+        `/tool/${tool}.html?image=${imageUrl}&mode=${mode}`,
         "",
         "location=no,toolbar=no,width=1280,height=720"
     )!.focus();

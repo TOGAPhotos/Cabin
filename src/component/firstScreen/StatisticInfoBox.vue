@@ -24,7 +24,7 @@ function runTime(): string {
   return `共运行${years}年${months}月${days}日`;
 }
 
-const websiteInfoReq = new ServerRequest('GET','/website');
+const websiteInfoReq = new ServerRequest('GET','/website?type=statistics');
 websiteInfoReq.success = () =>{
   const data = websiteInfoReq.getData();
   statisticInfo.userNum = data['userNum'];

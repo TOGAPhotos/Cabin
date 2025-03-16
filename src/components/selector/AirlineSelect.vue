@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import ServerRequest from "@/utils/request";
 import {ElMessage} from "element-plus";
-import {ref} from "vue";
+import {ref,watch} from "vue";
 import type {Option} from "@/utils/type/option";
 
 const value = defineModel({type: Number})
@@ -31,6 +31,20 @@ const airlineRemoteSearch = async (query: string) => {
   await searchReq.send();
   loading.value = false;
 }
+
+watch(()=>value.value, async (newValue)=>{
+  if(!newValue) return;
+  const optionSearch = airlineOptions.value.find((item)=>item.value === newValue)
+  if(optionSearch) return;
+  const searchReq = new ServerRequest('GET', `/airline/${newValue}`)
+  searchReq.success = () => {
+    airlineOptions.value.push({
+      label: searchReq.getData()['airline_cn'] || searchReq.getData()['airline_en'],
+      value: searchReq.getData()['id']
+    })
+  }
+  await searchReq.send();
+})
 
 </script>
 

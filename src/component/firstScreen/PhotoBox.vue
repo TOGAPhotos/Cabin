@@ -25,7 +25,7 @@ function processHeadPhoto(imgId:number):CSSProperties{
             <div class="photo-info-container">
               <div class="basic-info"><i class="iconfont toga-paizhao icon"></i> {{ photoInfo.username }}</div>
               <div class="extra-info">
-                <div class="extra-info-text"><i class="iconfont toga-plane icon"></i> {{ photoInfo.airline }} | {{ photoInfo.ac_type }}</div>
+                <div class="extra-info-text"><i class="iconfont toga-plane icon"></i> {{ photoInfo.airline_cn || photoInfo.airline_en }} | {{ photoInfo.ac_type }}</div>
                 <div class="extra-info-text"><i class="iconfont toga-bianhao icon"></i> {{ photoInfo.ac_reg }}</div>
               </div>
             </div>
@@ -38,7 +38,7 @@ function processHeadPhoto(imgId:number):CSSProperties{
           </div>
           <ul class="photo-info-container-mobile">
             <li><i class="iconfont toga-paizhao icon-mobile"></i> {{ photoInfo.username }}</li>
-            <li><i class="iconfont toga-plane icon-mobile"></i> {{ photoInfo.airline }} | {{ photoInfo.ac_type }}</li>
+            <li><i class="iconfont toga-plane icon-mobile"></i> {{ photoInfo.airline_cn || photoInfo.airline_en }} | {{ photoInfo.ac_type }}</li>
             <li><i class="iconfont toga-bianhao icon-mobile"></i> {{ photoInfo.ac_reg }}</li>
           </ul>
         </a>

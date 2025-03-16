@@ -80,7 +80,7 @@ const setImgBoxPositon = () => {
   }
 })()
 
-const searchLink = (type:PhotoSearchType,ctx:string|undefined) => ctx ? `/search?type=${type}&ctx=${ctx}` : " ";
+const searchLink = (type:PhotoSearchType,content:string|undefined) => content ? `/search?type=${type}&content=${content}` : " ";
 
 const deletePhoto = async () => {
   try{
@@ -131,7 +131,7 @@ const deletePhoto = async () => {
         </div>
         <div class="label-group">
           <InfoLabel
-              label="航空公司/运营人" :value="photoInfo?.airline"
+              label="航空公司/运营人" :value="photoInfo?.airline_cn"
           />
           <InfoLabel
               label="机场" :value="airportText"
@@ -150,7 +150,7 @@ const deletePhoto = async () => {
       </div>
       <div class="action-area">
         <div>
-          <el-button type="primary">
+          <el-button type="primary" disabled>
             <el-icon><Checked /></el-icon>
             为这张图片投票
           </el-button>
@@ -163,7 +163,7 @@ const deletePhoto = async () => {
         </div>
         <!-- <div style="height: 1px;background-color: black;"></div> -->
         <div v-if="showEditOption">
-          <el-button type="primary" @click="router.push('/photo/'+photoInfo?.id+'/edit')">
+          <el-button type="primary" @click="router.push('/photo/'+photoInfo?.id+'/edit')" disabled>
             编辑图片信息
           </el-button>
         </div>
@@ -180,7 +180,7 @@ const deletePhoto = async () => {
         v-for="photo in relatedPhotoList"
         :id="photo.id"
         :reg="photo.ac_reg"
-        :airline="photo.airline"
+        :airline="photo.airline_cn"
         :username="photo.username"
         :air-type="photo.ac_type"
       />
@@ -202,7 +202,7 @@ const deletePhoto = async () => {
 }
 
 .image-box {
-  min-height: 15vh;
+  min-height: 15dvh;
   display: flex;
   justify-content: center;
   width: 100%;
@@ -279,7 +279,8 @@ const deletePhoto = async () => {
   }
   .image-box img {
     width: auto;
-    max-height: calc(100vh - 64px);
+    max-width: 100%;
+    max-height: calc(100dvh - 64px);
     object-fit: contain;
   }
   .label-group{

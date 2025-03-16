@@ -2,16 +2,6 @@ import { createRouter, createWebHistory } from 'vue-router'
 import userInfoStore from '@/stores/userInfo'
 import Permission from '../utils/permission'
 import { ElMessage } from 'element-plus'
-import HomeView from '@/views/HomeView.vue'
-import RegisterView from '@/views/user/RegisterView.vue'
-import PhotoView from '@/views/photo/PhotoView.vue'
-import SearchView from '@/views/photo/SearchView.vue'
-import LoginView from '@/views/user/LoginView.vue'
-import RejectList from '@/views/user/RejectList.vue'
-import UploadView from "@/views/photo/UploadView.vue";
-import Page404 from "@/views/other/Page404.vue";
-import Tos from "@/views/other/Tos.vue";
-import UploadList from "@/views/user/UploadList.vue";
 
 const router = createRouter({
   history: createWebHistory('/'),
@@ -19,37 +9,37 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: HomeView
+      component: () => import('@/views/HomeView.vue')
     },
     {
       path:'/register',
       name:'register',
-      component: RegisterView
+      component: () => import('@/views/user/RegisterView.vue')
     },
     {
       path:'/photo/:id',
       name:'photo',
-      component: PhotoView
+      component: () => import('@/views/photo/PhotoView.vue')
     },
     {
       path:'/search',
       name:'search',
-      component: SearchView
+      component: () => import('@/views/photo/SearchView.vue')
     },
     {
       path:'/login',
       name:'login',
-      component: LoginView
+      component: () => import('@/views/user/LoginView.vue')
     },
     {
       path:'/myself',
       name:'myself',
-      component: () => import('@/views/user/MyselfView.vue')
+      component:() => import('@/views/user/MyselfView.vue')
     },
     {
       path:'/upload',
       name:'upload',
-      component: UploadView
+      component: () => import('@/views/photo/UploadView.vue')
     },
     {
       path:'/queue',
@@ -57,19 +47,19 @@ const router = createRouter({
         {
           path:'reject',
           name:'reject-list',
-          component: RejectList
+          component: () => import('@/views/user/RejectList.vue')
         },
         {
           path:'upload',
           name:'upload-queue',
-          component:UploadList
+          component:() => import('@/views/user/UploadList.vue')
         }
       ]
     },
     {
       path:'/user/:id',
       name:'user',
-      component: () => import('@/views/user/UserView.vue')
+      component:() => import('@/views/user/UserView.vue')
     },
     {
       path:'/about',
@@ -84,12 +74,12 @@ const router = createRouter({
     {
       path:"/tos",
       name:'Tos',
-      component: Tos
+      component: () => import("@/views/other/Tos.vue")
     },
     {
       path:'/:pathMatch(.*)*',
       name:'not-found',
-      component: Page404
+      component: () => import('@/views/other/Page404.vue')
     }
   ]
 })
