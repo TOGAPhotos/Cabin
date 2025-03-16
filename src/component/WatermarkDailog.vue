@@ -9,6 +9,8 @@ const dialogVisible = defineModel({default: false});
 const finalPosition = defineModel("watermark",{
     default: {x: -1, y: -1, s: 0, a:0}
 })
+const emits = defineEmits(["finish"]);
+
 const props = defineProps<{file:File|undefined}>()
 const PHOTO = new Image();
 
@@ -23,6 +25,7 @@ const confirmWatermark = (add:Boolean) =>{
         finalPosition.value.s = watermark.scale;
         finalPosition.value.a = watermark.alpha;
     }
+    emits('finish');
 }
 
 const watermarkImg = new Image()
@@ -144,8 +147,8 @@ watch(
     </div>
     <template #footer>
       <div class="dialog-footer">
-        <el-button >不添加</el-button>
-        <el-button type="primary" @click="">
+        <el-button @click="confirmWatermark(false)">不添加</el-button>
+        <el-button type="primary" @click="confirmWatermark(true)">
           添加
         </el-button>
       </div>

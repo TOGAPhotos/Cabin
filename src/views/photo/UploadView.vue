@@ -112,7 +112,7 @@ const uploadFormRules = reactive<FormRules<UploadFormInfo>>({
     {max:100,message:'留言不能超过100字',trigger:"blur"}
   ],
 })
-const watermark = reactive({
+const watermark = ref({
   x:0,
   y:0,
   s:0,
@@ -174,7 +174,7 @@ watch(()=>uploadFormData.airportId, async (newValue:number|undefined)=>{
   uploadFormData.reg = icao_code;
 })
 
-async function PreUpload(){
+async function upload(){
   let uploading = ElLoading.service({
     text:'正在创建图片',
     target:'#upload-form',
@@ -192,7 +192,6 @@ async function PreUpload(){
     return;
   }
     
-  fileUpload.value!.submit();
   if(!FILE){
     uploadFormInstance.value!.scrollToField("file")
     ElMessage.error("图片未上传");
@@ -213,12 +212,10 @@ async function PreUpload(){
     picType:uploadFormData.photoType.join(','),
     queue:uploadFormData.queue,
     exif:uploadFormData.exifData,
-    watermark:JSON.stringify(watermark)
+    watermark:JSON.stringify(watermark.value)
   }
   const uploadReq = new ServerRequest('POST','/photo',uploadData);
-  uploadReq.success = () => {
-    uploading.close();
-  }
+  uploadReq.success = () => uploading.close();
   let uploadError = false;
   uploadReq.error = (_,msg) => {
     ElNotification.error({
@@ -246,6 +243,9 @@ async function PreUpload(){
     const buffer = await FILE.arrayBuffer();
     await CosStrorage.uploadFile(uploadUrl,buffer);
     ElNotification.success({title:"上传成功"})
+    const updateReq = new ServerRequest('PUT',`/cos/photos?photo_id=${photoId}&status=available`);
+    updateReq.error = (_,msg) => {throw new Error(msg)};
+    await updateReq.send();
   }catch(e){
     ElNotification.error({
       title:"上传失败",
@@ -257,6 +257,11 @@ async function PreUpload(){
     await init();
   }
 
+}
+
+const showWatermarkDialog = () => {
+  fileUpload.value!.submit();
+  elemStatus.watermark = true;
 }
 
 function AutoFillSelect(aircraft:AircraftInfo){
@@ -373,11 +378,11 @@ const readExifDate = async (file:UploadFile) => {
           </el-upload>
         </el-form-item>
 
-        <!-- <el-form-item>
+        <el-form-item>
           <el-button type="primary" style="width: 100%" @click="watermarkTest" :disabled="elemStatus.upload">
             上传测试
           </el-button>
-        </el-form-item> -->
+        </el-form-item>
 
         <el-form-item label="注册号/机身编号" prop="reg">
           <el-input
@@ -452,7 +457,7 @@ const readExifDate = async (file:UploadFile) => {
         </el-form-item>
 
         <el-form-item>
-          <el-button type="primary" style="width: 100%" @click="PreUpload" :disabled="elemStatus.upload">
+          <el-button type="primary" style="width: 100%" @click="showWatermarkDialog" :disabled="elemStatus.upload">
             上传
           </el-button>
         </el-form-item>
@@ -466,6 +471,7 @@ const readExifDate = async (file:UploadFile) => {
   <WatermarkDailog 
     v-model="elemStatus.watermark" :file="FILE"
     v-model:watermark="watermark"
+    @finish="upload"
   />
 </template>
 
