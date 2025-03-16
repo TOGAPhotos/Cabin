@@ -6,9 +6,8 @@
   "scripts": {
     "dev": "vite --open --host",
     "build": "run-p type-check \"build-only {@}\" --",
-    "preview": "vite preview",
-    "test:unit": "vitest",
-    "build-only": "vite build",
+    "preview": "vite build && vite preview --open",
+    "build-only": "vite build --mode production",
     "type-check": "vue-tsc --build --force"
   },
   "dependencies": {
