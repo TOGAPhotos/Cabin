@@ -30,3 +30,4 @@ coverage
 *.tsbuildinfo
 
 pnpm-lock.yaml
+.env.production
