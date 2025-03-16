@@ -23,14 +23,16 @@ const loading = ref(true);
         @load="onLoad()" @error="onError()"
         v-show="!loading"
     />
-    <img 
-        v-else
-        :src="prop.src" :alt="prop.alt" :class="prop.className + ' protect'"
-        @load="onLoad()" @error="onError()"
-        oncontextmenu="return false"
-        ondragstart="return false"
-        v-show="!loading"
-    />
+    <div v-else>
+        <img 
+            :src="prop.src" :alt="prop.alt" :class="prop.className + ' protect'"
+            @load="onLoad()" @error="onError()"
+            oncontextmenu="return false"
+            ondragstart="return false"
+            v-show="!loading"
+        />
+        <div class="cover"></div>
+    </div>
 </template>
 <style scoped>
 .protect{
@@ -38,5 +40,15 @@ const loading = ref(true);
     -webkit-user-select: none;
     -moz-user-select: none;
     user-select: none;
+    pointer-events:none;
+}
+.cover{
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background-color:none;
+    z-index:1;
 }
 </style>
