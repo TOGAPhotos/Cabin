@@ -8,7 +8,7 @@ import router from "@/router";
 
 import ImgLoader from "@/components/ImgLoader.vue";
 import InfoLabel from "@/components/InfoLabel.vue";
-import ContactPanel from "@/components/ContactPanel.vue";
+import ContactPanel from "@/component/ContactPanel.vue";
 import Thumbnail from "@/components/Thumbnail.vue";
 
 import type {AcceptPhoto, PhotoSearchType} from "@/utils/type/photo";

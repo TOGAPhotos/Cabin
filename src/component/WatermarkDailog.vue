@@ -135,6 +135,7 @@ watch(
         v-model="dialogVisible"
         width="fit-content"
         ref="watermark-dialog"
+        oncontextmenu="return false"
     >
     <div>
         <canvas ref="watermark-canvas"></canvas>

@@ -292,11 +292,12 @@ async function AutoFill(){
   await infoReq.send()
 }
 
-const watermarkTest = async () => {
-  fileUpload.value!.submit();
-  const exif = await ExifReader(FILE)
-  uploadFormData.date = isNaN(exif.DateOriginal.getTime()) ? "" : exif.DateOriginal.toISOString().split("T")[0];
-}
+// const watermarkTest = async () => {
+  // fileUpload.value!.submit();
+  // elemStatus.watermark = true;
+  // const exif = await ExifReader(FILE)
+  // uploadFormData.date = isNaN(exif.DateOriginal.getTime()) ? "" : exif.DateOriginal.toISOString().split("T")[0];
+// }
 
 const readExifDate = async (file:UploadFile) => {
   if(file.status !== 'ready') return;
@@ -378,11 +379,11 @@ const readExifDate = async (file:UploadFile) => {
           </el-upload>
         </el-form-item>
 
-        <el-form-item>
+        <!-- <el-form-item>
           <el-button type="primary" style="width: 100%" @click="watermarkTest" :disabled="elemStatus.upload">
             上传测试
           </el-button>
-        </el-form-item>
+        </el-form-item> -->
 
         <el-form-item label="注册号/机身编号" prop="reg">
           <el-input
