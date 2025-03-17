@@ -1,15 +1,21 @@
 <script setup lang="ts">
 import {reactive} from "vue";
 import type {AcceptPhoto} from "@/utils/type/photo";
+import useUserInfoStore from "@/stores/userInfo";
 
 const showPanel = defineModel({type:Boolean});
 const props = defineProps<{photoInfo:AcceptPhoto}>();
-
+const user = useUserInfoStore();
 const formData = reactive({
-  commercial:false,
   message:"",
-  email:"",
+  email:user.email,
 });
+
+const messages = [
+  "想要使用原图（商业使用）",
+  "想要使用原图（非商业使用）",
+  "询问拍摄信息",
+]
 
 function submit(){
 
@@ -22,26 +28,18 @@ function submit(){
       title="联系摄影师"
       style="min-width: 300px"
   >
-    您的消息将被转发给摄影师<strong>{{props.photoInfo.username}}</strong>
+    您的消息将被转发给摄影师<strong>{{props.photoInfo.username}}</strong>,请确保您的联系方式正确。
     <el-form
         label-position="top"
         style="margin: 1em 0 0 1em"
     >
-      <el-form-item label="是否获取商业使用授权">
-        <el-radio-group v-model="formData.commercial">
-          <el-radio :value="true" size="large"><span class="red-font">获取商业授权</span></el-radio>
-          <el-radio :value="false" size="large">不用做商业用途</el-radio>
-        </el-radio-group>
-      </el-form-item>
       <el-form-item label=" 您的联系方式">
         <el-input v-model="formData.email"/>
       </el-form-item>
       <el-form-item label="留言">
-        <el-input
-            v-model="formData.message"
-            :autosize="{ minRows: 2, maxRows: 4 }"
-            type="textarea"
-        />
+        <el-select v-model="formData.message" placeholder="请选择留言模板">
+          <el-option v-for="m in messages" :label="m" :value="m" />
+        </el-select>
       </el-form-item>
     </el-form>
 
