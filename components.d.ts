@@ -11,7 +11,6 @@ declare module 'vue' {
     AircraftTypeSelect: typeof import('./src/components/selector/AircraftTypeSelect.vue')['default']
     AirlineSelect: typeof import('./src/components/selector/AirlineSelect.vue')['default']
     AirportSelect: typeof import('./src/components/selector/AirportSelect.vue')['default']
-    ContactPanel: typeof import('./src/components/ContactPanel.vue')['default']
     CreateAirline: typeof import('./src/components/CreateAirline.vue')['default']
     CreateAirport: typeof import('./src/components/CreateAirport.vue')['default']
     CreateAirtype: typeof import('./src/components/CreateAirtype.vue')['default']
