@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import {onMounted, reactive, ref, watch} from "vue";
-import {useRoute} from "vue-router";
+import { onMounted, reactive, ref, watch } from "vue";
+import { useRoute } from "vue-router";
 
 import type {
-   UploadInstance,
-   UploadProps,
-   UploadRawFile,
-   FormInstance,
-   FormRules,
-   UploadFile,
+  UploadInstance,
+  UploadProps,
+  UploadRawFile,
+  FormInstance,
+  FormRules,
+  UploadFile,
 } from 'element-plus'
-import {ElNotification, ElMessage, genFileId, ElLoading,} from "element-plus";
-import {UploadFilled} from "@element-plus/icons-vue";
+import { ElNotification, ElMessage, genFileId, ElLoading, } from "element-plus";
+import { UploadFilled } from "@element-plus/icons-vue";
 
 import AircraftTypeSelect from "@/components/selector/AircraftTypeSelect.vue";
 import AirportSelect from "@/components/selector/AirportSelect.vue";
@@ -21,7 +21,7 @@ import CreateAirport from "@/components/CreateAirport.vue";
 import CreateAirline from "@/components/CreateAirline.vue";
 import CreateAirtype from "@/components/CreateAirtype.vue";
 
-import type {AircraftInfo} from "@/utils/type/aircraft";
+import type { AircraftInfo } from "@/utils/type/aircraft";
 import { ExifReader, type ExifData } from "@/utils/exif";
 import ServerRequest from "@/utils/request";
 import { getAirportById } from "@/utils/info";
@@ -33,103 +33,109 @@ import WatermarkDailog from "@/component/WatermarkDailog.vue";
 
 interface UploadFormInfo {
   reg: string,
-  msn:string,
+  msn: string,
   airportId: number | undefined,
   airlineId: number | undefined,
   ac_type: string,
   photoType: string[],
-  date:string,
+  date: string,
   remark: string,
-  message:string,
-  queue:string,
-  exifData:ExifData|null
+  message: string,
+  queue: string,
+  exifData: ExifData | null
 }
 
 
-let FILE:UploadRawFile;
+let FILE: UploadRawFile;
 const IMAGE = new Image()
 const elemStatus = reactive({
-  upload:false,
-  reg:false,
-  msn:false,
-  airline:false,
-  airtype:false,
-  prioQueue:false,
-  normQueueText:'',
-  prioQueueText:'',
-  showSelectPanel:'',
-  airportPanel:false,
-  airlinePanel:false,
-  airtypePanel:false,
-  watermark:false,
+  upload: false,
+  reg: false,
+  msn: false,
+  airline: false,
+  airtype: false,
+  prioQueue: false,
+  normQueueText: '',
+  prioQueueText: '',
+  showSelectPanel: '',
+  airportPanel: false,
+  airlinePanel: false,
+  airtypePanel: false,
+  watermark: false,
 })
 const localUserInfo = useUserInfoStore();
 const route = useRoute();
 
-const init = async ()=>{
-  const userInfoReq = new ServerRequest('GET',`/user/${localUserInfo.id}`);
+const init = async () => {
+  const userInfoReq = new ServerRequest('GET', `/user/${localUserInfo.id}`);
   uploadFormData
   userInfoReq.success = () => {
     const u = userInfoReq.getData('userInfo');
     elemStatus.normQueueText = `普通队列（空余${u.free_queue}张）`;
     elemStatus.prioQueueText = `优先队列（空余${u.free_priority_queue}张）`;
-    if(u.free_priority_queue <= 0){
+    if (u.free_priority_queue <= 0) {
       elemStatus.prioQueue = true;
     }
-    if(u.free_queue <= 0){
+    if (u.free_queue <= 0) {
       elemStatus.upload = true;
     }
   }
   await userInfoReq.send();
 }
-onMounted(async ()=>{
+onMounted(async () => {
   await init();
 })
 
 const fileUpload = ref<UploadInstance>();
 const uploadFormInstance = ref<FormInstance>();
 const uploadFormRules = reactive<FormRules<UploadFormInfo>>({
-  reg:[
-    {required: true, message: "请输入注册号/机身编号", trigger: "blur"},
+  reg: [
+    { required: true, message: "请输入注册号/机身编号", trigger: "blur" },
   ],
-  msn:[
-    {required: true, message: "请输入制造商序列号", trigger: "blur"},
+  msn: [
+    {
+      message: "请输入制造商序列号", trigger: "blur",
+      validator: () => {
+        if (elemStatus.msn) return true;
+        return uploadFormData.msn.length !== 0
+      }
+    },
   ],
-  airportId:[
-    {required:true,message:'请选择机场',trigger:"blur"},
+  airportId: [
+    { required: true, message: '请选择机场', trigger: "blur" },
   ],
-  airlineId:[
-    {required:true,message:'请选择航司/运营人',trigger:"blur"},
-    {type:"number",message:'请选择航司/运营人',trigger:"blur"},
+  airlineId: [
+    { required: true, message: '请选择航司/运营人', trigger: "blur" },
+    { type: "number", message: '请选择航司/运营人', trigger: "blur" },
   ],
-  ac_type:[
-    {required:true,message:'请选择机型',trigger:"blur"},
+  ac_type: [
+    { required: true, message: '请选择机型', trigger: "blur" },
   ],
-  remark:[
-    {max:100,message:'备注不能超过100字',trigger:"blur"}
+  remark: [
+    { max: 100, message: '备注不能超过100字', trigger: "blur" }
   ],
-  message:[
-    {max:100,message:'留言不能超过100字',trigger:"blur"}
+  message: [
+    { max: 100, message: '留言不能超过100字', trigger: "blur" }
   ],
 })
 const watermark = ref({
-  x:0,
-  y:0,
-  s:0,
-  a:0
+  x: 0,
+  y: 0,
+  s: 0,
+  a: 0
 })
 const uploadFormData = reactive<UploadFormInfo>({
-  reg:'',
-  msn:'',
+  reg: '',
+  msn: '',
   airportId: undefined,
   airlineId: undefined,
   ac_type: "",
-  photoType:[],
-  date:"",
-  remark:"",
-  message:"",
-  queue:'NORM',
-  exifData:null
+  photoType: [],
+  date: "",
+  remark: "",
+  message: "",
+  queue: 'NORM',
+  exifData: null
 })
 
 const handleExceed: UploadProps['onExceed'] = (files) => {
@@ -139,94 +145,96 @@ const handleExceed: UploadProps['onExceed'] = (files) => {
   fileUpload.value!.handleStart(file)
 }
 
-const beforeUpload = (rawFile:UploadRawFile) => {
+const beforeUpload = (rawFile: UploadRawFile) => {
   FILE = rawFile;
   return false;
 }
 
 // Watching for airportMode
-watch(()=>uploadFormData.photoType,async (newValue:string[],oldValue:string[])=>{
-  const current = newValue.join("").includes("A") 
+watch(() => uploadFormData.photoType, async (newValue: string[], oldValue: string[]) => {
+  const current = newValue.join("").includes("A")
   const previous = oldValue.join("").includes("A")
 
   elemStatus.msn = current;
   elemStatus.airtype = current;
   elemStatus.airline = current;
   elemStatus.reg = current;
-  if(current){
+  if (current) {
     uploadFormData.ac_type = "机场";
     uploadFormData.msn = "";
     uploadFormData.airlineId = 5241;
-    if(uploadFormData.airportId){
+    if (uploadFormData.airportId) {
       const { icao_code } = await getAirportById(uploadFormData.airportId)
       uploadFormData.reg = icao_code;
     }
-  }else if(current && !previous){
+  } else if (current && !previous) {
     uploadFormData.reg = "";
     uploadFormData.ac_type = "";
   }
 })
 
-watch(()=>uploadFormData.airportId, async (newValue:number|undefined)=>{
-  if(!newValue) return;
-  if(!elemStatus.reg) return;
+watch(() => uploadFormData.airportId, async (newValue: number | undefined) => {
+  if (!newValue) return;
+  if (!elemStatus.reg) return;
   const { icao_code } = await getAirportById(newValue)
   uploadFormData.reg = icao_code;
 })
 
-async function upload(){
-  let uploading = ElLoading.service({
-    text:'正在创建图片',
-    target:'#upload-form',
-  })
-  
+async function preCheck() {
   const validateResult = await uploadFormInstance.value!.validate(
-    (isValid, invalidFields)=>{
-      if(isValid)return;
+    (isValid, invalidFields) => {
+      if (isValid) return;
       const firstField = Object.values(invalidFields!)[0][0].field as string
       uploadFormInstance.value?.scrollToField(firstField)
     })
-    
-  if(!validateResult){
-    uploading.close();
+
+  if (!validateResult) {
     return;
   }
-    
-  if(!FILE){
+  return showWatermarkDialog();
+}
+
+async function upload() {
+  let uploading = ElLoading.service({
+    text: '正在创建图片',
+    target: '#upload-form',
+  })
+
+  if (!FILE) {
     uploadFormInstance.value!.scrollToField("file")
     ElMessage.error("图片未上传");
     return uploading.close();
   }
 
-  if( !(await checkImage(FILE)) ) return;
+  if (!(await checkImage(FILE))) return;
 
   const uploadData = {
-    reg:uploadFormData.reg,
-    msn:uploadFormData.msn,
-    airline:uploadFormData.airlineId,
-    airport:uploadFormData.airportId,
-    ac_type:uploadFormData.ac_type,
-    remark:uploadFormData.remark,
-    photoTime:uploadFormData.date,
-    message:uploadFormData.message,
-    picType:uploadFormData.photoType.join(','),
-    queue:uploadFormData.queue,
-    exif:uploadFormData.exifData,
-    watermark:JSON.stringify(watermark.value)
+    reg: uploadFormData.reg,
+    msn: uploadFormData.msn,
+    airline: uploadFormData.airlineId,
+    airport: uploadFormData.airportId,
+    ac_type: uploadFormData.ac_type,
+    remark: uploadFormData.remark,
+    photoTime: uploadFormData.date,
+    message: uploadFormData.message,
+    picType: uploadFormData.photoType.join(','),
+    queue: uploadFormData.queue,
+    exif: uploadFormData.exifData,
+    watermark: JSON.stringify(watermark.value)
   }
-  const uploadReq = new ServerRequest('POST','/photo',uploadData);
+  const uploadReq = new ServerRequest('POST', '/photo', uploadData);
   uploadReq.success = () => uploading.close();
   let uploadError = false;
-  uploadReq.error = (_,msg) => {
+  uploadReq.error = (_, msg) => {
     ElNotification.error({
-      title:"创建失败",
-      message:msg
+      title: "创建失败",
+      message: msg
     })
     uploadError = true;
   }
   await uploadReq.send()
 
-  if(uploadError){
+  if (uploadError) {
     fileUpload.value!.clearFiles();
     uploadFormInstance.value!.resetFields();
     uploading.close();
@@ -234,23 +242,23 @@ async function upload(){
   }
 
   uploading = ElLoading.service({
-    text:'正在上传图片',
-    target:'#upload-form',
+    text: '正在上传图片',
+    target: '#upload-form',
   })
-  const {uploadUrl, photoId} = uploadReq.getData()
+  const { uploadUrl, photoId } = uploadReq.getData()
 
-  try{
+  try {
     const buffer = await FILE.arrayBuffer();
-    await CosStrorage.uploadFile(uploadUrl,buffer);
-    ElNotification.success({title:"上传成功"})
-    const updateReq = new ServerRequest('PUT',`/cos/photos?photo_id=${photoId}&status=available`);
-    updateReq.error = (_,msg) => {throw new Error(msg)};
+    await CosStrorage.uploadFile(uploadUrl, buffer);
+    ElNotification.success({ title: "上传成功" })
+    const updateReq = new ServerRequest('PUT', `/cos/photos?photo_id=${photoId}&status=available`);
+    updateReq.error = (_, msg) => { throw new Error(msg) };
     await updateReq.send();
-  }catch(e){
+  } catch (e) {
     ElNotification.error({
-      title:"上传失败",
+      title: "上传失败",
     })
-  }finally{
+  } finally {
     fileUpload.value!.clearFiles();
     uploadFormInstance.value!.resetFields();
     uploading.close();
@@ -264,27 +272,27 @@ const showWatermarkDialog = () => {
   elemStatus.watermark = true;
 }
 
-function AutoFillSelect(aircraft:AircraftInfo){
+function AutoFillSelect(aircraft: AircraftInfo) {
   uploadFormData.reg = aircraft.reg;
   uploadFormData.msn = aircraft.msn;
   uploadFormData.airlineId = aircraft.airlineId;
   uploadFormData.ac_type = aircraft.air_type;
 }
 
-async function AutoFill(){
-  if(uploadFormData.reg === ""){
+async function AutoFill() {
+  if (uploadFormData.reg === "") {
     return ElNotification.warning({
-      title:"注册号不能为空",
-      message:"使用自动填充时注册号不能为空"
+      title: "注册号不能为空",
+      message: "使用自动填充时注册号不能为空"
     })
   }
-  const infoReq = new ServerRequest("GET",`/aircraft?reg=${uploadFormData.reg}`);
-  infoReq.success = () =>{
+  const infoReq = new ServerRequest("GET", `/aircraft?reg=${uploadFormData.reg}`);
+  infoReq.success = () => {
     const aircraft = infoReq.getData();
-    if(aircraft.length === 0){
+    if (aircraft.length === 0) {
       return ElNotification.warning({
-        title:"未找到相关信息",
-        message:"请手动填写"
+        title: "未找到相关信息",
+        message: "请手动填写"
       })
     }
     AutoFillSelect(aircraft[0]);
@@ -293,32 +301,33 @@ async function AutoFill(){
 }
 
 // const watermarkTest = async () => {
-  // fileUpload.value!.submit();
-  // elemStatus.watermark = true;
-  // const exif = await ExifReader(FILE)
-  // uploadFormData.date = isNaN(exif.DateOriginal.getTime()) ? "" : exif.DateOriginal.toISOString().split("T")[0];
+// fileUpload.value!.submit();
+// elemStatus.watermark = true;
+// const exif = await ExifReader(FILE)
+// uploadFormData.date = isNaN(exif.DateOriginal.getTime()) ? "" : exif.DateOriginal.toISOString().split("T")[0];
 // }
 
-const readExifDate = async (file:UploadFile) => {
-  if(file.status !== 'ready') return;
+const readExifDate = async (file: UploadFile) => {
+  if (file.status !== 'ready') return;
 
-  try{
+  try {
     const exif = await ExifReader(<File>file.raw)
     uploadFormData.exifData = exif;
     uploadFormData.date = isNaN(exif.DateOriginal.getTime()) ? "" : exif.DateOriginal.toISOString().split("T")[0];
-    if(uploadFormData.date === ""){
+    if (uploadFormData.date === "") {
       ElNotification.warning({
-        title:"未读取到拍摄日期",
-        message:"请手动填写拍摄日期"
+        title: "未读取到拍摄日期",
+        message: "请手动填写拍摄日期"
       })
     }
-  }catch(e){
+  } catch (e) {
     ElNotification.error({
-      title:"读取EXIF失败",
-      message:"请手动填写拍摄日期"
+      title: "读取EXIF失败",
+      message: "请手动填写拍摄日期"
     })
   }
 }
+
 </script>
 
 <template>
@@ -330,9 +339,9 @@ const readExifDate = async (file:UploadFile) => {
       <h4>补充信息</h4>
       <div>如果数据库中缺少您所需要的信息，请通过:
         <div style="padding: 0.2rem 0;">
-          <el-button type="primary" @click="elemStatus.airportPanel=true">添加机场</el-button>
-          <el-button type="primary" @click="elemStatus.airlinePanel=true">添加航司/运营人</el-button>
-          <el-button type="primary" @click="elemStatus.airtypePanel=true">添加机型</el-button>
+          <el-button type="primary" @click="elemStatus.airportPanel = true">添加机场</el-button>
+          <el-button type="primary" @click="elemStatus.airlinePanel = true">添加航司/运营人</el-button>
+          <el-button type="primary" @click="elemStatus.airtypePanel = true">添加机型</el-button>
         </div>
         进行补充。
       </div>
@@ -341,32 +350,18 @@ const readExifDate = async (file:UploadFile) => {
       <h4>有限的授权使用</h4>
       <p>TOGAPhotos <strong>可能在未事先通知您的情况下</strong>，将您上传的图片发布在TOGAPhotos的社交媒体账号上（遵循<a
           href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh-Hans">CC BY-NC-ND
-        4.0协议</a>）。其余情况下TOGAPhotos将在事前与您取得联系。</p>
+          4.0协议</a>）。其余情况下TOGAPhotos将在事前与您取得联系。</p>
       <h4>我们不接受"云图"</h4>
       <p>TOGAPhotos只接受用户自己拍摄的图片，<strong>不接受任何形式的"云图"</strong>。</p>
     </div>
     <div id="upload-form">
-      <el-form
-          label-position="top"
-          :model="uploadFormData"
-          ref="uploadFormInstance"
-          :rules="uploadFormRules"
-      >
+      <el-form label-position="top" :model="uploadFormData" ref="uploadFormInstance" :rules="uploadFormRules">
 
         <el-form-item prop="file">
-          <el-upload
-              style="width: 100%"
-              drag
-              ref="fileUpload"
-              :limit="1"
-              :auto-upload="false"
-              :before-upload="beforeUpload"
-              list-type="picture"
-              :on-change="readExifDate"
-              :on-exceed="handleExceed"
-          >
+          <el-upload style="width: 100%" drag ref="fileUpload" :limit="1" :auto-upload="false"
+            :before-upload="beforeUpload" list-type="picture" :on-change="readExifDate" :on-exceed="handleExceed">
             <el-icon class="el-icon--upload">
-              <upload-filled/>
+              <upload-filled />
             </el-icon>
             <div class="el-upload__text">
               将文件拖拽到此处或<em>点此上传</em>
@@ -386,94 +381,62 @@ const readExifDate = async (file:UploadFile) => {
         </el-form-item> -->
 
         <el-form-item label="注册号/机身编号" prop="reg">
-          <el-input
-              v-model="uploadFormData.reg"
-              :disabled="elemStatus.reg"
-          />
+          <el-input v-model="uploadFormData.reg" :disabled="elemStatus.reg" />
           <div class="remark">如果无注册号，请使用NO-REG</div>
           <el-button type="primary" style="width: 100%" @click="AutoFill">自动填充</el-button>
         </el-form-item>
 
         <el-form-item label="制造商序列号" prop="msn">
-          <el-input
-              v-model="uploadFormData.msn"
-              :disabled="elemStatus.msn"
-          />
+          <el-input v-model="uploadFormData.msn" :disabled="elemStatus.msn" />
         </el-form-item>
 
         <el-form-item label="机型" prop="ac_type">
-          <AircraftTypeSelect 
-            v-model="uploadFormData.ac_type"
-            :disabled="elemStatus.airtype"
-          />
+          <AircraftTypeSelect v-model="uploadFormData.ac_type" :disabled="elemStatus.airtype" />
         </el-form-item>
 
         <el-form-item label="航空公司/运营人" prop="airlineId">
-          <AirlineSelect
-              v-model="uploadFormData.airlineId"
-              :disabled="elemStatus.airline"
-          />
+          <AirlineSelect v-model="uploadFormData.airlineId" :disabled="elemStatus.airline" />
         </el-form-item>
 
         <el-form-item label="拍摄位置" prop="airportId">
-          <AirportSelect
-              v-model="uploadFormData.airportId"
-          />
+          <AirportSelect v-model="uploadFormData.airportId" />
         </el-form-item>
 
-        <el-form-item label="图片分类" >
-          <PhotoTypeSelect
-              v-model="<string[]>uploadFormData.photoType"
-          />
+        <el-form-item label="图片分类">
+          <PhotoTypeSelect v-model="<string[]>uploadFormData.photoType" />
         </el-form-item>
-        <el-form-item label="拍摄日期" >
-          <el-date-picker
-              style="width: 100%;"
-              size="large"
-              v-model="uploadFormData.date"
-              type="date"
-              format="YYYY-MM-DD"
-              value-format="YYYY-MM-DD"
-              placeholder="选择日期"
-          />
+        <el-form-item label="拍摄日期">
+          <el-date-picker style="width: 100%;" size="large" v-model="uploadFormData.date" type="date"
+            format="YYYY-MM-DD" value-format="YYYY-MM-DD" placeholder="选择日期" />
         </el-form-item>
         <el-form-item label="图片备注" prop="remark">
-          <el-input type="textarea" :rows="2" v-model="uploadFormData.remark"/>
+          <el-input type="textarea" :rows="2" v-model="uploadFormData.remark" />
         </el-form-item>
 
         <el-form-item label="给审图员的留言" prop="message">
-          <el-input type="textarea" :rows="2" v-model="uploadFormData.message"/>
+          <el-input type="textarea" :rows="2" v-model="uploadFormData.message" />
         </el-form-item>
 
         <el-form-item label="队列选择">
           <el-select v-model="uploadFormData.queue">
-            <el-option
-                :label="elemStatus.normQueueText" value="NORM"
-            />
-            <el-option
-                :label="elemStatus.prioQueueText" value="PRIO"
-                :disabled="elemStatus.prioQueue"
-            />
+            <el-option :label="elemStatus.normQueueText" value="NORM" />
+            <el-option :label="elemStatus.prioQueueText" value="PRIO" :disabled="elemStatus.prioQueue" />
           </el-select>
         </el-form-item>
 
         <el-form-item>
-          <el-button type="primary" style="width: 100%" @click="showWatermarkDialog" :disabled="elemStatus.upload">
+          <el-button type="primary" style="width: 100%" @click="preCheck" :disabled="elemStatus.upload">
             上传
           </el-button>
         </el-form-item>
 
       </el-form>
     </div>
-    <CreateAirport v-model="elemStatus.airportPanel"/>
-    <CreateAirline v-model="elemStatus.airlinePanel"/>
-    <CreateAirtype v-model="elemStatus.airtypePanel"/>
+    <CreateAirport v-model="elemStatus.airportPanel" />
+    <CreateAirline v-model="elemStatus.airlinePanel" />
+    <CreateAirtype v-model="elemStatus.airtypePanel" />
   </div>
-  <WatermarkDailog 
-    v-model="elemStatus.watermark" :file="FILE"
-    v-model:watermark="watermark"
-    @finish="upload"
-  />
+  <WatermarkDailog v-model="elemStatus.watermark" :file="FILE" v-model:watermark="watermark" @finish="upload" />
 </template>
 
 <style scoped>
@@ -482,9 +445,11 @@ const readExifDate = async (file:UploadFile) => {
   font-weight: 600;
   margin-bottom: 8px;
 }
-.remark{
+
+.remark {
   font-size: 0.8rem;
 }
+
 .intro-box p {
   font-size: 15px;
   text-indent: 2em;
@@ -521,9 +486,9 @@ const readExifDate = async (file:UploadFile) => {
   #upload-form {
     width: 100%;
   }
-  .intro-box *{
-    font-size: 0.9rem!important;
+
+  .intro-box * {
+    font-size: 0.9rem !important;
   }
 }
-
 </style>
