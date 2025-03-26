@@ -173,6 +173,7 @@ watch(() => uploadFormData.photoType, async (newValue: string[], oldValue: strin
   }
 })
 
+// Watching for airportId and update reg with icao_code
 watch(() => uploadFormData.airportId, async (newValue: number | undefined) => {
   if (!newValue) return;
   if (!elemStatus.reg) return;
@@ -181,6 +182,8 @@ watch(() => uploadFormData.airportId, async (newValue: number | undefined) => {
 })
 
 async function preCheck() {
+  // read out the image by submit
+  fileUpload.value!.submit();
   const validateResult = await uploadFormInstance.value!.validate(
     (isValid, invalidFields) => {
       if (isValid) return;
@@ -188,10 +191,19 @@ async function preCheck() {
       uploadFormInstance.value?.scrollToField(firstField)
     })
 
-  if (!validateResult) {
-    return;
+  if (!FILE) {
+    uploadFormInstance.value!.scrollToField("file")
+    return ElMessage.error("图片未上传");
   }
+
+  if (!(await checkImage(FILE))) return;
+  if (!validateResult) return;
+
   return showWatermarkDialog();
+}
+
+const showWatermarkDialog = () => {
+  elemStatus.watermark = true;
 }
 
 async function upload() {
@@ -199,14 +211,6 @@ async function upload() {
     text: '正在创建图片',
     target: '#upload-form',
   })
-
-  if (!FILE) {
-    uploadFormInstance.value!.scrollToField("file")
-    ElMessage.error("图片未上传");
-    return uploading.close();
-  }
-
-  if (!(await checkImage(FILE))) return;
 
   const uploadData = {
     reg: uploadFormData.reg,
@@ -267,10 +271,6 @@ async function upload() {
 
 }
 
-const showWatermarkDialog = () => {
-  fileUpload.value!.submit();
-  elemStatus.watermark = true;
-}
 
 function AutoFillSelect(aircraft: AircraftInfo) {
   uploadFormData.reg = aircraft.reg;
