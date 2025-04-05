@@ -255,7 +255,7 @@ async function upload() {
     const buffer = await FILE.arrayBuffer();
     await CosStrorage.uploadFile(uploadUrl, buffer);
     ElNotification.success({ title: "上传成功" })
-    const updateReq = new ServerRequest('PUT', `/cos/photos?photo_id=${photoId}&status=available`);
+    const updateReq = new ServerRequest('PUT', `/cos/photo?photo_id=${photoId}&status=available`);
     updateReq.error = (_, msg) => { throw new Error(msg) };
     await updateReq.send();
   } catch (e) {
