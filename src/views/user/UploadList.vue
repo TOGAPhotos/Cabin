@@ -2,14 +2,14 @@
 import { ref } from "vue";
 import ServerRequest from "@/utils/request";
 import type { AcceptPhoto } from "@/utils/type/photo";
-import { PhotoUrl } from "@/utils/photo-url";
+import { RawPhotoUrl } from "@/utils/photo-url";
 import { OpenToolWindow } from "@/utils/tool-page";
 import InfoLabel from "@/components/InfoLabel.vue";
 
 interface _FullPhotoInfo extends AcceptPhoto {
   queueIndex: number
-  airport:string,
-  message:string,
+  airport: string,
+  message: string,
 }
 
 const uploadQueue = ref<_FullPhotoInfo[]>();
@@ -19,10 +19,10 @@ const uploadQueue = ref<_FullPhotoInfo[]>();
     uploadQueue.value = infoReq.getData('photoQueue') as _FullPhotoInfo[]
   }
   await infoReq.send()
-  uploadQueue.value?.forEach((item)=>{
+  uploadQueue.value?.forEach((item) => {
     item.airport = item.airport_icao_code
-    if(item.airport_iata_code){
-      item.airport += '/'+ item.airport_iata_code
+    if (item.airport_iata_code) {
+      item.airport += '/' + item.airport_iata_code
     }
     item.airport += '-' + item.airport_cn
   })
@@ -47,7 +47,7 @@ const deletePhoto = (photoId: number) => {
     </div>
     <div class="upload-photo-box" v-for="photo in uploadQueue">
       <div class="photo">
-        <img :src="PhotoUrl(photo.id)" style="width: 100%; height: auto" />
+        <img :src="RawPhotoUrl(photo.id)" style="width: 100%; height: auto" />
       </div>
       <div class="info-box">
         <div class="row">
@@ -66,19 +66,19 @@ const deletePhoto = (photoId: number) => {
         </div>
         <div class="row">
           <InfoLabel label="队列位置" value="0" />
-          <el-button size="small" type="primary" @click="OpenToolWindow('cfd', PhotoUrl(photo.id))">
+          <el-button size="small" type="primary" @click="OpenToolWindow('cfd', RawPhotoUrl(photo.id))">
             对比度检查
           </el-button>
-          <el-button size="small" type="primary" @click="OpenToolWindow('histogram', PhotoUrl(photo.id))">
+          <el-button size="small" type="primary" @click="OpenToolWindow('histogram', RawPhotoUrl(photo.id))">
             直方图
           </el-button>
-          <el-button size="small" type="primary" @click="OpenToolWindow('histogramRGB', PhotoUrl(photo.id))">
+          <el-button size="small" type="primary" @click="OpenToolWindow('histogramRGB', RawPhotoUrl(photo.id))">
             RGB直方图
           </el-button>
-          <el-button size="small" type="primary" @click="OpenToolWindow('center', PhotoUrl(photo.id))">
+          <el-button size="small" type="primary" @click="OpenToolWindow('center', RawPhotoUrl(photo.id))">
             中心检查
           </el-button>
-          <el-button size="small" type="primary" @click="OpenToolWindow('horizon', PhotoUrl(photo.id))">
+          <el-button size="small" type="primary" @click="OpenToolWindow('horizon', RawPhotoUrl(photo.id))">
             水平检查
           </el-button>
           <el-button size="small" type="danger" @click="deletePhoto(photo.id)">
@@ -90,7 +90,7 @@ const deletePhoto = (photoId: number) => {
   </div>
 </template>
 <style>
-.upload-photo-box div.value{
+.upload-photo-box div.value {
   padding-left: 9px;
 }
 </style>
@@ -118,29 +118,35 @@ const deletePhoto = (photoId: number) => {
 }
 
 @media screen and (min-width: 768px) {
-  .photo{
+  .photo {
     padding-left: 1em;
   }
-  .info-box{
+
+  .info-box {
     gap: 1em;
     flex: 0 0 60%;
   }
-  .info-label{
+
+  .info-label {
     margin-right: 4em;
   }
 }
+
 @media screen and (max-width: 767px) {
   .info-box {
     width: 100%;
     gap: 0;
   }
-  .row{
+
+  .row {
     width: 100%;
   }
-  .row div{
+
+  .row div {
     margin-right: 1em;
   }
 }
+
 .info-box {
   min-width: 200px;
   display: flex;
@@ -148,12 +154,14 @@ const deletePhoto = (photoId: number) => {
   justify-content: flex-start;
   flex-flow: column wrap;
 }
-.row{
+
+.row {
   display: flex;
   flex-flow: row wrap;
   justify-content: flex-start;
 }
-.info-box .row:last-of-type{
+
+.info-box .row:last-of-type {
   align-items: end;
 }
 </style>
