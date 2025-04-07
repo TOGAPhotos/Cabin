@@ -17,9 +17,9 @@ import AircraftTypeSelect from "@/components/selector/AircraftTypeSelect.vue";
 import AirportSelect from "@/components/selector/AirportSelect.vue";
 import AirlineSelect from "@/components/selector/AirlineSelect.vue";
 import PhotoTypeSelect from "@/components/PhotoTypeSelect.vue";
-import CreateAirport from "@/components/CreateAirport.vue";
-import CreateAirline from "@/components/CreateAirline.vue";
-import CreateAirtype from "@/components/CreateAirtype.vue";
+import CreateAirport from "@/component/CreateAirport.vue";
+import CreateAirline from "@/component/CreateAirline.vue";
+import CreateAirtype from "@/component/CreateAirtype.vue";
 
 import type { AircraftInfo } from "@/utils/type/aircraft";
 import { ExifReader, type ExifData } from "@/utils/exif";
