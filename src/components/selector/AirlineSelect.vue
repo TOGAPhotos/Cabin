@@ -1,13 +1,29 @@
 <script setup lang="ts">
 import ServerRequest from "@/utils/request";
-import {ElMessage} from "element-plus";
-import {ref,watch} from "vue";
-import type {Option} from "@/utils/type/option";
+import { ElMessage } from "element-plus";
+import { onMounted, ref } from "vue";
+import type { Option } from "@/utils/type/option";
 
-const value = defineModel({type: Number})
+const value = defineModel<number | null>()
 const loading = ref(false)
-const airlineOptions = ref<Option[]>([])
+const airlineOptions = ref<Option[]>([]);
 
+
+const loadAirportInfo = async () => {
+  const airlineReq = new ServerRequest('GET', `/airline/${value.value}`)
+  airlineReq.success = () => {
+    const data = airlineReq.getData()
+    airlineOptions.value = [{
+      label: data['airline_cn'] || data['airline_en'],
+      value: data['id']
+    }]
+  }
+  await airlineReq.send()
+}
+onMounted(async () => {
+  if (!value.value) return;
+  await loadAirportInfo()
+})
 const airlineRemoteSearch = async (query: string) => {
 
   if ((!query) || query.length < 2) {
@@ -18,12 +34,12 @@ const airlineRemoteSearch = async (query: string) => {
   searchReq.success = () => {
     loading.value = true;
     airlineOptions.value = searchReq.getData().map(
-        (item: any) => {
-          return {
-            label: item['airline_cn'] || item['airline_en'],
-            value: item['id']
-          }
-        })
+      (item: any) => {
+        return {
+          label: item['airline_cn'] || item['airline_en'],
+          value: item['id']
+        }
+      })
   }
   searchReq.error = () => {
     ElMessage.error('搜索出错')
@@ -32,37 +48,13 @@ const airlineRemoteSearch = async (query: string) => {
   loading.value = false;
 }
 
-watch(()=>value.value, async (newValue)=>{
-  if(!newValue) return;
-  const optionSearch = airlineOptions.value.find((item)=>item.value === newValue)
-  if(optionSearch) return;
-  const searchReq = new ServerRequest('GET', `/airline/${newValue}`)
-  searchReq.success = () => {
-    airlineOptions.value.push({
-      label: searchReq.getData()['airline_cn'] || searchReq.getData()['airline_en'],
-      value: searchReq.getData()['id']
-    })
-  }
-  await searchReq.send();
-})
-
 </script>
 
 <template>
-<el-select v-model="value"
-           filterable
-           remote
-           reserve-keyword
-           placeholder="请输入关键词进行搜索"
-           :remote-method="airlineRemoteSearch"
-           :loading="loading">
-  <el-option v-for="option in airlineOptions"
-             :key="option.value"
-             :label="option.label"
-             :value="option.value"/>
-</el-select>
+  <el-select v-model="value" filterable remote reserve-keyword placeholder="请输入关键词进行搜索"
+    :remote-method="airlineRemoteSearch" :loading="loading">
+    <el-option v-for="option in airlineOptions" :key="option.value" :label="option.label" :value="option.value" />
+  </el-select>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

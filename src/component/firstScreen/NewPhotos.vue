@@ -11,7 +11,6 @@ photoListReq.success = () => photoList.value = photoListReq.getData()
 
 onMounted(async () => {
     await photoListReq.send();
-    console.log('photoList', photoList.value)
 })
 </script>
 
