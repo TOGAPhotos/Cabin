@@ -30,6 +30,7 @@ import CosStrorage from "@/utils/cos";
 
 import useUserInfoStore from "@/stores/userInfo";
 import WatermarkDailog from "@/component/WatermarkDailog.vue";
+import type { PhotoType } from "@/utils/type/photo";
 
 interface UploadFormInfo {
   reg: string,
@@ -37,7 +38,7 @@ interface UploadFormInfo {
   airportId: number | undefined,
   airlineId: number | undefined,
   ac_type: string,
-  photoType: string[],
+  photoType: PhotoType[],
   date: string,
   remark: string,
   message: string,
@@ -151,7 +152,7 @@ const beforeUpload = (rawFile: UploadRawFile) => {
 }
 
 // Watching for airportMode
-watch(() => uploadFormData.photoType, async (newValue: string[], oldValue: string[]) => {
+watch(() => uploadFormData.photoType, async (newValue: PhotoType[], oldValue: PhotoType[]) => {
   const current = newValue.join("").includes("A")
   const previous = oldValue.join("").includes("A")
 
@@ -403,7 +404,7 @@ const readExifDate = async (file: UploadFile) => {
         </el-form-item>
 
         <el-form-item label="图片分类">
-          <PhotoTypeSelect v-model="<string[]>uploadFormData.photoType" />
+          <PhotoTypeSelect v-model="uploadFormData.photoType" />
         </el-form-item>
         <el-form-item label="拍摄日期">
           <el-date-picker style="width: 100%;" size="large" v-model="uploadFormData.date" type="date"
