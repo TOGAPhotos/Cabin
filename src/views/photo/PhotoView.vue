@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, watch, ref, useTemplateRef } from "vue";
+import { computed, watch, ref, useTemplateRef, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import { Checked, User } from "@element-plus/icons-vue";
 import { ElMessage, ElMessageBox, ElNotification } from "element-plus";
@@ -18,9 +18,11 @@ import Device from "@/utils/device";
 import { PhotoUrl } from "@/utils/photo-url";
 
 import useUserInfoStore from "@/stores/userInfo";
+import InfoEditPanel from "@/component/InfoEditPanel.vue";
 
 const airportText = ref("")
 const showContactPanel = ref(false);
+const showInfoEditPanel = ref(false);
 const route = useRoute();
 const photoId = <string>route.params.id;
 const photoInfo = ref<AcceptPhoto>()
@@ -30,6 +32,13 @@ const showEditOption = computed(() => {
   const user = useUserInfoStore();
   return user.permission === 'ADMIN' || user.id === photoInfo.value?.upload_user_id;
 })
+
+watch(() => showInfoEditPanel.value, (value, oldValue) => {
+  if (oldValue === true && value === false) {
+    return loadPhoto();
+  }
+})
+
 async function SearchRelatedPhoto() {
   const searchGroup = await Promise.all([
     RemoteSearch.photo('reg', <string>photoInfo.value?.ac_reg, -1, 5),
@@ -59,7 +68,7 @@ const setImgBoxPositon = () => {
 }
 
 
-(async () => {
+const loadPhoto = async () => {
   const photoInfoReq = new ServerRequest('GET', `/photo/${photoId}`);
   photoInfoReq.success = () => photoInfo.value = photoInfoReq.getData() as AcceptPhoto;
   photoInfoReq.error = (_, msg) => {
@@ -79,12 +88,14 @@ const setImgBoxPositon = () => {
   }
   airportText.value += `<br>${photoInfo.value?.airport_cn}`
   await SearchRelatedPhoto();
+}
+onMounted(async () => {
+  await loadPhoto()
   if (!Device.isPhone()) {
     setImgBoxPositon();
     window.addEventListener('resize', setImgBoxPositon);
   }
-})()
-
+})
 const searchLink = (type: PhotoSearchType, content: string | undefined) => content ? `/search?type=${type}&content=${content}` : " ";
 
 const deletePhoto = async () => {
@@ -112,6 +123,7 @@ const deletePhoto = async () => {
   await req.send();
 }
 
+
 </script>
 
 <template>
@@ -138,16 +150,16 @@ const deletePhoto = async () => {
         </div>
       </div>
       <div class="action-area">
-        <div>
+        <!-- <div>
           <el-button type="primary" disabled>
             <el-icon>
               <Checked />
             </el-icon>
             为这张图片投票
           </el-button>
-        </div>
+        </div> -->
         <div>
-          <el-button type="primary" @click="showContactPanel = true" v-if="!showEditOption">
+          <el-button type="primary" @click="showContactPanel = true" v-if="showEditOption">
             <el-icon>
               <User />
             </el-icon>
@@ -156,7 +168,7 @@ const deletePhoto = async () => {
         </div>
         <!-- <div style="height: 1px;background-color: black;"></div> -->
         <div v-if="showEditOption">
-          <el-button type="primary" @click="router.push('/photo/' + photoInfo?.id + '/edit')" disabled>
+          <el-button type="primary" @click="showInfoEditPanel = true">
             编辑图片信息
           </el-button>
         </div>
@@ -169,17 +181,18 @@ const deletePhoto = async () => {
     </div>
     <el-divider />
     <div class="related-photo-area">
-      <Thumbnail v-for="photo in relatedPhotoList" :id="photo.id" :reg="photo.ac_reg" :airline="photo.airline_cn"
-        :username="photo.username" :air-type="photo.ac_type" />
+      <Thumbnail v-for="photo in relatedPhotoList" :id="photo.id" :reg="photo.ac_reg"
+        :airline="photo.airline_cn || photo.airline_en" :username="photo.username" :air-type="photo.ac_type" />
     </div>
     <ContactPanel v-model="showContactPanel" v-bind:photoInfo="photoInfo as AcceptPhoto" />
+    <InfoEditPanel :photoId="photoId" v-model="showInfoEditPanel" />
   </div>
 </template>
 
 <style scoped>
 #photo-view {
   width: 100% !important;
-  margin: 0 calc(100% - 100vw) 0 0;
+  /* margin: 0 calc(100% - 100vw) 0 0; */
   max-width: none !important;
   padding: 0 !important;
 }
