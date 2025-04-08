@@ -23,6 +23,7 @@ async function submit() {
   const dm = {
     receiverId: props.photoInfo.upload_user_id,
     contactInfo: formData.email,
+    photoId: props.photoInfo.id,
     content: formData.message,
   }
   const dmReq = new ServerRequest("POST", '/dm', dm);
