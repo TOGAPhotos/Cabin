@@ -17,7 +17,7 @@ const props = defineProps({
 <style scoped>
 .info-label{
   margin-bottom: 0.6em;
-
+  font-size: 0.9rem;
 }
 .value{
   min-height: 1em;
@@ -25,11 +25,11 @@ const props = defineProps({
 .label{
   font-size: 0.8rem;
   font-weight: bolder;
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.2rem;
   color: white;
 }
 .value a{
-  font-size: 0.8rem;
+  /* font-size: 0.8rem; */
   color: black;
 }
 .value a.link:hover{
@@ -37,5 +37,6 @@ const props = defineProps({
   color: white;
   background: #001A38;
 }
+
 
 </style>
