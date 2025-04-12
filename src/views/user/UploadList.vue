@@ -2,7 +2,7 @@
 import { ref } from "vue";
 import ServerRequest from "@/utils/request";
 import type { AcceptPhoto } from "@/utils/type/photo";
-import { RawPhotoUrl } from "@/utils/photo-url";
+import { RawPhotoUrl, ThumbnailUrl } from "@/utils/photo-url";
 import { OpenToolWindow } from "@/utils/tool-page";
 import InfoLabel from "@/components/InfoLabel.vue";
 
@@ -10,6 +10,7 @@ interface _FullPhotoInfo extends AcceptPhoto {
   queueIndex: number
   airport: string,
   message: string,
+  storage_status: string,
 }
 
 const uploadQueue = ref<_FullPhotoInfo[]>();
@@ -35,6 +36,15 @@ const deletePhoto = (photoId: number) => {
   }
   deleteReq.send()
 }
+
+const _ThumbnailUrl = (photo:_FullPhotoInfo) => {
+  if( photo.storage_status === 'COMPLETE' ) {
+    return ThumbnailUrl(photo.id)
+  }else{
+    return RawPhotoUrl(photo.id)
+  }
+}
+
 </script>
 
 
@@ -47,9 +57,10 @@ const deletePhoto = (photoId: number) => {
     </div>
     <div class="upload-photo-box" v-for="photo in uploadQueue">
       <div class="photo">
-        <img :src="RawPhotoUrl(photo.id)" style="width: 100%; height: auto" />
+        <img :src="_ThumbnailUrl(photo)" style="width: 100%; height: auto" />
       </div>
       <div class="info-box">
+        <h2>{{ photo.id }}</h2>
         <div class="row">
           <InfoLabel label="注册号" :value="photo.ac_reg" />
           <InfoLabel label="制造商序列号" :value="photo.ac_msn" />
@@ -58,7 +69,7 @@ const deletePhoto = (photoId: number) => {
         </div>
         <div class="row">
           <InfoLabel label="拍摄地点" :value="photo.airport" />
-          <InfoLabel label="拍摄日期" :value="photo.photo_time" />
+          <InfoLabel label="拍摄日期" :value="photo.photo_time?.split('T')[0]" />
         </div>
         <div class="row">
           <InfoLabel label="备注" :value="photo.user_remark" />
