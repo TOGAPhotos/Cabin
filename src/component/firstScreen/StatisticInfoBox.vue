@@ -1,19 +1,24 @@
 <script setup lang="ts">
-import {CameraFilled, PictureFilled, UserFilled, Promotion} from "@element-plus/icons-vue";
-import TransparentButton from "@/component/firstScreen/TransparentButton.vue"
-import {onMounted, reactive} from "vue";
+import {
+  CameraFilled,
+  PictureFilled,
+  UserFilled,
+  Promotion,
+} from "@element-plus/icons-vue";
+import TransparentButton from "@/component/firstScreen/TransparentButton.vue";
+import { onMounted, reactive } from "vue";
 import ServerRequest from "@/utils/request";
 import router from "@/router";
 
 const statisticInfo = reactive({
-  userNum:0,
-  uploadQueueLen:0,
-  photoNum:0,
-  runTime:runTime(),
-})
+  userNum: 0,
+  uploadQueueLen: 0,
+  photoNum: 0,
+  runTime: runTime(),
+});
 
 function runTime(): string {
-  const delta =  Date.now() - new Date("2023-05-03").getTime();
+  const delta = Date.now() - new Date("2023-05-03").getTime();
   let days = Math.floor(delta / (1000 * 60 * 60 * 24));
 
   const years = Math.floor(days / 365);
@@ -24,14 +29,14 @@ function runTime(): string {
   return `共运行${years}年${months}月${days}日`;
 }
 
-const websiteInfoReq = new ServerRequest('GET','/website?type=statistics');
-websiteInfoReq.success = () =>{
+const websiteInfoReq = new ServerRequest("GET", "/website?type=statistics");
+websiteInfoReq.success = () => {
   const data = websiteInfoReq.getData();
-  statisticInfo.userNum = data['userNum'];
-  statisticInfo.uploadQueueLen = data['uploadQueueLen'];
-  statisticInfo.photoNum = data['photoNum'];
-}
-websiteInfoReq.error = () => router.push('/maintenance');
+  statisticInfo.userNum = data["userNum"];
+  statisticInfo.uploadQueueLen = data["uploadQueueLen"];
+  statisticInfo.photoNum = data["photoNum"];
+};
+websiteInfoReq.error = () => router.push("/maintenance");
 
 function daysSince(date: Date): number {
   const today = new Date();
@@ -43,7 +48,7 @@ function daysSince(date: Date): number {
 const targetDate = new Date("2023-05-03");
 const daysPassed = daysSince(targetDate);
 
-onMounted(() => websiteInfoReq.send())
+onMounted(() => websiteInfoReq.send());
 </script>
 
 <template>
@@ -52,19 +57,26 @@ onMounted(() => websiteInfoReq.send())
       <h2>关于 TOGAPhotos</h2>
     </div>
     <div class="content-box-desc">
-      <p>TOGAPhotos是一个由航空爱好者发起和维护的图库项目，我们诚挚的欢迎每一位新用户的到来，你们的支持是图库继续发展的最大动力</p>
+      <p>
+        TOGAPhotos是一个由航空爱好者发起和维护的图库项目，我们诚挚的欢迎每一位新用户的到来，你们的支持是图库继续发展的最大动力
+      </p>
       <div class="btn-box">
         <TransparentButton :isWhite="false"></TransparentButton>
-        <TransparentButton :isWhite="false" :href="'https://blog.togaphotos.com/'" :isNewPage="true">关于我们</TransparentButton>
+        <TransparentButton
+          :isWhite="false"
+          :href="'https://blog.togaphotos.com/'"
+          :isNewPage="true"
+          >关于我们</TransparentButton
+        >
       </div>
     </div>
-    
+
     <div class="content-box-main statistic-info">
-<!--      <div class="statistic">-->
-<!--        <div class="content">-->
-<!--          <strong>{{ statisticInfo.runTime }}</strong>-->
-<!--        </div>-->
-<!--      </div>-->
+      <!--      <div class="statistic">-->
+      <!--        <div class="content">-->
+      <!--          <strong>{{ statisticInfo.runTime }}</strong>-->
+      <!--        </div>-->
+      <!--      </div>-->
       <div class="statistic">
         <div class="icon">
           <UserFilled />
@@ -76,7 +88,7 @@ onMounted(() => websiteInfoReq.send())
       </div>
       <div class="statistic">
         <div class="icon">
-          <PictureFilled/>
+          <PictureFilled />
         </div>
         <div class="content">
           <h4>注册用户数量</h4>
@@ -94,7 +106,7 @@ onMounted(() => websiteInfoReq.send())
       </div>
       <div class="statistic">
         <div class="icon">
-          <Promotion/>
+          <Promotion />
         </div>
         <div class="content">
           <h4>本站累计运行</h4>
@@ -105,12 +117,12 @@ onMounted(() => websiteInfoReq.send())
   </div>
 </template>
 <style scoped>
-.statistic-container{
+.statistic-container {
   /* background-color: red; */
   padding-top: 6rem;
   padding-bottom: 6rem;
 }
-.statistic-info{
+.statistic-info {
   justify-content: space-between;
 }
 .statistic {
@@ -119,7 +131,7 @@ onMounted(() => websiteInfoReq.send())
   padding: 0.9rem 1.2rem;
   text-align: center;
   display: flex;
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   margin-right: 1rem;
   border-radius: 6px;
   transition: transform 0.3s ease;
@@ -129,7 +141,7 @@ onMounted(() => websiteInfoReq.send())
   cursor: pointer;
   transform: translateY(-0.15rem);
 }
-.statistic:last-child{
+.statistic:last-child {
   margin-right: 0;
 }
 .btn-box {
@@ -164,17 +176,17 @@ onMounted(() => websiteInfoReq.send())
   display: inline-flex;
   align-items: baseline;
 }
-@media only screen and (max-width: 841px){
-  .statistic-info{
+@media only screen and (max-width: 841px) {
+  .statistic-info {
     flex-direction: column;
   }
-  .statistic{
+  .statistic {
     height: 6rem;
     width: 100%;
     margin-right: 0;
     margin-bottom: 1rem;
   }
-  .statistic:last-child{
+  .statistic:last-child {
     margin-bottom: 0;
   }
 }

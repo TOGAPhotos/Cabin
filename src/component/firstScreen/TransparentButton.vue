@@ -7,16 +7,20 @@ const props = withDefaults(
   }>(),
   {
     isWhite: false,
-    href: '/upload',
-    isNewPage: false
-  }
+    href: "/upload",
+    isNewPage: false,
+  },
 );
 </script>
 
 <template>
-    <a :href="href" :class="['upload-now-btn', { 'white-style': isWhite }]" :target="isNewPage ? '_blank' : ''">
-      <slot>立即上传</slot>
-    </a>
+  <a
+    :href="href"
+    :class="['upload-now-btn', { 'white-style': isWhite }]"
+    :target="isNewPage ? '_blank' : ''"
+  >
+    <slot>立即上传</slot>
+  </a>
 </template>
 
 <style scoped>
@@ -31,7 +35,9 @@ const props = withDefaults(
   font-size: 1rem;
   border: 1px solid #000000;
   border-radius: 2.5rem;
-  transition: background-color 0.15s ease, color 0.15s ease;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
 }
 @media (max-width: 768px) {
   .upload-now-btn {
@@ -55,17 +61,17 @@ const props = withDefaults(
   }
 }
 .upload-now-btn:hover {
-    background-color: #000000;
-    color: #FFFFFF;
-    cursor: pointer;
+  background-color: #000000;
+  color: #ffffff;
+  cursor: pointer;
 }
 .white-style {
-  color: #FFFFFF;
-  border: 1px solid #FFFFFF;
+  color: #ffffff;
+  border: 1px solid #ffffff;
   background-color: transparent;
 }
 .white-style:hover {
   color: #000000;
-  background-color: #FFFFFF;
+  background-color: #ffffff;
 }
 </style>

@@ -1,20 +1,24 @@
-@import 'base.css';
+@import "base.css";
 @import "contentbox.css";
 
-body{
-    background-color: #F7F8FA;
+body {
+  background-color: #f7f8fa;
 }
 
-a{
-    color: var(--color-basic-link);
-    text-decoration: none;
+a {
+  color: var(--color-basic-link);
+  text-decoration: none;
 }
 
-h1,h2,h3,h4,strong{
-    font-weight: bolder;
-} 
+h1,
+h2,
+h3,
+h4,
+strong {
+  font-weight: bolder;
+}
 
-.page-box{
+.page-box {
   margin: 0 auto;
   max-width: var(--max-width);
 }
@@ -30,7 +34,6 @@ h1,h2,h3,h4,strong{
         height: 25vmin!important;
     }
 } */
-
 
 /* .is-checked::after {
   background-color: #001A38 !important;

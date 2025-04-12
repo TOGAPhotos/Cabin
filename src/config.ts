@@ -1,8 +1,8 @@
-const siteUrl = import.meta.env.VITE_API_BASE_URL
+const siteUrl = import.meta.env.VITE_API_BASE_URL;
 
-export const API_URL = siteUrl + '/api/v2';
+export const API_URL = siteUrl + "/api/v2";
 
-export const STATIC_RESOURCE_URL = "https://cos-0688-tp-cdn.794td.cn"
+export const STATIC_RESOURCE_URL = "https://cos-0688-tp-cdn.794td.cn";
 
 export const consoleStr = `
   _______ ____   _____            _____  _           _            
@@ -14,4 +14,4 @@ export const consoleStr = `
                            
                                   Maintenance by TO/GAPhotos Team
                                   Welcome to join us
-`
+`;

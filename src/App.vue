@@ -1,20 +1,20 @@
 <script setup lang="ts">
-import { RouterView } from 'vue-router'
-import HeadBar from '@/component/header/HeadBar.vue'
+import { RouterView } from "vue-router";
+import HeadBar from "@/component/header/HeadBar.vue";
 
-import Footer from '@/component/Footer.vue'
+import Footer from "@/component/Footer.vue";
 </script>
 
 <template>
   <HeadBar />
   <main>
-    <RouterView/>
+    <RouterView />
   </main>
   <Footer />
 </template>
 
 <style scoped>
-main{
+main {
   min-height: calc(100dvh - 170px);
   margin: 0 auto;
 }

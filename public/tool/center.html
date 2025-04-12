@@ -1,56 +1,53 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>居中检查</title>
     <style>
-        body{
-            background-color: rgb(128,128,128);
-            margin: 0;
-            padding: 0;
-        }
+      body {
+        background-color: rgb(128, 128, 128);
+        margin: 0;
+        padding: 0;
+      }
     </style>
-</head>
+  </head>
 
-<body>
-<canvas id="canvas"></canvas>
-<script>
-    const BASE_WIDTH = 700;
+  <body>
+    <canvas id="canvas"></canvas>
+    <script>
+      const BASE_WIDTH = 700;
 
-    const canvas = document.getElementById('canvas');
-    const ctx = canvas.getContext('2d');
-    const params = new URLSearchParams(window.location.href.split("?")[1]);
-    const mode = params.get("mode") || "0";
-    const img = new Image();
-    img.src = params.get("image");
-    img.crossOrigin = "Anonymous";
-    img.onload = () => {
-        
+      const canvas = document.getElementById("canvas");
+      const ctx = canvas.getContext("2d");
+      const params = new URLSearchParams(window.location.href.split("?")[1]);
+      const mode = params.get("mode") || "0";
+      const img = new Image();
+      img.src = params.get("image");
+      img.crossOrigin = "Anonymous";
+      img.onload = () => {
         canvas.width = BASE_WIDTH;
-        canvas.height = BASE_WIDTH/img.width*img.height;
+        canvas.height = (BASE_WIDTH / img.width) * img.height;
 
-        const __height = mode === '0' ? img.height : img.height - 20;
+        const __height = mode === "0" ? img.height : img.height - 20;
 
-        ctx.scale(BASE_WIDTH/img.width,BASE_WIDTH/img.width);
+        ctx.scale(BASE_WIDTH / img.width, BASE_WIDTH / img.width);
         ctx.drawImage(img, 0, 0);
 
         // 中心线
-        ctx.fillStyle = 'red';
-        ctx.fillRect(img.width/2,0 , 1, __height);
-        ctx.fillRect(0,__height/2,img.width,1);
+        ctx.fillStyle = "red";
+        ctx.fillRect(img.width / 2, 0, 1, __height);
+        ctx.fillRect(0, __height / 2, img.width, 1);
 
         // 包围框
-        ctx.fillStyle = 'yellow';
-        ctx.fillRect(0,__height/2-img.height*0.15,img.width,1);
-        ctx.fillRect(0,__height/2+img.height*0.15,img.width,1);
-        ctx.fillRect(img.width/2-img.width*0.2,0,1,__height);
-        ctx.fillRect(img.width/2+img.width*0.2,0,1,__height);
+        ctx.fillStyle = "yellow";
+        ctx.fillRect(0, __height / 2 - img.height * 0.15, img.width, 1);
+        ctx.fillRect(0, __height / 2 + img.height * 0.15, img.width, 1);
+        ctx.fillRect(img.width / 2 - img.width * 0.2, 0, 1, __height);
+        ctx.fillRect(img.width / 2 + img.width * 0.2, 0, 1, __height);
 
-        window.resizeTo(canvas.width,canvas.height+40);
-
-    }
-</script>
-</body>
+        window.resizeTo(canvas.width, canvas.height + 40);
+      };
+    </script>
+  </body>
 </html>

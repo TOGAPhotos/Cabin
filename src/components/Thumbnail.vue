@@ -1,20 +1,20 @@
 <script setup lang="ts">
-import {computed, ref} from "vue";
+import { computed, ref } from "vue";
 import { ThumbnailUrl } from "@/utils/photo-url";
 import formatAirportString from "@/utils/airport";
 import ImgLoader from "./ImgLoader.vue";
 
-interface ThumbnailData{
-  id: number,
-  reg: string,
-  airline: string,
-  username?: string,
-  airType?:string,
+interface ThumbnailData {
+  id: number;
+  reg: string;
+  airline: string;
+  username?: string;
+  airType?: string;
   airport?: {
-    name: string,
-    icao: string,
-    iata?: string,
-  }
+    name: string;
+    icao: string;
+    iata?: string;
+  };
 }
 
 const props = defineProps<ThumbnailData>();
@@ -22,46 +22,52 @@ const props = defineProps<ThumbnailData>();
 const url = computed(() => ThumbnailUrl(props.id));
 const href = computed(() => `/photo/${props.id}`);
 const airportLine = computed(() => {
-  if(props.airport?.name){
-    console.log(formatAirportString(props.airport.name, props.airport.icao, props.airport.iata))
-    return formatAirportString(props.airport.name, props.airport.icao, props.airport.iata);
-  }else{
-    return '';
+  if (props.airport?.name) {
+    console.log(
+      formatAirportString(
+        props.airport.name,
+        props.airport.icao,
+        props.airport.iata,
+      ),
+    );
+    return formatAirportString(
+      props.airport.name,
+      props.airport.icao,
+      props.airport.iata,
+    );
+  } else {
+    return "";
   }
 });
-
-
 </script>
 <template>
   <div class="thumbnail">
     <a :href="href">
-      <ImgLoader :src="url" className="img"/>
+      <ImgLoader :src="url" className="img" />
       <div class="info-area">
         <div class="info-area-row" v-if="username">
           <div class="round outer lightblue">
-            <div class="round inner lightblue">
-            </div>
+            <div class="round inner lightblue"></div>
           </div>
-            由<strong>{{ username }}</strong>拍摄
+          由<strong>{{ username }}</strong
+          >拍摄
         </div>
         <div class="info-area-row">
-            <div class="round outer blue">
-              <div class="round inner blue">
-              </div>
-            </div>
-              <span class="airline">{{ airline }}</span> | <span class="reg">{{ reg }}</span>
+          <div class="round outer blue">
+            <div class="round inner blue"></div>
+          </div>
+          <span class="airline">{{ airline }}</span> |
+          <span class="reg">{{ reg }}</span>
         </div>
         <div class="info-area-row">
           <div class="round outer lightblue">
-            <div class="round inner lightblue">
-            </div>
+            <div class="round inner lightblue"></div>
           </div>
           {{ airType }}
         </div>
         <div class="info-area-row" v-if="airportLine !== ''">
           <div class="round outer blue">
-            <div class="round inner blue">
-            </div>
+            <div class="round inner blue"></div>
           </div>
           {{ airportLine }}
         </div>
@@ -84,7 +90,7 @@ const airportLine = computed(() => {
 
 @media only screen and (max-width: 701px) {
   .thumbnail {
-    width: calc(50% - 12px)
+    width: calc(50% - 12px);
   }
 }
 
@@ -104,7 +110,6 @@ const airportLine = computed(() => {
   padding: 0.35rem 0.3rem 0.3rem 0.7rem;
   font-size: 0.65rem;
   color: #000c17;
-
 }
 
 .info-area-row {
@@ -114,19 +119,19 @@ const airportLine = computed(() => {
   min-height: 16px;
   text-wrap: nowrap;
 }
-.blue{
+.blue {
   background: #0984e3;
 }
 
-.lightblue{
+.lightblue {
   background: #74b9ff;
 }
 
-.round{
+.round {
   border-radius: 50%;
 }
 
-.round.outer{
+.round.outer {
   --diameter: 0.6rem;
   width: var(--diameter);
   height: var(--diameter);
@@ -136,19 +141,20 @@ const airportLine = computed(() => {
   margin-right: 0.7rem;
 }
 
-.round.inner{
+.round.inner {
   width: 0.45rem;
   height: 0.45rem;
   border: 0.07rem solid white;
 }
 
-.airline{
+.airline {
   max-width: 53%;
 }
-.reg{
+.reg {
   max-width: 45%;
 }
-.airline, .reg{
+.airline,
+.reg {
   display: inline-block;
   line-height: 1em;
   overflow: hidden;

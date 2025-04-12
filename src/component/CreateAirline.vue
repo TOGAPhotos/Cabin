@@ -7,7 +7,7 @@ import ServerRequest from "@/utils/request";
 const show = defineModel({ type: Boolean, default: false });
 const status = reactive({
   loading: false,
-})
+});
 
 const form = useTemplateRef<FormInstance>("form");
 const formData = reactive({
@@ -16,7 +16,7 @@ const formData = reactive({
   icao_code: "",
   iata_code: "",
 });
-const setWidth = computed(() => Device.isPhone() ? '100%' : 500)
+const setWidth = computed(() => (Device.isPhone() ? "100%" : 500));
 
 async function submit() {
   if (status.loading) return;
@@ -36,17 +36,22 @@ async function submit() {
     ElMessage.success(msg);
     form.value!.resetFields();
     show.value = false;
-  }
-  req.error = (code, msg) => {
-    ElMessage.error(msg)
   };
-  await req.send()
+  req.error = (code, msg) => {
+    ElMessage.error(msg);
+  };
+  await req.send();
   status.loading = false;
 }
 </script>
 
 <template>
-  <el-drawer v-model="show" title="添加航司/运营人" :size="setWidth" direction="ltr">
+  <el-drawer
+    v-model="show"
+    title="添加航司/运营人"
+    :size="setWidth"
+    direction="ltr"
+  >
     <div>
       <h3 style="margin-bottom: 0.8rem">填写说明</h3>
       <p>如航司无官方中文名称，则中文名称可留空。</p>
@@ -54,7 +59,10 @@ async function submit() {
     <el-divider />
     <el-form label-position="top" ref="form" :model="formData">
       <el-form-item label="中文名" prop="airline_cn">
-        <el-input v-model="formData.airline_cn" placeholder="例：中国国际航空" />
+        <el-input
+          v-model="formData.airline_cn"
+          placeholder="例：中国国际航空"
+        />
       </el-form-item>
       <el-form-item label="英文名" prop="airline_en">
         <el-input v-model="formData.airline_en" placeholder="例：Air China" />
@@ -69,7 +77,13 @@ async function submit() {
     <template #footer>
       <div class="dialog-footer">
         <el-button @click="show = false">取消</el-button>
-        <el-button type="primary" @click="submit()" v-loading="status.loading" :disabled="status.loading">确认</el-button>
+        <el-button
+          type="primary"
+          @click="submit()"
+          v-loading="status.loading"
+          :disabled="status.loading"
+          >确认</el-button
+        >
       </div>
     </template>
   </el-drawer>
