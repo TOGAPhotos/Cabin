@@ -1,12 +1,12 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8">
-    <link rel="icon" href="/favicon.ico">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>TOGAPhotos</title>
     <style>
-      #loading{
+      #loading {
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -20,7 +20,7 @@
         background-color: #061936;
         z-index: 1000;
       }
-      #loading-text{
+      #loading-text {
         font-size: 2rem;
       }
     </style>
@@ -29,27 +29,26 @@
     <div id="app"></div>
     <div id="loading">
       <img src="/placeholder.png" alt="loading" />
-      <div id="l-t">
-      </div>
+      <div id="l-t"></div>
     </div>
     <script>
       let loadedResources = 0;
-      const ltElem = document.getElementById('l-t');
-      ltElem.style.display = 'none';
-      setTimeout(() => ltElem.style.display = 'block', 1000);
-      const updateLoadRes = () =>{
+      const ltElem = document.getElementById("l-t");
+      ltElem.style.display = "none";
+      setTimeout(() => (ltElem.style.display = "block"), 1000);
+      const updateLoadRes = () => {
         ltElem.innerText = `${loadedResources}已登机`;
         loadedResources++;
-      }
+      };
       const observer = new PerformanceObserver((list) => {
-          const entries = list.getEntries();
-          entries.forEach((entry) => updateLoadRes());
+        const entries = list.getEntries();
+        entries.forEach((entry) => updateLoadRes());
       });
 
-      observer.observe({ entryTypes: ['resource'] });
-      window.addEventListener('DOMContentLoaded', () =>{
+      observer.observe({ entryTypes: ["resource"] });
+      window.addEventListener("DOMContentLoaded", () => {
         observer.disconnect();
-        document.getElementById('loading').style.display = 'none';
+        document.getElementById("loading").style.display = "none";
       });
     </script>
     <script type="module" src="/src/main.ts"></script>

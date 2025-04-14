@@ -1,48 +1,47 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>TOGA|地平检查</title>
     <style>
-        body{
-            background-color: rgb(128,128,128);
-            margin: 0;
-            padding: 0;
-        }
+      body {
+        background-color: rgb(128, 128, 128);
+        margin: 0;
+        padding: 0;
+      }
     </style>
-</head>
+  </head>
 
-<body>
-<canvas id="canvas"></canvas>
-<script>
-    const BASE_WIDTH = 1280;
+  <body>
+    <canvas id="canvas"></canvas>
+    <script>
+      const BASE_WIDTH = 1280;
 
-    const canvas = document.getElementById('canvas');
-    const ctx = canvas.getContext('2d');
-    const params = new URLSearchParams(window.location.href.split("?")[1]);
-    const img = new Image();
-    img.src = params.get("image");
-    img.crossOrigin = "Anonymous";
-    img.onload = () => {
-
+      const canvas = document.getElementById("canvas");
+      const ctx = canvas.getContext("2d");
+      const params = new URLSearchParams(window.location.href.split("?")[1]);
+      const img = new Image();
+      img.src = params.get("image");
+      img.crossOrigin = "Anonymous";
+      img.onload = () => {
         canvas.width = BASE_WIDTH;
-        canvas.height = BASE_WIDTH/img.width*img.height;
+        canvas.height = (BASE_WIDTH / img.width) * img.height;
 
-        ctx.scale(BASE_WIDTH/img.width,BASE_WIDTH/img.width);
+        ctx.scale(BASE_WIDTH / img.width, BASE_WIDTH / img.width);
         ctx.drawImage(img, 0, 0);
 
-        ctx.fillStyle = 'yellow';
+        ctx.fillStyle = "yellow";
         ctx.globalAlpha = 0.7;
         for (let i = 15; i < img.width; i = i + 25) {
-            ctx.fillRect(i, 0, 1, img.height-20);
+          ctx.fillRect(i, 0, 1, img.height - 20);
         }
-        for(let i = 15; i<img.height-20; i = i+25 ){
-            ctx.fillRect(0, i, img.width, 1);
+        for (let i = 15; i < img.height - 20; i = i + 25) {
+          ctx.fillRect(0, i, img.width, 1);
         }
 
-        window.resizeTo(canvas.width,canvas.height+40);
-
-    }
-</script>
+        window.resizeTo(canvas.width, canvas.height + 40);
+      };
+    </script>
+  </body>
+</html>

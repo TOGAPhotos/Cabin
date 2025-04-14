@@ -7,7 +7,7 @@ import ServerRequest from "@/utils/request";
 const show = defineModel({ type: Boolean, default: false });
 const status = reactive({
   loading: false,
-})
+});
 const form = useTemplateRef<FormInstance>("form");
 const formData = reactive({
   manufacturer_cn: "",
@@ -16,7 +16,7 @@ const formData = reactive({
   sub_type: "",
   icao_code: "",
 });
-const setWidth = computed(() => Device.isPhone() ? '100%' : 500)
+const setWidth = computed(() => (Device.isPhone() ? "100%" : 500));
 
 async function submit() {
   if (status.loading) return;
@@ -36,11 +36,11 @@ async function submit() {
     ElMessage.success(msg);
     form.value!.resetFields();
     show.value = false;
-  }
-  req.error = (code, msg) => {
-    ElMessage.error(msg)
   };
-  await req.send()
+  req.error = (code, msg) => {
+    ElMessage.error(msg);
+  };
+  await req.send();
   status.loading = false;
 }
 </script>
@@ -54,7 +54,10 @@ async function submit() {
     <el-divider />
     <el-form label-position="top" ref="form" :model="formData">
       <el-form-item label="制造商中文名" prop="manufacturer_cn">
-        <el-input v-model="formData.manufacturer_cn" placeholder="例：空中客车" />
+        <el-input
+          v-model="formData.manufacturer_cn"
+          placeholder="例：空中客车"
+        />
       </el-form-item>
       <el-form-item label="制造商英文名" prop="manufacturer_en">
         <el-input v-model="formData.manufacturer_en" placeholder="例：Airbus" />
@@ -72,7 +75,13 @@ async function submit() {
     <template #footer>
       <div class="dialog-footer">
         <el-button @click="show = false">取消</el-button>
-        <el-button type="primary" @click="submit" v-loading="status.loading" :disabled="status.loading">确认</el-button>
+        <el-button
+          type="primary"
+          @click="submit"
+          v-loading="status.loading"
+          :disabled="status.loading"
+          >确认</el-button
+        >
       </div>
     </template>
   </el-drawer>

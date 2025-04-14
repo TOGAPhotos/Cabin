@@ -7,37 +7,37 @@ import { OpenToolWindow } from "@/utils/tool-page";
 import InfoLabel from "@/components/InfoLabel.vue";
 
 interface _FullPhotoInfo extends AcceptPhoto {
-  queueIndex: number
-  airport: string,
-  message: string,
+  queueIndex: number;
+  airport: string;
+  message: string;
 }
 
 const uploadQueue = ref<_FullPhotoInfo[]>();
 (async () => {
-  const infoReq = new ServerRequest('GET', '/queue/upload')
+  const infoReq = new ServerRequest("GET", "/queue/upload");
   infoReq.success = () => {
-    uploadQueue.value = infoReq.getData('photoQueue') as _FullPhotoInfo[]
-  }
-  await infoReq.send()
+    uploadQueue.value = infoReq.getData("photoQueue") as _FullPhotoInfo[];
+  };
+  await infoReq.send();
   uploadQueue.value?.forEach((item) => {
-    item.airport = item.airport_icao_code
+    item.airport = item.airport_icao_code;
     if (item.airport_iata_code) {
-      item.airport += '/' + item.airport_iata_code
+      item.airport += "/" + item.airport_iata_code;
     }
-    item.airport += '-' + item.airport_cn
-  })
-})()
+    item.airport += "-" + item.airport_cn;
+  });
+})();
 
 const deletePhoto = (photoId: number) => {
-  const deleteReq = new ServerRequest('DELETE', `/photo/${photoId}`)
+  const deleteReq = new ServerRequest("DELETE", `/photo/${photoId}`);
   deleteReq.success = () => {
-    uploadQueue.value = uploadQueue.value?.filter((item) => item.id !== photoId)
-  }
-  deleteReq.send()
-}
+    uploadQueue.value = uploadQueue.value?.filter(
+      (item) => item.id !== photoId,
+    );
+  };
+  deleteReq.send();
+};
 </script>
-
-
 
 <template>
   <div class="upload-photo-list page-box">
@@ -54,7 +54,10 @@ const deletePhoto = (photoId: number) => {
           <InfoLabel label="注册号" :value="photo.ac_reg" />
           <InfoLabel label="制造商序列号" :value="photo.ac_msn" />
           <InfoLabel label="机型" :value="photo.ac_type" />
-          <InfoLabel label="航空公司/运营人" :value="photo.airline_cn || photo.airline_en" />
+          <InfoLabel
+            label="航空公司/运营人"
+            :value="photo.airline_cn || photo.airline_en"
+          />
         </div>
         <div class="row">
           <InfoLabel label="拍摄地点" :value="photo.airport" />
@@ -66,19 +69,39 @@ const deletePhoto = (photoId: number) => {
         </div>
         <div class="row">
           <InfoLabel label="队列位置" value="0" />
-          <el-button size="small" type="primary" @click="OpenToolWindow('cfd', RawPhotoUrl(photo.id))">
+          <el-button
+            size="small"
+            type="primary"
+            @click="OpenToolWindow('cfd', RawPhotoUrl(photo.id))"
+          >
             对比度检查
           </el-button>
-          <el-button size="small" type="primary" @click="OpenToolWindow('histogram', RawPhotoUrl(photo.id))">
+          <el-button
+            size="small"
+            type="primary"
+            @click="OpenToolWindow('histogram', RawPhotoUrl(photo.id))"
+          >
             直方图
           </el-button>
-          <el-button size="small" type="primary" @click="OpenToolWindow('histogramRGB', RawPhotoUrl(photo.id))">
+          <el-button
+            size="small"
+            type="primary"
+            @click="OpenToolWindow('histogramRGB', RawPhotoUrl(photo.id))"
+          >
             RGB直方图
           </el-button>
-          <el-button size="small" type="primary" @click="OpenToolWindow('center', RawPhotoUrl(photo.id))">
+          <el-button
+            size="small"
+            type="primary"
+            @click="OpenToolWindow('center', RawPhotoUrl(photo.id))"
+          >
             中心检查
           </el-button>
-          <el-button size="small" type="primary" @click="OpenToolWindow('horizon', RawPhotoUrl(photo.id))">
+          <el-button
+            size="small"
+            type="primary"
+            @click="OpenToolWindow('horizon', RawPhotoUrl(photo.id))"
+          >
             水平检查
           </el-button>
           <el-button size="small" type="danger" @click="deletePhoto(photo.id)">

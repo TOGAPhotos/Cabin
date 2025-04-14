@@ -1,92 +1,105 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>TOGA|直方图</title>
     <style>
-        body{
-            background-color: rgb(128,128,128);
-            margin: 0;
-            padding: 0;
-        }
+      body {
+        background-color: rgb(128, 128, 128);
+        margin: 0;
+        padding: 0;
+      }
     </style>
-</head>
+  </head>
 
-<body>
-    <canvas id="histogramCanvas" style="border: 1px solid orange; background-color: white;"></canvas>
+  <body>
+    <canvas
+      id="histogramCanvas"
+      style="border: 1px solid orange; background-color: white"
+    ></canvas>
 
     <script>
-        const params = new URLSearchParams(window.location.href.split("?")[1]);
-        const mode = params.get("mode") || "0";
-        
-        const photoCanvas = document.createElement('canvas');
-        const histogramCanvas = document.getElementById('histogramCanvas');
-        const ptx = photoCanvas.getContext('2d');
-        const ctx = histogramCanvas.getContext('2d');
+      const params = new URLSearchParams(window.location.href.split("?")[1]);
+      const mode = params.get("mode") || "0";
 
-        const img = new Image();
-        img.crossOrigin = 'anonymous';
-        img.src = params.get("image");
+      const photoCanvas = document.createElement("canvas");
+      const histogramCanvas = document.getElementById("histogramCanvas");
+      const ptx = photoCanvas.getContext("2d");
+      const ctx = histogramCanvas.getContext("2d");
 
-        img.onload = () => {
-            const __height = mode === '0' ? img.height : img.height - 20;
-            photoCanvas.height = img.height;
-            photoCanvas.width = img.width;
+      const img = new Image();
+      img.crossOrigin = "anonymous";
+      img.src = params.get("image");
 
-            ptx.drawImage(img, 0, 0);
+      img.onload = () => {
+        const __height = mode === "0" ? img.height : img.height - 20;
+        photoCanvas.height = img.height;
+        photoCanvas.width = img.width;
 
-            let photoData = ptx.getImageData(0, 0, img.width, __height).data;
+        ptx.drawImage(img, 0, 0);
 
-            let lightness = Array(256).fill(0);
+        let photoData = ptx.getImageData(0, 0, img.width, __height).data;
 
-            for (let i = 0; i < photoData.length; i += 4) {
-                let g = photoData[i] * 299 + photoData[i + 1] * 587 + photoData[i + 2] * 114;
-                g = Math.round(g / 1000);
-                lightness[g]++;
-            }
+        let lightness = Array(256).fill(0);
 
-            for (let i = 0; i < 256; i++) {
-                lightness[i] = lightness[i] / (Math.round(30 * (photoData.length / 4) / (1280 * 720)));
-                if (lightness[i] > 400) {
-                    lightness[i] = 400;
-                }
-                lightness[i] = Math.round(400 - lightness[i]);
-            }
-
-            histogramCanvas.height = 402;
-            histogramCanvas.width = 256 * 3 + 2;
-            window.resizeTo(histogramCanvas.width,histogramCanvas.height+40)
-            ctx.fillStyle = 'red';
-            ctx.fillRect(0, 0, 256 * 3 + 2, 400 + 2);
-
-            ctx.fillStyle = 'black';
-            ctx.fillRect(1, 1, 256 * 3, 400);
-
-            ctx.fillStyle = "white";
-            for (let i = 0; i < 256; i++) {
-                let start = 3 * i + 1;
-
-                if (i === 0) {
-                    ctx.fillRect(start, 1, 1, Math.round((lightness[i] + 400) / 2));
-                } else {
-                    ctx.fillRect(start, 1, 1, Math.round((lightness[i] + lightness[i - 1]) / 2));
-                }
-
-                ctx.fillRect(start + 1, 1, 1, lightness[i]);
-
-                if (i === 255) {
-                    ctx.fillRect(start + 2, 1, 1, Math.round((lightness[i] + 400) / 2));
-                } else {
-                    ctx.fillRect(start + 2, 1, 1, Math.round((lightness[i] + lightness[i + 1]) / 2));
-                }
-            }
+        for (let i = 0; i < photoData.length; i += 4) {
+          let g =
+            photoData[i] * 299 +
+            photoData[i + 1] * 587 +
+            photoData[i + 2] * 114;
+          g = Math.round(g / 1000);
+          lightness[g]++;
         }
 
+        for (let i = 0; i < 256; i++) {
+          lightness[i] =
+            lightness[i] /
+            Math.round((30 * (photoData.length / 4)) / (1280 * 720));
+          if (lightness[i] > 400) {
+            lightness[i] = 400;
+          }
+          lightness[i] = Math.round(400 - lightness[i]);
+        }
 
+        histogramCanvas.height = 402;
+        histogramCanvas.width = 256 * 3 + 2;
+        window.resizeTo(histogramCanvas.width, histogramCanvas.height + 40);
+        ctx.fillStyle = "red";
+        ctx.fillRect(0, 0, 256 * 3 + 2, 400 + 2);
 
+        ctx.fillStyle = "black";
+        ctx.fillRect(1, 1, 256 * 3, 400);
+
+        ctx.fillStyle = "white";
+        for (let i = 0; i < 256; i++) {
+          let start = 3 * i + 1;
+
+          if (i === 0) {
+            ctx.fillRect(start, 1, 1, Math.round((lightness[i] + 400) / 2));
+          } else {
+            ctx.fillRect(
+              start,
+              1,
+              1,
+              Math.round((lightness[i] + lightness[i - 1]) / 2),
+            );
+          }
+
+          ctx.fillRect(start + 1, 1, 1, lightness[i]);
+
+          if (i === 255) {
+            ctx.fillRect(start + 2, 1, 1, Math.round((lightness[i] + 400) / 2));
+          } else {
+            ctx.fillRect(
+              start + 2,
+              1,
+              1,
+              Math.round((lightness[i] + lightness[i + 1]) / 2),
+            );
+          }
+        }
+      };
     </script>
-</body>
-
+  </body>
 </html>
