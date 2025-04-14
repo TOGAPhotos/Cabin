@@ -1,13 +1,13 @@
-import { createApp } from "vue";
+import "@/assets/iconfont/iconfont.css";
 import { createPinia } from "pinia";
 import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
-import "@/assets/iconfont/iconfont.css";
+import { createApp } from "vue";
 
 import "./assets/main.css";
 
+import { consoleStr } from "@/config";
 import App from "./App.vue";
 import router from "./router";
-import { consoleStr } from "@/config";
 
 console.log(consoleStr);
 const app = createApp(App);

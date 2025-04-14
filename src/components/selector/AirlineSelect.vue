@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import ServerRequest from "@/utils/request";
+import type { Option } from "@/utils/type/option";
 import { ElMessage } from "element-plus";
 import { onMounted, ref } from "vue";
-import type { Option } from "@/utils/type/option";
 
 const value = defineModel<number | null>();
 const loading = ref(false);

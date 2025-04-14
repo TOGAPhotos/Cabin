@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import { type CSSProperties, onMounted, ref } from "vue";
 import { STATIC_RESOURCE_URL } from "@/config";
-import { CameraFilled } from "@element-plus/icons-vue";
 import type { AcceptPhoto } from "@/utils/type/photo";
+import { type CSSProperties } from "vue";
 const props = withDefaults(
   defineProps<{
     photoInfo: AcceptPhoto;

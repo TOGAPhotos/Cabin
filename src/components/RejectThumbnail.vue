@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { computed } from "vue";
-import { STATIC_RESOURCE_URL } from "@/config";
 import { ThumbnailUrl } from "@/utils/photo-url";
+import { computed } from "vue";
 
 interface ThumbnailData {
   id: number;

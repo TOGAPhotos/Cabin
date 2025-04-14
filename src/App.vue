@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { RouterView } from "vue-router";
 import HeadBar from "@/component/header/HeadBar.vue";
+import { RouterView } from "vue-router";
 
 import Footer from "@/component/Footer.vue";
 import { computed } from "vue";

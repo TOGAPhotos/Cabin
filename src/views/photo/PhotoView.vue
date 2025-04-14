@@ -1,24 +1,24 @@
 <script setup lang="ts">
-import { computed, watch, ref, useTemplateRef, onMounted, reactive } from "vue";
-import { useRoute } from "vue-router";
-import { Checked, User } from "@element-plus/icons-vue";
+import { User } from "@element-plus/icons-vue";
 import { ElMessage, ElMessageBox, ElNotification } from "element-plus";
+import { computed, onMounted, reactive, ref, useTemplateRef, watch } from "vue";
+import { useRoute } from "vue-router";
 
 import router from "@/router";
 
+import ContactPanel from "@/component/ContactPanel.vue";
 import ImgLoader from "@/components/ImgLoader.vue";
 import InfoLabel from "@/components/InfoLabel.vue";
-import ContactPanel from "@/component/ContactPanel.vue";
 import Thumbnail from "@/components/Thumbnail.vue";
 
-import type { AcceptPhoto, PhotoSearchType } from "@/utils/type/photo";
-import ServerRequest from "@/utils/request";
-import { RemoteSearch } from "@/utils/remoteSearch";
 import Device from "@/utils/device";
 import { PhotoUrl } from "@/utils/photo-url";
+import { RemoteSearch } from "@/utils/remoteSearch";
+import ServerRequest from "@/utils/request";
+import type { AcceptPhoto, PhotoSearchType } from "@/utils/type/photo";
 
-import useUserInfoStore from "@/stores/userInfo";
 import InfoEditPanel from "@/component/InfoEditPanel.vue";
+import useUserInfoStore from "@/stores/userInfo";
 
 const showContactPanel = ref(false);
 const showInfoEditPanel = ref(false);

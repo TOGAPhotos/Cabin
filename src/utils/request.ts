@@ -1,7 +1,7 @@
-import { ElMessage } from "element-plus";
-import userInfoStore from "@/stores/userInfo";
 import { API_URL } from "@/config";
 import useLocalIdStore from "@/stores/localId";
+import userInfoStore from "@/stores/userInfo";
+import { ElMessage } from "element-plus";
 
 interface RequestFailFunc {
   (code: number, msg: string): any;

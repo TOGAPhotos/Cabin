@@ -1,5 +1,5 @@
-import { ElMessage } from "element-plus";
 import type { UploadRawFile } from "element-plus";
+import { ElMessage } from "element-plus";
 export async function checkImage(rawFile: UploadRawFile) {
   if (rawFile.type !== "image/jpeg") {
     ElMessage.error("格式错误");

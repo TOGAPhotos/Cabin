@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
-import serverRequest from "@/utils/request";
-import TransparentButton from "@/component/firstScreen/TransparentButton.vue";
 import PhotoBox from "@/component/firstScreen/PhotoBox.vue";
+import TransparentButton from "@/component/firstScreen/TransparentButton.vue";
+import serverRequest from "@/utils/request";
+import { onMounted, ref } from "vue";
 // import Carousel from "@/components/photo/Carousel.vue";
 import type { AcceptPhoto } from "@/utils/type/photo";
 

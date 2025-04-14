@@ -1,14 +1,14 @@
 <script setup lang="ts">
+import TransparentButton from "@/component/firstScreen/TransparentButton.vue";
+import router from "@/router";
+import ServerRequest from "@/utils/request";
 import {
   CameraFilled,
   PictureFilled,
-  UserFilled,
   Promotion,
+  UserFilled,
 } from "@element-plus/icons-vue";
-import TransparentButton from "@/component/firstScreen/TransparentButton.vue";
 import { onMounted, reactive } from "vue";
-import ServerRequest from "@/utils/request";
-import router from "@/router";
 
 const statisticInfo = reactive({
   userNum: 0,

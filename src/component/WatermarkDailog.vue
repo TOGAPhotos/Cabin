@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { reactive, watch } from "vue";
-import { onMounted, ref, useTemplateRef } from "vue";
+import { reactive, useTemplateRef, watch } from "vue";
 
 import Device from "@/utils/device";
 import { ElLoading } from "element-plus";

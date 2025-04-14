@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { onMounted, ref, type Ref } from "vue";
 import ServerRequest from "@/utils/request";
 import { ElMessage } from "element-plus";
+import { onMounted, ref, type Ref } from "vue";
 
 const value = defineModel<number | undefined>() as Ref<number | undefined>;
 

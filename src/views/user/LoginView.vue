@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { reactive, ref } from "vue";
-import userInfoStore from "@/stores/userInfo";
-import { ElNotification } from "element-plus";
-import ServerRequest from "@/utils/request";
 import router from "@/router";
+import userInfoStore from "@/stores/userInfo";
+import ServerRequest from "@/utils/request";
+import { ElNotification } from "element-plus";
+import { reactive } from "vue";
 
 interface LoginForm {
   email: string;

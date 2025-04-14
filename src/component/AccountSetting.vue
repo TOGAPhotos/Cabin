@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { onMounted, reactive, ref } from "vue";
 import AirportSelect from "@/components/selector/AirportSelect.vue";
-import ServerRequest from "@/utils/request";
-import useUserInfoStore from "@/stores/userInfo";
-import { ElMessage } from "element-plus";
 import router from "@/router";
+import useUserInfoStore from "@/stores/userInfo";
+import ServerRequest from "@/utils/request";
 import type { AcceptPhoto } from "@/utils/type/photo";
+import { ElMessage } from "element-plus";
+import { onMounted, reactive, ref } from "vue";
 
 const panelVisible = defineModel({ type: Boolean, default: false });
 const user = useUserInfoStore();

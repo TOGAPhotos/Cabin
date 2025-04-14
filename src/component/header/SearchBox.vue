@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import router from "@/router";
 import { Search } from "@element-plus/icons-vue";
-import { ref, onMounted, onBeforeUnmount } from "vue";
+import { onBeforeUnmount, onMounted, ref } from "vue";
 
 const inputContent = ref("");
 const showMobileSearchBox = ref(false);

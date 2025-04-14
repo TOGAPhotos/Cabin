@@ -1,5 +1,3 @@
-import type { AirportData } from "@/utils/type/airport";
-
 declare type ThumbnailInfo = {
   airline_cn: string;
   airline_en: string;
