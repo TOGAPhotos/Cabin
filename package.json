@@ -10,7 +10,13 @@
     "build-only": "vite build --mode production",
     "type-check": "vue-tsc --build --force",
     "format": "prettier --write --cache .",
-    "format-check": "prettier --check --cache ."
+    "format-check": "prettier --check --cache .",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "*.{ts,jsx,tsx,cjs,cts,mjs,mts,vue}": [
+      "prettier --write --cache ."
+    ]
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.1",
@@ -34,6 +40,7 @@
     "@vue/runtime-dom": "^3.5.12",
     "@vue/test-utils": "^2.4.6",
     "@vue/tsconfig": "^0.5.1",
+    "husky": "^9.1.7",
     "jsdom": "^24.1.3",
     "npm-run-all2": "^6.2.6",
     "sass-loader": "^16.0.5",
