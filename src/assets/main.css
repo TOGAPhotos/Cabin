@@ -1,5 +1,6 @@
-@import "base.css";
-@import "contentbox.css";
+@import "tailwindcss";
+@import "./base.css";
+@import "./contentbox.css";
 
 body {
   background-color: #f7f8fa;
