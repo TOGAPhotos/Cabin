@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, watch, ref, useTemplateRef, onMounted } from "vue";
+import { computed, watch, ref, useTemplateRef, onMounted, reactive } from "vue";
 import { useRoute } from "vue-router";
 import { Checked, User } from "@element-plus/icons-vue";
 import { ElMessage, ElMessageBox, ElNotification } from "element-plus";
@@ -20,19 +20,31 @@ import { PhotoUrl } from "@/utils/photo-url";
 import useUserInfoStore from "@/stores/userInfo";
 import InfoEditPanel from "@/component/InfoEditPanel.vue";
 
-const airportText = ref("");
 const showContactPanel = ref(false);
 const showInfoEditPanel = ref(false);
 const route = useRoute();
+const user = useUserInfoStore();
 const photoId = <string>route.params.id;
 const photoInfo = ref<AcceptPhoto>();
 const relatedPhotoList = ref<AcceptPhoto[]>([]);
 const imgBoxElm = useTemplateRef("_imgBox");
-const showEditOption = computed(() => {
-  const user = useUserInfoStore();
-  return (
-    user.permission === "ADMIN" || user.id === photoInfo.value?.upload_user_id
-  );
+
+const status = reactive({
+  edit:
+    user.permission === "ADMIN" || user.id === photoInfo.value?.upload_user_id,
+  contact: user.id !== photoInfo.value?.upload_user_id,
+  info:
+    user.permission === "ADMIN" || user.id === photoInfo.value?.upload_user_id,
+});
+
+const airportText = computed(() => {
+  if (!photoInfo.value) return;
+  let _s = photoInfo.value.airport_icao_code as string;
+  if (photoInfo.value?.airport_iata_code) {
+    _s = photoInfo.value.airport_iata_code + "/" + _s;
+  }
+  _s += `<br>${photoInfo.value?.airport_cn}`;
+  return _s;
 });
 
 watch(
@@ -98,14 +110,9 @@ const loadPhoto = async () => {
   if (photoInfo.value?.photo_time) {
     photoInfo.value.photo_time = photoInfo.value.photo_time.split("T")[0];
   }
-  airportText.value = photoInfo.value?.airport_icao_code as string;
-  if (photoInfo.value?.airport_iata_code) {
-    airportText.value =
-      photoInfo.value.airport_iata_code + "/" + airportText.value;
-  }
-  airportText.value += `<br>${photoInfo.value?.airport_cn}`;
   await SearchRelatedPhoto();
 };
+
 onMounted(async () => {
   await loadPhoto();
   if (!Device.isPhone()) {
@@ -145,11 +152,7 @@ const deletePhoto = async () => {
 <template>
   <div id="photo-view">
     <div class="image-box" ref="_imgBox">
-      <ImgLoader
-        :src="PhotoUrl(photoId)"
-        :alt="photoInfo?.ac_reg"
-        :protect="true"
-      />
+      <ImgLoader :src="PhotoUrl(photoId)" :alt="photoInfo?.ac_reg" protect />
     </div>
     <div class="info-box">
       <div class="info-area">
@@ -198,7 +201,7 @@ const deletePhoto = async () => {
           <el-button
             type="primary"
             @click="showContactPanel = true"
-            v-if="showEditOption"
+            v-if="status.contact"
           >
             <el-icon>
               <User />
@@ -207,12 +210,12 @@ const deletePhoto = async () => {
           </el-button>
         </div>
         <!-- <div style="height: 1px;background-color: black;"></div> -->
-        <div v-if="showEditOption">
+        <div v-if="status.edit">
           <el-button type="primary" @click="showInfoEditPanel = true">
             编辑图片信息
           </el-button>
         </div>
-        <div v-if="showEditOption">
+        <div v-if="status.edit">
           <el-button type="danger" @click="deletePhoto"> 删除图片 </el-button>
         </div>
       </div>
@@ -271,7 +274,7 @@ const deletePhoto = async () => {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content: space-evenly;
+  justify-content: start;
 }
 
 .action-area .el-button {
@@ -294,14 +297,10 @@ const deletePhoto = async () => {
   max-width: var(--max-width);
   margin: 0 auto;
 }
-
-.info-label {
-  min-width: 9em;
-}
 </style>
 <style>
 @media only screen and (max-width: 701px) {
-  .image-box .img {
+  .image-box img {
     width: 100%;
     height: auto;
   }
@@ -321,11 +320,20 @@ const deletePhoto = async () => {
   .user-info.label-group {
     display: flex;
     flex-direction: row;
+    width: 100%;
   }
-
-  .user-info .username {
+  .user-info .info-label {
+    min-width: 130px;
+  }
+  .user-info {
+    margin: 0 0.2em;
+  }
+  .user-info .info-label:first-child {
+    margin-right: 0.6em;
+  }
+  /* .user-info .username {
     margin-right: 3em;
-  }
+  } */
 }
 
 @media only screen and (min-width: 701px) {

@@ -7,9 +7,9 @@ const prop = defineProps({
   protect: { type: Boolean, required: false, default: false },
 });
 
+const loading = ref(true);
 const onLoad = () => (loading.value = false);
 const onError = () => (loading.value = true);
-const loading = ref(true);
 </script>
 <template>
   <img
@@ -27,19 +27,22 @@ const loading = ref(true);
     @error="onError()"
     v-show="!loading"
   />
-  <div v-else>
-    <img
-      :src="prop.src"
-      :alt="prop.alt"
-      :class="prop.className + ' protect'"
-      @load="onLoad()"
-      @error="onError()"
-      oncontextmenu="return false"
-      ondragstart="return false"
-      v-show="!loading"
-    />
-    <div class="cover"></div>
-  </div>
+  <img
+    ref="img"
+    v-if="prop.protect"
+    :src="prop.src"
+    :alt="prop.alt"
+    :class="'protect ' + prop.className"
+    draggable="false"
+    oncontextmenu="return false;"
+    ondblclick="return false;"
+    onselectstart="return false;"
+    v-on:touchstart="false"
+    onmousedown="return false;"
+    @load="onLoad()"
+    @error="onError()"
+    v-show="!loading"
+  />
 </template>
 <style scoped>
 .protect {
@@ -48,14 +51,5 @@ const loading = ref(true);
   -moz-user-select: none;
   user-select: none;
   pointer-events: none;
-}
-.cover {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: none;
-  z-index: 1;
 }
 </style>

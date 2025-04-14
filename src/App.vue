@@ -3,10 +3,17 @@ import { RouterView } from "vue-router";
 import HeadBar from "@/component/header/HeadBar.vue";
 
 import Footer from "@/component/Footer.vue";
+import { computed } from "vue";
+
+const showHeadBar = computed(() => {
+  console.log(window.location.pathname);
+  const NO_SHOW_PATH = ["/maintenance"];
+  return !NO_SHOW_PATH.includes(window.location.pathname);
+});
 </script>
 
 <template>
-  <HeadBar />
+  <HeadBar v-if="showHeadBar" />
   <main>
     <RouterView />
   </main>
@@ -18,6 +25,7 @@ main {
   min-height: calc(100dvh - 170px);
   margin: 0 auto;
 }
+
 /* .main{
   max-width: var(--max-width);
   margin: 0 auto;
