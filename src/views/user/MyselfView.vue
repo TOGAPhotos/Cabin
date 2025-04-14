@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import useUserInfoStore from "@/stores/userInfo";
 import Thumbnail from "@/components/Thumbnail.vue";
-import {onMounted, ref, useTemplateRef, type Ref} from "vue";
+import { onMounted, ref, useTemplateRef, type Ref } from "vue";
 import ServerRequest from "@/utils/request";
 import router from "@/router";
 import AccountSetting from "@/component/AccountSetting.vue";
-import type {UserSelfInfo} from "@/utils/type/user";
-import type {AirportData} from "@/utils/type/airport";
-import type {AcceptPhoto} from "@/utils/type/photo";
+import type { UserSelfInfo } from "@/utils/type/user";
+import type { AirportData } from "@/utils/type/airport";
+import type { AcceptPhoto } from "@/utils/type/photo";
 import { ThumbnailUrl } from "@/utils/photo-url";
 
 const user = useUserInfoStore();
@@ -15,39 +15,42 @@ const user = useUserInfoStore();
 const photoList = ref<AcceptPhoto[]>([]);
 const userInfo = ref<UserSelfInfo>();
 const airportText = ref("");
-const headerElm = useTemplateRef<HTMLElement>("header-photo")
+const headerElm = useTemplateRef<HTMLElement>("header-photo");
 onMounted(async () => {
-  const userInfoReq = new ServerRequest('GET', `/user/${user.id}`,);
+  const userInfoReq = new ServerRequest("GET", `/user/${user.id}`);
   userInfoReq.success = () => {
-    photoList.value = userInfoReq.getData('photoList')
-    userInfo.value = userInfoReq.getData('userInfo')
+    photoList.value = userInfoReq.getData("photoList");
+    userInfo.value = userInfoReq.getData("userInfo");
     user.username = userInfo.value!.username;
-  }
+  };
   await userInfoReq.send();
-  if(userInfo.value?.cover_photo_id){
-      headerElm.value!.style.background = `linear-gradient(rgba(247, 248, 250, 0) 0%, rgba(247, 248, 250, 1) 100%),
+  if (userInfo.value?.cover_photo_id) {
+    headerElm.value!.style.background = `linear-gradient(rgba(247, 248, 250, 0) 0%, rgba(247, 248, 250, 1) 100%),
       url("${ThumbnailUrl(userInfo.value.cover_photo_id)}") no-repeat center/cover`;
   }
-  if(userInfo.value?.airport_id){
-    const airportInfoReq = new ServerRequest('GET', `/airport/${userInfo.value.airport_id}`,);
+  if (userInfo.value?.airport_id) {
+    const airportInfoReq = new ServerRequest(
+      "GET",
+      `/airport/${userInfo.value.airport_id}`,
+    );
     airportInfoReq.success = () => {
       const airportData = airportInfoReq.getData() as AirportData;
       airportText.value = airportData.icao_code + " " + airportData.airport_cn;
-      if(airportData.iata_code){
+      if (airportData.iata_code) {
         airportText.value = `${airportData.iata_code}/${airportText.value}`;
       }
-    }
+    };
     await airportInfoReq.send();
   }
-})
+});
 
 const settingPanelVisible = ref<boolean>(false);
 
-const logout = async () =>{
+const logout = async () => {
   user.clearUserInfo();
-  await router.push('/')
-  router.go(0)
-}
+  await router.push("/");
+  router.go(0);
+};
 </script>
 
 <template>
@@ -95,35 +98,46 @@ const logout = async () =>{
         </div> -->
       </div>
       <div class="statistic-box">
-        <el-statistic class="statistic-item" title="入库数量" :value="userInfo?.total_photo"/>
-        <el-statistic class="statistic-item" title="过审率" :value="userInfo?.passing_rate">
-          <template #suffix>
-            %
-          </template>
+        <el-statistic
+          class="statistic-item"
+          title="入库数量"
+          :value="userInfo?.total_photo"
+        />
+        <el-statistic
+          class="statistic-item"
+          title="过审率"
+          :value="userInfo?.passing_rate"
+        >
+          <template #suffix> % </template>
         </el-statistic>
-
       </div>
       <div class="action-box">
         <div class="action-item">
           <a href="/upload">上传图片</a>
           <div class="explain">从这里上传您的照片到TOGAPhotos</div>
           <a href="/queue/upload">上传队列</a>
-          <div class="explain">查看正在等待审核的图片，您可以利用TOGAPhotos提供的工具自行检查您上传的图片。</div>
+          <div class="explain">
+            查看正在等待审核的图片，您可以利用TOGAPhotos提供的工具自行检查您上传的图片。
+          </div>
           <a href="/queue/reject">未过审队列</a>
-          <div class="explain">查看您最近10张没有通过TOGAPhotos审核的图片，了解您的图片没能通过审核的原因</div>
-          <a @click="settingPanelVisible = true;">账户设置</a>
+          <div class="explain">
+            查看您最近10张没有通过TOGAPhotos审核的图片，了解您的图片没能通过审核的原因
+          </div>
+          <a @click="settingPanelVisible = true">账户设置</a>
           <div class="explain">更改账户信息，调整您对第三方的授权</div>
-          <a style="color: #ff4d4a;" @click="logout()">退出登陆</a>
+          <a style="color: #ff4d4a" @click="logout()">退出登陆</a>
           <div class="explain">退出当前账户，注销本地存储的凭据</div>
         </div>
       </div>
     </div>
     <div class="photo-box">
-      <Thumbnail v-for="photo in photoList" :key="photo.id"
-                 :id="photo.id"
-                 :reg="photo.ac_reg"
-                 :airline="photo.airline_cn || photo.airline_en"
-                 :airType="photo.ac_type"
+      <Thumbnail
+        v-for="photo in photoList"
+        :key="photo.id"
+        :id="photo.id"
+        :reg="photo.ac_reg"
+        :airline="photo.airline_cn || photo.airline_en"
+        :airType="photo.ac_type"
       />
     </div>
     <AccountSetting v-model="settingPanelVisible" />
@@ -149,7 +163,7 @@ const logout = async () =>{
   flex-direction: column;
   justify-content: center;
 }
-.action-item a{
+.action-item a {
   font-weight: bolder;
 }
 @media only screen and (min-width: 701px) {
@@ -161,18 +175,18 @@ const logout = async () =>{
     height: 240px;
   }
 
-  .self-intro{
+  .self-intro {
     width: 40%;
   }
-  .photo-box{
+  .photo-box {
     width: 60%;
   }
 
   .photo-box {
     margin: 24px 0 0 0;
   }
-  .thumbnail{
-    width: calc(100%/3 - 12px)!important;
+  .thumbnail {
+    width: calc(100% / 3 - 12px) !important;
   }
 }
 
@@ -191,7 +205,8 @@ const logout = async () =>{
     height: 15vh;
   }
 
-  .self-intro, .photo-box {
+  .self-intro,
+  .photo-box {
     width: 100%;
   }
 }
@@ -252,7 +267,7 @@ const logout = async () =>{
   font-size: 0.9rem;
   padding: 0.5rem;
 }
-.explain{
+.explain {
   margin: 0 0 0.4em 0;
 }
 </style>

@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import { RouterView } from 'vue-router'
-import HeadBar from '@/component/header/HeadBar.vue'
+import { RouterView } from "vue-router";
+import HeadBar from "@/component/header/HeadBar.vue";
 
-import Footer from '@/component/Footer.vue'
-import { computed } from 'vue'
+import Footer from "@/component/Footer.vue";
+import { computed } from "vue";
 
 const showHeadBar = computed(() => {
-  console.log(window.location.pathname)
-  const NO_SHOW_PATH = ['/maintenance']
-  return !NO_SHOW_PATH.includes(window.location.pathname)
-})
+  console.log(window.location.pathname);
+  const NO_SHOW_PATH = ["/maintenance"];
+  return !NO_SHOW_PATH.includes(window.location.pathname);
+});
 </script>
 
 <template>

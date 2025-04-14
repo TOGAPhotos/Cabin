@@ -25,44 +25,54 @@ const showInfoEditPanel = ref(false);
 const route = useRoute();
 const user = useUserInfoStore();
 const photoId = <string>route.params.id;
-const photoInfo = ref<AcceptPhoto>()
+const photoInfo = ref<AcceptPhoto>();
 const relatedPhotoList = ref<AcceptPhoto[]>([]);
-const imgBoxElm = useTemplateRef('_imgBox');
+const imgBoxElm = useTemplateRef("_imgBox");
 
 const status = reactive({
-  edit: user.permission === 'ADMIN' || user.id === photoInfo.value?.upload_user_id,
+  edit:
+    user.permission === "ADMIN" || user.id === photoInfo.value?.upload_user_id,
   contact: user.id !== photoInfo.value?.upload_user_id,
-  info: user.permission === 'ADMIN' || user.id === photoInfo.value?.upload_user_id,
-})
+  info:
+    user.permission === "ADMIN" || user.id === photoInfo.value?.upload_user_id,
+});
 
-const airportText = computed(()=>{
-  if ( !photoInfo.value ) return;
+const airportText = computed(() => {
+  if (!photoInfo.value) return;
   let _s = photoInfo.value.airport_icao_code as string;
   if (photoInfo.value?.airport_iata_code) {
     _s = photoInfo.value.airport_iata_code + "/" + _s;
   }
-  _s += `<br>${photoInfo.value?.airport_cn}`
+  _s += `<br>${photoInfo.value?.airport_cn}`;
   return _s;
-})
+});
 
-watch(() => showInfoEditPanel.value, (value, oldValue) => {
-  if (oldValue === true && value === false) {
-    return loadPhoto();
-  }
-})
+watch(
+  () => showInfoEditPanel.value,
+  (value, oldValue) => {
+    if (oldValue === true && value === false) {
+      return loadPhoto();
+    }
+  },
+);
 
 async function SearchRelatedPhoto() {
   const searchGroup = await Promise.all([
-    RemoteSearch.photo('reg', <string>photoInfo.value?.ac_reg, -1, 5),
-    RemoteSearch.photo('airport', <string>photoInfo.value?.airport_icao_code, -1, 5),
-    RemoteSearch.photo('user', <string>photoInfo.value?.username, -1, 5),
+    RemoteSearch.photo("reg", <string>photoInfo.value?.ac_reg, -1, 5),
+    RemoteSearch.photo(
+      "airport",
+      <string>photoInfo.value?.airport_icao_code,
+      -1,
+      5,
+    ),
+    RemoteSearch.photo("user", <string>photoInfo.value?.username, -1, 5),
   ]);
-  const resultArray = searchGroup.reduce((list, item) => list.concat(item))
+  const resultArray = searchGroup.reduce((list, item) => list.concat(item));
   for (const item of resultArray) {
     if (item.id === Number(photoId)) {
       continue;
     }
-    if (relatedPhotoList.value.find(value => value.id === item.id)) {
+    if (relatedPhotoList.value.find((value) => value.id === item.id)) {
       continue;
     }
     relatedPhotoList.value.push(item);
@@ -70,41 +80,48 @@ async function SearchRelatedPhoto() {
 
   const listLen = relatedPhotoList.value.length;
   if (Device.isPhone() && listLen > 2) {
-    relatedPhotoList.value = relatedPhotoList.value.slice(0, listLen - (listLen % 2));
+    relatedPhotoList.value = relatedPhotoList.value.slice(
+      0,
+      listLen - (listLen % 2),
+    );
   } else if (listLen > 4) {
-    relatedPhotoList.value = relatedPhotoList.value.slice(0, listLen - (listLen % 4));
+    relatedPhotoList.value = relatedPhotoList.value.slice(
+      0,
+      listLen - (listLen % 4),
+    );
   }
 }
 const setImgBoxPositon = () => {
   imgBoxElm.value!.style.transform = `translateX(-${imgBoxElm.value!.offsetLeft}px)`;
-}
-
+};
 
 const loadPhoto = async () => {
-  const photoInfoReq = new ServerRequest('GET', `/photo/${photoId}`);
-  photoInfoReq.success = () => photoInfo.value = photoInfoReq.getData() as AcceptPhoto;
+  const photoInfoReq = new ServerRequest("GET", `/photo/${photoId}`);
+  photoInfoReq.success = () =>
+    (photoInfo.value = photoInfoReq.getData() as AcceptPhoto);
   photoInfoReq.error = (_, msg) => {
     ElNotification.error({
       title: msg,
     });
-    router.push('/');
-  }
+    router.push("/");
+  };
   await photoInfoReq.send();
 
   if (photoInfo.value?.photo_time) {
-    photoInfo.value.photo_time = photoInfo.value.photo_time.split('T')[0]
+    photoInfo.value.photo_time = photoInfo.value.photo_time.split("T")[0];
   }
   await SearchRelatedPhoto();
-}
+};
 
 onMounted(async () => {
-  await loadPhoto()
+  await loadPhoto();
   if (!Device.isPhone()) {
     setImgBoxPositon();
-    window.addEventListener('resize', setImgBoxPositon);
+    window.addEventListener("resize", setImgBoxPositon);
   }
-})
-const searchLink = (type: PhotoSearchType, content: string | undefined) => content ? `/search?type=${type}&content=${content}` : " ";
+});
+const searchLink = (type: PhotoSearchType, content: string | undefined) =>
+  content ? `/search?type=${type}&content=${content}` : " ";
 
 const deletePhoto = async () => {
   try {
@@ -112,48 +129,62 @@ const deletePhoto = async () => {
       `请确认删除图片ID:${photoInfo.value?.id}`,
       `删除图片`,
       {
-        confirmButtonText: '删除',
-        cancelButtonText: '取消',
-        inputErrorMessage: 'ID输入错误',
-        type: 'warning',
-        inputValidator: v => v === photoInfo.value?.id.toString()
-      }
-    )
+        confirmButtonText: "删除",
+        cancelButtonText: "取消",
+        inputErrorMessage: "ID输入错误",
+        type: "warning",
+        inputValidator: (v) => v === photoInfo.value?.id.toString(),
+      },
+    );
   } catch {
-    return ElMessage.info('取消删除');
+    return ElMessage.info("取消删除");
   }
-  const req = new ServerRequest('DELETE', `/photo/${photoId}`);
+  const req = new ServerRequest("DELETE", `/photo/${photoId}`);
   req.success = () => {
-    ElMessage.success('删除成功');
-    return router.push('/')
-  }
+    ElMessage.success("删除成功");
+    return router.push("/");
+  };
   req.error = (_, msg) => ElMessage.error(msg);
   await req.send();
-}
-
-
+};
 </script>
 
 <template>
   <div id="photo-view">
     <div class="image-box" ref="_imgBox">
-      <ImgLoader :src="PhotoUrl(photoId)" :alt="photoInfo?.ac_reg"  protect/>
+      <ImgLoader :src="PhotoUrl(photoId)" :alt="photoInfo?.ac_reg" protect />
     </div>
     <div class="info-box">
       <div class="info-area">
         <div class="label-group">
-          <InfoLabel label="注册号" :value="photoInfo?.ac_reg" :link="searchLink('reg', photoInfo?.ac_reg)" />
+          <InfoLabel
+            label="注册号"
+            :value="photoInfo?.ac_reg"
+            :link="searchLink('reg', photoInfo?.ac_reg)"
+          />
           <InfoLabel label="序列号" :value="photoInfo?.ac_msn" />
-          <InfoLabel label="机型" :value="photoInfo?.ac_type" :link="searchLink('airtype', photoInfo?.ac_type)" />
+          <InfoLabel
+            label="机型"
+            :value="photoInfo?.ac_type"
+            :link="searchLink('airtype', photoInfo?.ac_type)"
+          />
         </div>
         <div class="label-group">
           <InfoLabel label="航空公司/运营人" :value="photoInfo?.airline_cn" />
-          <InfoLabel label="机场" :value="airportText" :link="searchLink('airport', photoInfo?.airport_icao_code)" />
+          <InfoLabel
+            label="机场"
+            :value="airportText"
+            :link="searchLink('airport', photoInfo?.airport_icao_code)"
+          />
           <!-- <InfoLabel label="机场" :value="photoInfo?.airport_cn"/> -->
         </div>
         <div class="label-group user-info">
-          <InfoLabel label="摄影师" :value="photoInfo?.username" :link="'/user/' + photoInfo?.upload_user_id"
-            class="username" />
+          <InfoLabel
+            label="摄影师"
+            :value="photoInfo?.username"
+            :link="'/user/' + photoInfo?.upload_user_id"
+            class="username"
+          />
           <InfoLabel label="摄影师备注" :value="photoInfo?.user_remark" />
         </div>
       </div>
@@ -167,7 +198,11 @@ const deletePhoto = async () => {
           </el-button>
         </div> -->
         <div>
-          <el-button type="primary" @click="showContactPanel = true" v-if="status.contact">
+          <el-button
+            type="primary"
+            @click="showContactPanel = true"
+            v-if="status.contact"
+          >
             <el-icon>
               <User />
             </el-icon>
@@ -181,18 +216,25 @@ const deletePhoto = async () => {
           </el-button>
         </div>
         <div v-if="status.edit">
-          <el-button type="danger" @click="deletePhoto">
-            删除图片
-          </el-button>
+          <el-button type="danger" @click="deletePhoto"> 删除图片 </el-button>
         </div>
       </div>
     </div>
     <el-divider />
     <div class="related-photo-area">
-      <Thumbnail v-for="photo in relatedPhotoList" :id="photo.id" :reg="photo.ac_reg"
-        :airline="photo.airline_cn || photo.airline_en" :username="photo.username" :air-type="photo.ac_type" />
+      <Thumbnail
+        v-for="photo in relatedPhotoList"
+        :id="photo.id"
+        :reg="photo.ac_reg"
+        :airline="photo.airline_cn || photo.airline_en"
+        :username="photo.username"
+        :air-type="photo.ac_type"
+      />
     </div>
-    <ContactPanel v-model="showContactPanel" v-bind:photoInfo="photoInfo as AcceptPhoto" />
+    <ContactPanel
+      v-model="showContactPanel"
+      v-bind:photoInfo="photoInfo as AcceptPhoto"
+    />
     <InfoEditPanel :photoId="photoId" v-model="showInfoEditPanel" />
   </div>
 </template>
@@ -246,7 +288,6 @@ const deletePhoto = async () => {
   gap: 1rem;
   justify-content: center;
   align-items: center;
-
 }
 
 .related-photo-area {
@@ -256,7 +297,6 @@ const deletePhoto = async () => {
   max-width: var(--max-width);
   margin: 0 auto;
 }
-
 </style>
 <style>
 @media only screen and (max-width: 701px) {
@@ -282,13 +322,13 @@ const deletePhoto = async () => {
     flex-direction: row;
     width: 100%;
   }
-  .user-info .info-label{
+  .user-info .info-label {
     min-width: 130px;
   }
-  .user-info{
+  .user-info {
     margin: 0 0.2em;
   }
-  .user-info .info-label:first-child{
+  .user-info .info-label:first-child {
     margin-right: 0.6em;
   }
   /* .user-info .username {

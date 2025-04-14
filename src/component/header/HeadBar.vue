@@ -1,100 +1,107 @@
 <script setup lang="ts">
-import {computed, onMounted, onUnmounted, ref} from 'vue'
-import userInfoStore from '@/stores/userInfo'
-import router from '@/router';
-import { useRoute } from 'vue-router';
-import { transparentNameList, floatNameList } from './config';
-import SearchBox from '@/component/header/SearchBox.vue';
-import LoginButton from '@/component/header/LoginButton.vue';
+import { computed, onMounted, onUnmounted, ref } from "vue";
+import userInfoStore from "@/stores/userInfo";
+import router from "@/router";
+import { useRoute } from "vue-router";
+import { transparentNameList, floatNameList } from "./config";
+import SearchBox from "@/component/header/SearchBox.vue";
+import LoginButton from "@/component/header/LoginButton.vue";
 
-const header = ref<HTMLElement|null>(null);
+const header = ref<HTMLElement | null>(null);
 const user = userInfoStore();
 const userPageText = ref("登录/注册");
-const route = useRoute()
+const route = useRoute();
 
 const mobileMenuVisible = ref(false);
 const loginDialogVisible = ref(false);
 const lastScrollTop = ref(0);
 const showHeadBar = ref(true);
 const isAtTop = ref(true);
-const isMouseOn = ref(false)
+const isMouseOn = ref(false);
 
 if (user.isLoggedIn) {
   userPageText.value = user.username;
 }
 
-const goUserPage = () => user.isLoggedIn ? router.push(`/myself`) : loginDialogVisible.value = true;
-const showMobileMenu = () => mobileMenuVisible.value = (!mobileMenuVisible.value)
+const goUserPage = () =>
+  user.isLoggedIn ? router.push(`/myself`) : (loginDialogVisible.value = true);
+const showMobileMenu = () =>
+  (mobileMenuVisible.value = !mobileMenuVisible.value);
 
 const isTransparentBg = computed(() => {
-  if(typeof route.name === 'string'){
-    if(transparentNameList.includes(route.name)){
-      return true
+  if (typeof route.name === "string") {
+    if (transparentNameList.includes(route.name)) {
+      return true;
     }
   }
-  return false
-})
+  return false;
+});
 
 const isFloat = computed(() => {
-  if(typeof route.name === 'string'){
-    if(floatNameList.includes(route.name)){
-      return true
+  if (typeof route.name === "string") {
+    if (floatNameList.includes(route.name)) {
+      return true;
     }
   }
-  return false
-})
+  return false;
+});
 
 function windowScroll() {
-  const currentScrollTop = window.pageYOffset || document.documentElement.scrollTop
-  if(currentScrollTop === 0){
-    isAtTop.value = true
-  }else{
-    isAtTop.value = false
+  const currentScrollTop =
+    window.pageYOffset || document.documentElement.scrollTop;
+  if (currentScrollTop === 0) {
+    isAtTop.value = true;
+  } else {
+    isAtTop.value = false;
   }
   if (currentScrollTop > lastScrollTop.value) {
-    showHeadBar.value = false
-  }else {
-    showHeadBar.value = true
+    showHeadBar.value = false;
+  } else {
+    showHeadBar.value = true;
   }
   lastScrollTop.value = currentScrollTop;
 }
 
-const handleLoginClick = (value:boolean) => router.push('/login')
-const handleMobileLoginClick = (value:boolean) => mobileMenuVisible.value = value
-const handleMouseEnter = () => isMouseOn.value = true
-const handleMouseLeave = () => isMouseOn.value = false
+const handleLoginClick = (value: boolean) => router.push("/login");
+const handleMobileLoginClick = (value: boolean) =>
+  (mobileMenuVisible.value = value);
+const handleMouseEnter = () => (isMouseOn.value = true);
+const handleMouseLeave = () => (isMouseOn.value = false);
 
 onMounted(() => {
-  window.addEventListener("scroll", windowScroll)
-  if(header.value){
-    header.value.addEventListener('mouseenter', handleMouseEnter)
-    header.value.addEventListener('mouseleave', handleMouseLeave)
+  window.addEventListener("scroll", windowScroll);
+  if (header.value) {
+    header.value.addEventListener("mouseenter", handleMouseEnter);
+    header.value.addEventListener("mouseleave", handleMouseLeave);
   }
-})
+});
 
 onUnmounted(() => {
-  window.removeEventListener("scroll", windowScroll)
-  if(header.value){
-    header.value.removeEventListener('mouseenter', handleMouseEnter)
-    header.value.removeEventListener('mouseleave', handleMouseLeave)
+  window.removeEventListener("scroll", windowScroll);
+  if (header.value) {
+    header.value.removeEventListener("mouseenter", handleMouseEnter);
+    header.value.removeEventListener("mouseleave", handleMouseLeave);
   }
-})
-
+});
 </script>
 
 <template>
-  <header 
+  <header
     :class="[
-             isFloat ? (showHeadBar ? 'fade-in-down' : 'fade-out-up') : '',
-             isAtTop && !isMouseOn && isTransparentBg ? 'transparent-bg' : '',
-             isFloat ? 'float' : 'fixed'
-            ]" 
-   ref="header"
+      isFloat ? (showHeadBar ? 'fade-in-down' : 'fade-out-up') : '',
+      isAtTop && !isMouseOn && isTransparentBg ? 'transparent-bg' : '',
+      isFloat ? 'float' : 'fixed',
+    ]"
+    ref="header"
   >
     <div class="head-bar">
       <div>
         <a id="logo" href="/">
-          <img style="width: 10em" src="https://source.cdn.794td.cn/TOGA/n_logo_w.jpg" alt="">
+          <img
+            style="width: 10em"
+            src="https://source.cdn.794td.cn/TOGA/n_logo_w.jpg"
+            alt=""
+          />
         </a>
       </div>
       <div class="head-bar-desk">
@@ -103,21 +110,22 @@ onUnmounted(() => {
       </div>
       <div class="head-bar-mobile">
         <SearchBox :isMobile="true"></SearchBox>
-        <LoginButton :isMobile="true" @mobileMenuVisible="handleMobileLoginClick"></LoginButton>
+        <LoginButton
+          :isMobile="true"
+          @mobileMenuVisible="handleMobileLoginClick"
+        ></LoginButton>
       </div>
     </div>
 
     <div class="head-bar-menu" v-show="mobileMenuVisible">
-      <div style="display: flex;justify-content: space-around;margin-bottom: 2em">
+      <div
+        style="display: flex; justify-content: space-around; margin-bottom: 2em"
+      >
         <a href="/search">
-          <div class="head-bar-menu-item">
-            图库
-          </div>
+          <div class="head-bar-menu-item">图库</div>
         </a>
         <a href="https://blog.togaphotos.com">
-          <div class="head-bar-menu-item">
-            关于
-          </div>
+          <div class="head-bar-menu-item">关于</div>
         </a>
       </div>
       <a @click="goUserPage()">
@@ -127,9 +135,7 @@ onUnmounted(() => {
       </a>
       <div>
         <a @click="goUserPage()">
-          <div>
-            个人主页
-          </div>
+          <div>个人主页</div>
         </a>
       </div>
     </div>
@@ -139,7 +145,7 @@ onUnmounted(() => {
 <style scoped>
 header {
   /*background-color: #001529;*/
-  background-color: #001A38;
+  background-color: #001a38;
   /* position: fixed;
   top: 0;
   z-index: 100; */
@@ -147,13 +153,13 @@ header {
   color: white;
   transition: all 0.5s ease;
 }
-.float{
+.float {
   position: fixed;
   top: 0;
   z-index: 100;
   width: 100%;
 }
-.fixed{
+.fixed {
   position: relative;
   z-index: 100;
   width: 100%;
@@ -171,7 +177,6 @@ header {
   line-height: 64px;
   display: flex;
   justify-content: space-between;
-  
 }
 
 #logo {
@@ -186,7 +191,7 @@ header {
 
 .head-bar-menu {
   /*background-color: #001529;*/
-  background-color: #002E4D;
+  background-color: #002e4d;
   height: 150px;
   padding: 1em 25px;
   z-index: 999;
@@ -208,7 +213,7 @@ header {
   font-weight: 600;
 }
 
-.login-btn{
+.login-btn {
   cursor: pointer;
 }
 
@@ -253,7 +258,6 @@ header {
     opacity: 0;
   }
 }
-
 
 @media only screen and (min-width: 701px) {
   .head-bar-desk {

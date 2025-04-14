@@ -1,11 +1,11 @@
-import { fileURLToPath, URL } from 'node:url'
+import { fileURLToPath, URL } from "node:url";
 
-import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
+import { defineConfig } from "vite";
+import vue from "@vitejs/plugin-vue";
 
-import AutoImport from 'unplugin-auto-import/vite'
-import Components from 'unplugin-vue-components/vite'
-import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
+import AutoImport from "unplugin-auto-import/vite";
+import Components from "unplugin-vue-components/vite";
+import { ElementPlusResolver } from "unplugin-vue-components/resolvers";
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -20,8 +20,8 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      '@/': new URL('./src/', import.meta.url).pathname
-    }
+      "@/": new URL("./src/", import.meta.url).pathname,
+    },
   },
   css: {
     preprocessorOptions: {
@@ -31,6 +31,6 @@ export default defineConfig({
     },
   },
   define: {
-    'process.env.SASS_DISABLE_DEPRECATION_WARNINGS': '1',
+    "process.env.SASS_DISABLE_DEPRECATION_WARNINGS": "1",
   },
-})
+});

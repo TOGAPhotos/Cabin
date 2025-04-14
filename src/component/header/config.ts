@@ -1,7 +1,3 @@
-export const transparentNameList:String[] = [
-    'home',
-]
+export const transparentNameList: String[] = ["home"];
 
-export const floatNameList:String[] = [
-    'home',
-]
+export const floatNameList: String[] = ["home"];
