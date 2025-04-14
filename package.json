@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite --open --host",
+    "dev": "vite --open --host --port 6001",
     "build": "run-p type-check \"build-only {@}\" --",
     "preview": "vite build && vite preview --open",
     "build-only": "vite build --mode production",
