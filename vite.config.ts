@@ -3,6 +3,7 @@ import { URL } from "node:url";
 import vue from "@vitejs/plugin-vue";
 import { defineConfig } from "vite";
 
+import tailwindcss from "@tailwindcss/vite";
 import AutoImport from "unplugin-auto-import/vite";
 import ElementPlus from "unplugin-element-plus/vite";
 import { ElementPlusResolver } from "unplugin-vue-components/resolvers";
@@ -19,6 +20,7 @@ export default defineConfig({
     Components({
       resolvers: [ElementPlusResolver({ importStyle: "sass" })],
     }),
+    tailwindcss(),
   ],
   resolve: {
     alias: {
