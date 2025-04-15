@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { onMounted, reactive, ref, watch } from "vue";
 import Thumbnail from "@/components/Thumbnail.vue";
-import { useRoute } from "vue-router";
-import { ElMessage } from "element-plus";
 import router from "@/router";
-import { RemoteSearch } from "@/utils/remoteSearch";
 import { BottomLoader } from "@/utils/bottom-loader";
+import { RemoteSearch } from "@/utils/remoteSearch";
 import type { AcceptPhoto, PhotoSearchType } from "@/utils/type/photo";
+import { ElMessage } from "element-plus";
+import { onMounted, reactive, ref, watch } from "vue";
+import { useRoute } from "vue-router";
 
 const resultList = ref<AcceptPhoto[]>([]);
 const searchInfo = reactive({ type: "reg", content: "" });

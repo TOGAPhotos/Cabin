@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
-import ServerRequest from "@/utils/request";
 import Thumbnail from "@/components/Thumbnail.vue";
+import ServerRequest from "@/utils/request";
 import type { AcceptPhoto } from "@/utils/type/photo";
+import { onMounted, ref } from "vue";
 
 const activeTabName = ref("first");
 const headPhotoList = ref<AcceptPhoto[]>([]);

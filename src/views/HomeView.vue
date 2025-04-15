@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import { onMounted, ref, inject, type Ref } from "vue";
 import { ElNotification } from "element-plus";
+import { onMounted } from "vue";
 
 import FirstScreen from "@/component/firstScreen/FirstScreen.vue";
 import FirstScreenMobile from "@/component/firstScreen/FirstScreenMobile.vue";
 
-import StatisticInfoBox from "@/component/firstScreen/StatisticInfoBox.vue";
 import NewPhotos from "@/component/firstScreen/NewPhotos.vue";
+import StatisticInfoBox from "@/component/firstScreen/StatisticInfoBox.vue";
 
-import ServerRequest from "@/utils/request";
 import Device from "@/utils/device";
+import ServerRequest from "@/utils/request";
 
 import useUserInfoStore from "@/stores/userInfo";
 

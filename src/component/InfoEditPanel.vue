@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { reactive, onMounted } from "vue";
-import { ElMessage } from "element-plus";
-import AirtypeSelect from "@/components/selector/AircraftTypeSelect.vue";
-import AirportSelect from "@/components/selector/AirportSelect.vue";
-import AirlineSelect from "@/components/selector/AirlineSelect.vue";
 import PhotoTypeSelectot from "@/components/PhotoTypeSelect.vue";
+import AirtypeSelect from "@/components/selector/AircraftTypeSelect.vue";
+import AirlineSelect from "@/components/selector/AirlineSelect.vue";
+import AirportSelect from "@/components/selector/AirportSelect.vue";
 import ServerRequest from "@/utils/request";
 import type { PhotoType } from "@/utils/type/photo";
+import { ElMessage } from "element-plus";
+import { onMounted, reactive } from "vue";
 
 const props = defineProps<{
   photoId: string;

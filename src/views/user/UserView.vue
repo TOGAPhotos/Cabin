@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { useRoute } from "vue-router";
+import Thumbnail from "@/components/Thumbnail.vue";
 import router from "@/router";
 import useUserInfoStore from "@/stores/userInfo";
-import Thumbnail from "@/components/Thumbnail.vue";
-import { ref, onMounted, useTemplateRef } from "vue";
+import { PhotoUrl } from "@/utils/photo-url";
 import ServerRequest from "@/utils/request";
 import type { AirportData } from "@/utils/type/airport";
 import type { BasicUserInfo } from "@/utils/type/user";
-import { PhotoUrl } from "@/utils/photo-url";
+import { onMounted, ref, useTemplateRef } from "vue";
+import { useRoute } from "vue-router";
 
 const route = useRoute();
 const userId = route.params.id;

@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { ref } from "vue";
-import ServerRequest from "@/utils/request";
-import type { AcceptPhoto } from "@/utils/type/photo";
-import { RawPhotoUrl, ThumbnailUrl } from "@/utils/photo-url";
-import { OpenToolWindow } from "@/utils/tool-page";
 import InfoLabel from "@/components/InfoLabel.vue";
+import { RawPhotoUrl, ThumbnailUrl } from "@/utils/photo-url";
+import ServerRequest from "@/utils/request";
+import { OpenToolWindow } from "@/utils/tool-page";
+import type { AcceptPhoto } from "@/utils/type/photo";
+import { ref } from "vue";
 
 interface _FullPhotoInfo extends AcceptPhoto {
   queueIndex: number;

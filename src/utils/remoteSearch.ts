@@ -1,7 +1,7 @@
 import ServerRequest from "@/utils/request";
 import { ElMessage } from "element-plus";
-import type { AcceptPhoto, PhotoSearchType } from "./type/photo";
 import type { Airtype } from "./type/airtype";
+import type { AcceptPhoto, PhotoSearchType } from "./type/photo";
 
 export class RemoteSearch {
   static async photo(

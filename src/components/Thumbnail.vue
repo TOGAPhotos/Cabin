@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
-import { ThumbnailUrl } from "@/utils/photo-url";
 import formatAirportString from "@/utils/airport";
+import { ThumbnailUrl } from "@/utils/photo-url";
+import { computed } from "vue";
 import ImgLoader from "./ImgLoader.vue";
 
 interface ThumbnailData {

@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import useUserInfoStore from "@/stores/userInfo";
-import Thumbnail from "@/components/Thumbnail.vue";
-import { onMounted, ref, useTemplateRef, type Ref } from "vue";
-import ServerRequest from "@/utils/request";
-import router from "@/router";
 import AccountSetting from "@/component/AccountSetting.vue";
-import type { UserSelfInfo } from "@/utils/type/user";
+import Thumbnail from "@/components/Thumbnail.vue";
+import router from "@/router";
+import useUserInfoStore from "@/stores/userInfo";
+import { ThumbnailUrl } from "@/utils/photo-url";
+import ServerRequest from "@/utils/request";
 import type { AirportData } from "@/utils/type/airport";
 import type { AcceptPhoto } from "@/utils/type/photo";
-import { ThumbnailUrl } from "@/utils/photo-url";
+import type { UserSelfInfo } from "@/utils/type/user";
+import { onMounted, ref, useTemplateRef } from "vue";
 
 const user = useUserInfoStore();
 

@@ -1,9 +1,9 @@
 <script setup lang="ts">
 // import { PhotoUrl } from '@/utils/photo-url';
+import RejectThumbnail from "@/components/RejectThumbnail.vue";
 import ServerRequest from "@/utils/request";
 import type { RejectPhotoInfo } from "@/utils/type/photo";
 import { ref } from "vue";
-import RejectThumbnail from "@/components/RejectThumbnail.vue";
 
 const rejectPhotoList = ref<RejectPhotoInfo[]>([]);
 

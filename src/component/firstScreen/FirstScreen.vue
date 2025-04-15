@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
-import ServerRequest from "@/utils/request";
-import TransparentButton from "@/component/firstScreen/TransparentButton.vue";
-import PhotoBox from "@/component/firstScreen/PhotoBox.vue";
 import Carousel from "@/component/firstScreen/Carousel.vue";
-import { DArrowLeft } from "@element-plus/icons-vue";
+import PhotoBox from "@/component/firstScreen/PhotoBox.vue";
+import TransparentButton from "@/component/firstScreen/TransparentButton.vue";
+import ServerRequest from "@/utils/request";
 import type { AcceptPhoto } from "@/utils/type/photo";
+import { DArrowLeft } from "@element-plus/icons-vue";
+import { onMounted, ref } from "vue";
 
 const firstPageBlock = ref<HTMLElement | null>(null);
 const nextScreenArrow = ref<HTMLElement | null>(null);

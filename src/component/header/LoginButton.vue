@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { onMounted, ref, watch } from "vue";
 import router from "@/router";
 import userInfoStore from "@/stores/userInfo";
 import { UserFilled } from "@element-plus/icons-vue";
+import { onMounted, ref, watch } from "vue";
 
 const props = withDefaults(
   defineProps<{

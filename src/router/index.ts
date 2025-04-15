@@ -1,7 +1,7 @@
-import { createRouter, createWebHistory } from "vue-router";
 import userInfoStore from "@/stores/userInfo";
-import Permission from "../utils/permission";
 import { ElMessage } from "element-plus";
+import { createRouter, createWebHistory } from "vue-router";
+import Permission from "../utils/permission";
 
 const router = createRouter({
   history: createWebHistory("/"),

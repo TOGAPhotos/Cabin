@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref } from "vue";
-import userInfoStore from "@/stores/userInfo";
-import router from "@/router";
-import { useRoute } from "vue-router";
-import { transparentNameList, floatNameList } from "./config";
-import SearchBox from "@/component/header/SearchBox.vue";
 import LoginButton from "@/component/header/LoginButton.vue";
+import SearchBox from "@/component/header/SearchBox.vue";
+import router from "@/router";
+import userInfoStore from "@/stores/userInfo";
+import { computed, onMounted, onUnmounted, ref } from "vue";
+import { useRoute } from "vue-router";
+import { floatNameList, transparentNameList } from "./config";
 
 const header = ref<HTMLElement | null>(null);
 const user = userInfoStore();

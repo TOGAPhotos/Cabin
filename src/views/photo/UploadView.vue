@@ -2,34 +2,34 @@
 import { onMounted, reactive, ref, watch } from "vue";
 import { useRoute } from "vue-router";
 
+import { UploadFilled } from "@element-plus/icons-vue";
 import type {
-  UploadInstance,
-  UploadProps,
-  UploadRawFile,
   FormInstance,
   FormRules,
   UploadFile,
+  UploadInstance,
+  UploadProps,
+  UploadRawFile,
 } from "element-plus";
-import { ElNotification, ElMessage, genFileId, ElLoading } from "element-plus";
-import { UploadFilled } from "@element-plus/icons-vue";
+import { ElLoading, ElMessage, ElNotification, genFileId } from "element-plus";
 
-import AircraftTypeSelect from "@/components/selector/AircraftTypeSelect.vue";
-import AirportSelect from "@/components/selector/AirportSelect.vue";
-import AirlineSelect from "@/components/selector/AirlineSelect.vue";
-import PhotoTypeSelect from "@/components/PhotoTypeSelect.vue";
-import CreateAirport from "@/component/CreateAirport.vue";
 import CreateAirline from "@/component/CreateAirline.vue";
+import CreateAirport from "@/component/CreateAirport.vue";
 import CreateAirtype from "@/component/CreateAirtype.vue";
+import PhotoTypeSelect from "@/components/PhotoTypeSelect.vue";
+import AircraftTypeSelect from "@/components/selector/AircraftTypeSelect.vue";
+import AirlineSelect from "@/components/selector/AirlineSelect.vue";
+import AirportSelect from "@/components/selector/AirportSelect.vue";
 
-import type { AircraftInfo } from "@/utils/type/aircraft";
-import { ExifReader, type ExifData } from "@/utils/exif";
-import ServerRequest from "@/utils/request";
-import { getAirportById } from "@/utils/info";
 import { checkImage } from "@/utils/check-image";
 import CosStrorage from "@/utils/cos";
+import { ExifReader, type ExifData } from "@/utils/exif";
+import { getAirportById } from "@/utils/info";
+import ServerRequest from "@/utils/request";
+import type { AircraftInfo } from "@/utils/type/aircraft";
 
-import useUserInfoStore from "@/stores/userInfo";
 import WatermarkDailog from "@/component/WatermarkDailog.vue";
+import useUserInfoStore from "@/stores/userInfo";
 import type { PhotoType } from "@/utils/type/photo";
 
 interface UploadFormInfo {

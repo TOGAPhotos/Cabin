@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { reactive, ref } from "vue";
-import type { FormInstance, FormRules } from "element-plus";
-import serverRequest from "@/utils/request";
-import userInfoStore from "@/stores/userInfo";
 import router from "@/router";
+import userInfoStore from "@/stores/userInfo";
+import serverRequest from "@/utils/request";
+import type { FormInstance, FormRules } from "element-plus";
+import { reactive, ref } from "vue";
 
 const registerForm = ref<FormInstance>();
 

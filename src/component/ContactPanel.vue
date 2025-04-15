@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { reactive } from "vue";
-import type { AcceptPhoto } from "@/utils/type/photo";
 import useUserInfoStore from "@/stores/userInfo";
 import ServerRequest from "@/utils/request";
-import { ElMessage, ElNotification } from "element-plus";
+import type { AcceptPhoto } from "@/utils/type/photo";
+import { ElNotification } from "element-plus";
+import { reactive } from "vue";
 
 const showPanel = defineModel({ type: Boolean });
 const props = defineProps<{ photoInfo: AcceptPhoto }>();
