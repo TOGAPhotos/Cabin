@@ -1,25 +1,25 @@
 <!doctype html>
 <html lang="zh">
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Histogram-HSV</title>
     <style>
-        body {
-            background-color: rgb(128, 128, 128);
-            margin: 0;
-            padding: 0;
-        }
+      body {
+        background-color: rgb(128, 128, 128);
+        margin: 0;
+        padding: 0;
+      }
     </style>
-</head>
+  </head>
 
-<body>
-<canvas
-        id="histogramCanvas"
-        style="border: 1px solid orange; background-color: white"
-></canvas>
-<!-- checkbox, select RGB or all -->
-<!-- <div>
+  <body>
+    <canvas
+      id="histogramCanvas"
+      style="border: 1px solid orange; background-color: white"
+    ></canvas>
+    <!-- checkbox, select RGB or all -->
+    <!-- <div>
 <input type="checkbox" id="mode" name="mode" value="0" checked>
 <label for="mode">R</label>
 <input type="checkbox" id="mode" name="mode" value="1">
@@ -28,23 +28,23 @@
 <label for="mode">B</label>
 </div> -->
 
-<script>
-    const params = new URLSearchParams(window.location.href.split("?")[1]);
-    const mode = params.get("mode") || "0";
-    const photoCanvas = document.createElement("canvas");
-    const histogramCanvas = document.getElementById("histogramCanvas");
+    <script>
+      const params = new URLSearchParams(window.location.href.split("?")[1]);
+      const mode = params.get("mode") || "0";
+      const photoCanvas = document.createElement("canvas");
+      const histogramCanvas = document.getElementById("histogramCanvas");
 
-    const ptx = photoCanvas.getContext("2d");
-    const ctx = histogramCanvas.getContext("2d");
+      const ptx = photoCanvas.getContext("2d");
+      const ctx = histogramCanvas.getContext("2d");
 
-    const img = new Image();
-    img.crossOrigin = "anonymous";
-    img.src = params.get("image");
-    let Hue = new Array(360).fill(0);
-    let Saturation = new Array(100).fill(0);
-    let Value = new Array(100).fill(0);
+      const img = new Image();
+      img.crossOrigin = "anonymous";
+      img.src = params.get("image");
+      let Hue = new Array(360).fill(0);
+      let Saturation = new Array(100).fill(0);
+      let Value = new Array(100).fill(0);
 
-    img.onload = () => {
+      img.onload = () => {
         photoCanvas.width = img.width;
         photoCanvas.height = img.height;
 
@@ -52,31 +52,30 @@
 
         ptx.drawImage(img, 0, 0, img.width, img.height);
 
-        let photoData = ptx.getImageData(
-            0,
-            0,
-            photoCanvas.width,
-            _height,
-        ).data;
+        let photoData = ptx.getImageData(0, 0, photoCanvas.width, _height).data;
 
         for (let i = 0; i < photoData.length; i += 4) {
-            const [h,s,v] = calculateHSV(photoData[i],photoData[i + 1],photoData[i + 2]);
-            Hue[h]++;
-            Saturation[s]++
-            Value[v]++;
+          const [h, s, v] = calculateHSV(
+            photoData[i],
+            photoData[i + 1],
+            photoData[i + 2],
+          );
+          Hue[h]++;
+          Saturation[s]++;
+          Value[v]++;
         }
 
-        Hue = channelCompression(Hue, 360,photoData.length);
-        Saturation = channelCompression(Saturation, 100,photoData.length);
-        Value = channelCompression(Value, 100,photoData.length);
+        Hue = channelCompression(Hue, 360, photoData.length);
+        Saturation = channelCompression(Saturation, 100, photoData.length);
+        Value = channelCompression(Value, 100, photoData.length);
 
         histogramCanvas.width = (360 + 100 + 100) * 3 + 2;
         histogramCanvas.height = 402;
-        drawHistogram()
+        drawHistogram();
         window.resizeTo(histogramCanvas.width, histogramCanvas.height + 40);
-    };
+      };
 
-    const calculateHSV = (r, g, b) => {
+      const calculateHSV = (r, g, b) => {
         r = r / 255;
         g = g / 255;
         b = b / 255;
@@ -85,76 +84,75 @@
         const delta = max - min;
         let h;
         if (delta === 0) {
-            h = 0;
+          h = 0;
         } else if (max === r) {
-            h = 60 * ((g - b) / delta % 6);
+          h = 60 * (((g - b) / delta) % 6);
         } else if (max === g) {
-            h = 60 * ((b - r) / delta + 2);
+          h = 60 * ((b - r) / delta + 2);
         } else {
-            h = 60 * ((r - g) / delta + 4);
+          h = 60 * ((r - g) / delta + 4);
         }
         let s = max === 0 ? 0 : (delta / max) * 100;
         return [
-            Math.round(h),
-            Math.round(s),
-            Math.round(max * 100), // v = max
+          Math.round(h),
+          Math.round(s),
+          Math.round(max * 100), // v = max
         ];
-    };
+      };
 
-
-    const channelCompression = (channel, channelMax, pLen) => {
-        let _s = ( ( 256 / channelMax) * 60 * (pLen / 4)) / (1280 * 720)
+      const channelCompression = (channel, channelMax, pLen) => {
+        let _s = ((256 / channelMax) * 60 * (pLen / 4)) / (1280 * 720);
 
         for (let i = 0; i < channelMax; i++) {
-            channel[i] = Math.round(channel[i] / _s);
+          channel[i] = Math.round(channel[i] / _s);
         }
         return channel;
-    };
+      };
 
-    /**
-     * Draws the HSV histogram with gradient colors
-     */
-    const drawHistogram = () => {
+      /**
+       * Draws the HSV histogram with gradient colors
+       */
+      const drawHistogram = () => {
         // Clear and set background
         ctx.clearRect(0, 0, histogramCanvas.width, histogramCanvas.height);
         ctx.fillStyle = "white";
         ctx.fillRect(0, 0, histogramCanvas.width, histogramCanvas.height);
 
         const end = 360 + 100 + 100;
-        
+
         // Draw histogram bars for each component
         for (let i = 0; i < end; i++) {
-            const start = 3 * i;
-            
-            if (i < 360) {
-                // Hue component with rainbow gradient
-                // Convert hue value to HSL color (full saturation and 50% lightness)
-                ctx.fillStyle = `hsl(${i}, 100%, 50%)`;
-                drawBar(start, Hue, i);
-            } else if (i < 460) {
-                // Saturation component with gray to vibrant color gradient
-                // Map 0-100 saturation to HSL with fixed hue (0 for red) and 50% lightness
-                const satIndex = i - 360; // 0-100
-                ctx.fillStyle = `hsl(0, ${satIndex}%, 50%)`;
-                drawBar(start, Saturation, satIndex);
-            } else {
-                // Value component with black to white gradient
-                // Map 0-100 value to grayscale (0-100% lightness)
-                const valIndex = i - 460; // 0-100
-                ctx.fillStyle = `rgb(${Math.round(valIndex * 2.55)}, ${Math.round(valIndex * 2.55)}, ${Math.round(valIndex * 2.55)})`;
-                drawBar(start, Value, valIndex);
-            }
-        }
-    }
+          const start = 3 * i;
 
-    const drawBar = (start, array, index) => {
-        const v = array[index]
-        const pV = ((array[index-1] || 0) + v ) / 2;
-        const nV = ((array[index+1] || array[index]) + v) / 2;
+          if (i < 360) {
+            // Hue component with rainbow gradient
+            // Convert hue value to HSL color (full saturation and 50% lightness)
+            ctx.fillStyle = `hsl(${i}, 100%, 50%)`;
+            drawBar(start, Hue, i);
+          } else if (i < 460) {
+            // Saturation component with gray to vibrant color gradient
+            // Map 0-100 saturation to HSL with fixed hue (0 for red) and 50% lightness
+            const satIndex = i - 360; // 0-100
+            ctx.fillStyle = `hsl(0, ${satIndex}%, 50%)`;
+            drawBar(start, Saturation, satIndex);
+          } else {
+            // Value component with black to white gradient
+            // Map 0-100 value to grayscale (0-100% lightness)
+            const valIndex = i - 460; // 0-100
+            ctx.fillStyle = `rgb(${Math.round(valIndex * 2.55)}, ${Math.round(valIndex * 2.55)}, ${Math.round(valIndex * 2.55)})`;
+            drawBar(start, Value, valIndex);
+          }
+        }
+      };
+
+      const drawBar = (start, array, index) => {
+        const v = array[index];
+        const pV = ((array[index - 1] || 0) + v) / 2;
+        const nV = ((array[index + 1] || array[index]) + v) / 2;
         ctx.fillRect(start, 401, 1, -Math.round(pV));
         ctx.fillRect(start + 1, 401, 1, -Math.round(v));
         ctx.fillRect(start + 2, 402, 1, -Math.round(nV));
-    }
-</script>
-</body>
+      };
+    </script>
+  </body>
 </html>
