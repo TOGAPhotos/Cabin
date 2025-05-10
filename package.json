@@ -19,7 +19,7 @@
     ]
   },
   "lint-staged": {
-    "*.{ts,jsx,tsx,cjs,cts,mjs,mts,vue}": [
+    "*.{ts,jsx,tsx,cjs,cts,mjs,mts,vue,html}": [
       "prettier --write --cache ."
     ]
   },
