@@ -2,14 +2,19 @@
 @import "./base.css";
 @import "./contentbox.css";
 
-body {
-  background-color: #f7f8fa;
+@theme {
+  --color-text-primary: var(--color-gray-950);
+  --color-text-secondary: var(--color-gray-600);
 }
 
-a {
-  color: var(--color-basic-link);
-  text-decoration: none;
-}
+/*body {*/
+/*  background-color: var(--color-gray-50);*/
+/*}*/
+
+/*a {*/
+/*  color: var(--color-basic-link);*/
+/*  text-decoration: none;*/
+/*}*/
 
 h1,
 h2,
