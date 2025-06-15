@@ -26,7 +26,7 @@
 }
 
 body {
-  min-height: 100vh;
+  @apply min-h-screen;
   color: var(--color-text);
   background: var(--color-background);
   font-family:
