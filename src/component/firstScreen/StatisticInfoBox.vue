@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import TransparentButton from "@/component/firstScreen/TransparentButton.vue";
+import ContentBox from "@/components/ContentBox.vue";
 import router from "@/router";
 import ServerRequest from "@/utils/request";
 import {
@@ -41,18 +42,39 @@ websiteInfoReq.error = () => router.push("/maintenance");
 function daysSince(date: Date): number {
   const today = new Date();
   const timeDifference = today.getTime() - date.getTime();
-  const daysDifference = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
-  return daysDifference;
+  return Math.floor(timeDifference / (1000 * 60 * 60 * 24));
 }
 
 const targetDate = new Date("2023-05-03");
 const daysPassed = daysSince(targetDate);
 
+const statistics = [
+  {
+    icon: UserFilled,
+    title: "当前队列长度",
+    content: statisticInfo.uploadQueueLen,
+  },
+  {
+    icon: PictureFilled,
+    title: "注册用户数量",
+    content: statisticInfo.userNum,
+  },
+  {
+    icon: CameraFilled,
+    title: "收录图片数量",
+    content: statisticInfo.photoNum,
+  },
+  {
+    icon: Promotion,
+    title: "本站累计运行",
+    content: `${daysPassed} 天`,
+  },
+];
 onMounted(() => websiteInfoReq.send());
 </script>
 
 <template>
-  <div class="content-box statistic-container">
+  <div class="content-box">
     <div class="content-box-title">
       <h2>关于 TOGAPhotos</h2>
     </div>
@@ -71,79 +93,18 @@ onMounted(() => websiteInfoReq.send());
       </div>
     </div>
 
-    <div class="content-box-main statistic-info">
-      <!--      <div class="statistic">-->
-      <!--        <div class="content">-->
-      <!--          <strong>{{ statisticInfo.runTime }}</strong>-->
-      <!--        </div>-->
-      <!--      </div>-->
-      <div class="statistic">
-        <div class="icon">
-          <UserFilled />
-        </div>
-        <div class="content">
-          <h4>当前队列长度</h4>
-          <strong>{{ statisticInfo.uploadQueueLen }}</strong>
-        </div>
-      </div>
-      <div class="statistic">
-        <div class="icon">
-          <PictureFilled />
-        </div>
-        <div class="content">
-          <h4>注册用户数量</h4>
-          <strong>{{ statisticInfo.userNum }}</strong>
-        </div>
-      </div>
-      <div class="statistic">
-        <div class="icon">
-          <CameraFilled />
-        </div>
-        <div class="content">
-          <h4>收录图片数量</h4>
-          <strong>{{ statisticInfo.photoNum }}</strong>
-        </div>
-      </div>
-      <div class="statistic">
-        <div class="icon">
-          <Promotion />
-        </div>
-        <div class="content">
-          <h4>本站累计运行</h4>
-          <strong>{{ daysPassed }} <span>天</span></strong>
-        </div>
-      </div>
+    <div class="grid sm:grid-cols-2 md:grid-cols-4 gap-6">
+      <ContentBox v-for="(item, index) in statistics" :key="index">
+        <template #icon>
+          <component :is="item.icon" />
+        </template>
+        <template #title>{{ item.title }}</template>
+        <template #content>{{ item.content }}</template>
+      </ContentBox>
     </div>
   </div>
 </template>
 <style scoped>
-.statistic-container {
-  /* background-color: red; */
-  padding-top: 6rem;
-  padding-bottom: 6rem;
-}
-.statistic-info {
-  justify-content: space-between;
-}
-.statistic {
-  height: 6rem;
-  flex: 1;
-  padding: 0.9rem 1.2rem;
-  text-align: center;
-  display: flex;
-  background-color: #ffffff;
-  margin-right: 1rem;
-  border-radius: 6px;
-  transition: transform 0.3s ease;
-}
-.statistic:hover {
-  box-shadow: 0.15rem 0.3rem 0.6rem rgba(0, 0, 0, 0.3);
-  cursor: pointer;
-  transform: translateY(-0.15rem);
-}
-.statistic:last-child {
-  margin-right: 0;
-}
 .btn-box {
   display: flex;
   justify-content: space-between;

@@ -16,7 +16,8 @@
   "prettier": {
     "plugins": [
       "prettier-plugin-organize-imports"
-    ]
+    ],
+    "ignorePath": ".prettierignore"
   },
   "lint-staged": {
     "*.{ts,jsx,tsx,cjs,cts,mjs,mts,vue,html,!d.ts}": [

@@ -5,11 +5,20 @@
 @theme {
   --color-text-primary: var(--color-gray-950);
   --color-text-secondary: var(--color-gray-600);
+
+  --animate-duration: 100ms;
 }
 
-/*body {*/
-/*  background-color: var(--color-gray-50);*/
-/*}*/
+@utility transition-grow {
+  transition: all 0.3s ease-in-out;
+  @variant hover {
+    transform: scale3d(1.03, 1.03, 1.03);
+  }
+}
+
+body {
+  background-color: var(--color-gray-50);
+}
 
 /*a {*/
 /*  color: var(--color-basic-link);*/
