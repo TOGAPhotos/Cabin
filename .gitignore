@@ -32,3 +32,6 @@ coverage
 
 pnpm-lock.yaml
 .env.production
+
+auto-imports.d.ts
+components.d.ts
