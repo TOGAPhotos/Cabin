@@ -6,38 +6,9 @@ import ServerRequest from "@/utils/request";
 import {
   CameraFilled,
   PictureFilled,
-  Promotion,
   UserFilled,
 } from "@element-plus/icons-vue";
 import { onMounted, reactive } from "vue";
-
-const statisticInfo = reactive({
-  userNum: 0,
-  uploadQueueLen: 0,
-  photoNum: 0,
-  runTime: runTime(),
-});
-
-function runTime(): string {
-  const delta = Date.now() - new Date("2023-05-03").getTime();
-  let days = Math.floor(delta / (1000 * 60 * 60 * 24));
-
-  const years = Math.floor(days / 365);
-  days = days % 365;
-  const months = Math.floor(days / 30);
-  days = days % 30;
-
-  return `共运行${years}年${months}月${days}日`;
-}
-
-const websiteInfoReq = new ServerRequest("GET", "/website?type=statistics");
-websiteInfoReq.success = () => {
-  const data = websiteInfoReq.getData();
-  statisticInfo.userNum = data["userNum"];
-  statisticInfo.uploadQueueLen = data["uploadQueueLen"];
-  statisticInfo.photoNum = data["photoNum"];
-};
-websiteInfoReq.error = () => router.push("/maintenance");
 
 function daysSince(date: Date): number {
   const today = new Date();
@@ -48,29 +19,24 @@ function daysSince(date: Date): number {
 const targetDate = new Date("2023-05-03");
 const daysPassed = daysSince(targetDate);
 
-const statistics = [
-  {
-    icon: UserFilled,
-    title: "当前队列长度",
-    content: statisticInfo.uploadQueueLen,
-  },
-  {
-    icon: PictureFilled,
-    title: "注册用户数量",
-    content: statisticInfo.userNum,
-  },
-  {
-    icon: CameraFilled,
-    title: "收录图片数量",
-    content: statisticInfo.photoNum,
-  },
-  {
-    icon: Promotion,
-    title: "本站累计运行",
-    content: `${daysPassed} 天`,
-  },
-];
-onMounted(() => websiteInfoReq.send());
+const statisticInfo = reactive({
+  userNum: null,
+  uploadQueueLen: null,
+  photoNum: null,
+});
+
+onMounted(async () => {
+  const websiteInfoReq = new ServerRequest("GET", "/website?type=statistics");
+  websiteInfoReq.success = () => {
+    const data = websiteInfoReq.getData();
+    Object.assign(statisticInfo, {
+      ...data,
+    });
+  };
+  websiteInfoReq.error = () => router.push("/maintenance");
+
+  await websiteInfoReq.send();
+});
 </script>
 
 <template>
@@ -94,12 +60,33 @@ onMounted(() => websiteInfoReq.send());
     </div>
 
     <div class="grid sm:grid-cols-2 md:grid-cols-4 gap-6">
-      <ContentBox v-for="(item, index) in statistics" :key="index">
+      <ContentBox>
         <template #icon>
-          <component :is="item.icon" />
+          <UserFilled />
         </template>
-        <template #title>{{ item.title }}</template>
-        <template #content>{{ item.content }}</template>
+        <template #title>队列长度</template>
+        <template #content>{{ statisticInfo.uploadQueueLen }}</template>
+      </ContentBox>
+      <ContentBox>
+        <template #icon>
+          <PictureFilled />
+        </template>
+        <template #title>用户数量</template>
+        <template #content>{{ statisticInfo.userNum }}</template>
+      </ContentBox>
+      <ContentBox>
+        <template #icon>
+          <CameraFilled />
+        </template>
+        <template #title>入库图片</template>
+        <template #content>{{ statisticInfo.photoNum }}</template>
+      </ContentBox>
+      <ContentBox>
+        <template #icon>
+          <UserFilled />
+        </template>
+        <template #title>累计运行</template>
+        <template #content>{{ `${daysPassed} 天` }}</template>
       </ContentBox>
     </div>
   </div>

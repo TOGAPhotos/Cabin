@@ -94,7 +94,7 @@ onUnmounted(() => {
     ]"
     ref="header"
   >
-    <div class="head-bar">
+    <div class="global-container head-bar">
       <div>
         <a id="logo" href="/">
           <img
@@ -169,10 +169,6 @@ header {
 }
 
 .head-bar {
-  margin: 0 auto;
-  width: 100%;
-  padding: 0 15px;
-  max-width: var(--max-width);
   height: 64px;
   line-height: 64px;
   display: flex;

@@ -20,7 +20,7 @@
     "ignorePath": ".prettierignore"
   },
   "lint-staged": {
-    "*.{ts,jsx,tsx,cjs,cts,mjs,mts,vue,html,!d.ts}": [
+    "*.{ts,jsx,tsx,cjs,cts,mjs,mts,vue,html}": [
       "prettier --write --cache ."
     ]
   },

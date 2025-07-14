@@ -2,7 +2,7 @@
 
 <template>
   <div
-    class="p-6 flex gap-3 bg-white rounded-lg shadow-md text-shadow-text-primary transition-grow"
+    class="p-6 flex gap-3 bg-white rounded-lg shadow-md text-shadow-text-primary"
   >
     <div class="size-8">
       <slot name="icon" />
