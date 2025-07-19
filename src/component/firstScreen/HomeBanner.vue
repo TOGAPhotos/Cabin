@@ -38,14 +38,14 @@
         draggable="false"
       />
       <div
-        class="absolute z-10 h-full w-1/3 right-0 top-0 translate-x-full bg-gradient-to-l from-toga-blue"
+        class="absolute z-10 h-full w-1/3 -right-0.5 top-0 translate-x-full bg-gradient-to-l from-toga-blue"
       />
     </div>
     <div
       class="absolute z-30 top-2/5 left-1/2 -translate-x-1/2 -translate-y-1/2 pt-16 w-full flex flex-col justify-center"
     >
       <div class="global-container flex">
-        <div class="py-8 flex flex-col gap-4 w-fit text-white">
+        <div class="md:mt-16 py-8 flex flex-col gap-4 w-fit text-white">
           <h1>加入TOGAPhotos</h1>
           <h2>与广大航空爱好者分享你的作品</h2>
           <a
