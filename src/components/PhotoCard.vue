@@ -18,10 +18,7 @@ const isAirportPhoto = computed(() => props.airport_icao_code === props.ac_reg);
 </script>
 
 <template>
-  <a
-    class="h-full transition-grow rounded-lg overflow-clip transition-all"
-    :href="href"
-  >
+  <a class="h-full transition-grow rounded-lg overflow-clip" :href="href">
     <div class="flex flex-col w-full h-full">
       <ImgLoader
         :src="url"

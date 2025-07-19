@@ -1,15 +1,4 @@
-<script setup lang="ts">
-// const { user } = defineProps<{ user: UserInfo }>();
-
-// const headPhotoList = ref<AcceptPhoto[]>([]);
-// onMounted(async () => {
-//   const headPhotoReq = new ServerRequest("GET", `/website?type=random`);
-//   headPhotoReq.success = () => {
-//     headPhotoList.value = headPhotoReq.getData();
-//   };
-//   await headPhotoReq.send();
-// });
-</script>
+<script setup lang="ts"></script>
 
 <template>
   <div class="relative w-screen max-md:pt-18 mx-auto bg-toga overflow-clip">
@@ -59,25 +48,6 @@
       class="absolute z-20 h-2/5 left-1/2 -translate-x-1/2 bottom-0 w-full bg-gradient-to-t from-toga via-30% via-toga"
     />
   </div>
-  <!--  <img
-    class="w-full"
-    src="https://cos-0688-tp-cdn.794td.cn/photos/2359.jpg"
-    alt=""
-  />
-  <div class="z-99 content-box first-screen-content">
-    <div class="head-title head-title-container">
-      <h3>加入TOGAPhotos</h3>
-      <h3>与广大航空爱好者分享你的作品</h3>
-      <TransparentButton :isWhite="true"></TransparentButton>
-      <p class="copyright">PHOTO BY @Baigiver-0764</p>
-    </div>
-    <div class="head-photo-container" v-if="headPhotoList.length > 0">
-      <div class="top-photo-container">
-        <PhotoBox :photoInfo="headPhotoList[0]"></PhotoBox>
-      </div>
-      <Carousel :photoList="headPhotoList.slice(1)"></Carousel>
-    </div>
-  </div>-->
 </template>
 
 <style scoped></style>
