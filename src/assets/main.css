@@ -3,7 +3,11 @@
 @import "./contentbox.css";
 
 @theme {
-  --color-toga-blue: #001a38;
+  --color-toga: #001a38;
+  --color-toga-light: #002240;
+  --color-toga-lighter: #003062;
+  --color-toga-dark: #00122a;
+  --color-toga-darker: #000a16;
 
   --color-text-primary: var(--color-gray-950);
   --color-text-secondary: var(--color-gray-600);
@@ -13,13 +17,15 @@
 
 @utility global-container {
   @apply relative max-w-7xl w-full;
-  @apply my-0 mx-auto py-0 px-8;
+  @apply my-0 mx-auto py-0 px-4;
 }
 
 @utility transition-grow {
-  transition: all 0.3s ease-in-out;
-  @variant hover {
-    transform: scale3d(1.02, 1.02, 1.02);
+  transition: all 0.1s ease-in-out;
+  @media (min-width: 48rem) {
+    @variant hover {
+      transform: scale3d(1.01, 1.01, 1.01);
+    }
   }
 }
 

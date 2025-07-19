@@ -12,18 +12,16 @@
 </script>
 
 <template>
-  <div
-    class="relative w-screen max-md:pt-18 mx-auto bg-toga-blue overflow-clip"
-  >
+  <div class="relative w-screen max-md:pt-18 mx-auto bg-toga overflow-clip">
     <div
-      class="absolute z-20 max-md:h-1/2 h-1/3 left-1/2 -translate-x-1/2 max-md:top-16 top-0 w-full bg-gradient-to-b from-toga-blue"
+      class="absolute z-20 max-md:h-1/2 h-1/3 left-1/2 -translate-x-1/2 max-md:top-16 top-0 w-full bg-gradient-to-b from-toga"
     />
     <div class="relative mx-auto max-w-[108rem] max-md:blur-[1px]">
       <div
-        class="md:hidden absolute z-10 h-full w-2/3 left-0 top-0 md:translate-x-[133%] bg-gradient-to-r from-toga-blue"
+        class="md:hidden absolute z-10 h-full w-2/3 left-0 top-0 md:translate-x-[133%] bg-gradient-to-r from-toga"
       />
       <div
-        class="hidden md:block absolute z-10 h-full w-1/4 left-0 top-0 md:translate-x-[133%] bg-gradient-to-r from-toga-blue"
+        class="hidden md:block absolute z-10 h-full w-1/4 left-0 top-0 md:translate-x-[133%] bg-gradient-to-r from-toga"
       />
       <img
         class="md:hidden mx-auto w-full select-none"
@@ -38,7 +36,7 @@
         draggable="false"
       />
       <div
-        class="absolute z-10 h-full w-1/3 -right-0.5 top-0 translate-x-full bg-gradient-to-l from-toga-blue"
+        class="absolute z-10 h-full w-1/3 -right-0.5 top-0 translate-x-full bg-gradient-to-l from-toga"
       />
     </div>
     <div
@@ -58,7 +56,7 @@
       </div>
     </div>
     <div
-      class="absolute z-20 h-2/5 left-1/2 -translate-x-1/2 bottom-0 w-full bg-gradient-to-t from-toga-blue via-30% via-toga-blue"
+      class="absolute z-20 h-2/5 left-1/2 -translate-x-1/2 bottom-0 w-full bg-gradient-to-t from-toga via-30% via-toga"
     />
   </div>
   <!--  <img

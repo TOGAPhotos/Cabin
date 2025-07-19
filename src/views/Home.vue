@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import HomeBanner from "@/component/firstScreen/HomeBanner.vue";
 import { ElNotification } from "element-plus";
 import { onMounted } from "vue";
 
 import ServerRequest from "@/utils/request";
 
+import HomeBanner from "@/component/firstScreen/HomeBanner.vue";
+import NewPhotos from "@/component/firstScreen/NewPhotos.vue";
 import StatisticInfoBox from "@/component/firstScreen/StatisticInfoBox.vue";
 import useUserInfoStore from "@/stores/userInfo";
 
@@ -34,9 +35,9 @@ onMounted(() => {
 });
 </script>
 <template>
-  <div>
+  <div class="flex flex-col gap-16">
     <HomeBanner :user="user" />
     <StatisticInfoBox />
-    <!--    <NewPhotos />-->
+    <NewPhotos />
   </div>
 </template>
