@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import TransparentButton from "@/component/firstScreen/TransparentButton.vue";
 import ContentBox from "@/components/ContentBox.vue";
 import router from "@/router";
 import ServerRequest from "@/utils/request";
 import {
-  CameraFilled,
+  Management,
   PictureFilled,
+  Promotion,
   UserFilled,
 } from "@element-plus/icons-vue";
 import { onMounted, reactive } from "vue";
@@ -40,50 +40,49 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="content-box">
-    <div class="content-box-title">
-      <h2>关于 TOGAPhotos</h2>
-    </div>
-    <div class="content-box-desc">
-      <p>
-        TOGAPhotos是一个由航空爱好者发起和维护的图库项目，我们诚挚的欢迎每一位新用户的到来，你们的支持是图库继续发展的最大动力
-      </p>
-      <div class="btn-box">
-        <TransparentButton :isWhite="false"></TransparentButton>
-        <TransparentButton
-          :isWhite="false"
-          :href="'https://blog.togaphotos.com/'"
-          :isNewPage="true"
-          >关于我们</TransparentButton
-        >
+  <div class="global-container flex flex-col gap-8">
+    <div class="flex flex-col gap-4 text-toga-dark">
+      <div class="flex flex-col text-2xl tracking-wide">
+        <div>
+          <span class="text-3xl font-bold">TOGAPhotos</span>
+          是一个由航空爱好者发起和维护的图库项目
+        </div>
+        <div>我们诚挚的欢迎每一位新用户的到来</div>
+        <div>你们的支持是图库继续发展的最大动力</div>
+      </div>
+      <div
+        class="flex gap-8 *:w-fit *:text-lg *:px-7 *:py-1 *:border-1 *:border-toga *:rounded-full *:transition-all *:duration-250 *:hover:text-white *:hover:font-bold *:hover:bg-toga"
+      >
+        <a href="https://blog.togaphotos.com/">关于我们</a>
+        <a href="https://guide.togaphotos.com/">上传指南</a>
       </div>
     </div>
 
-    <div class="grid sm:grid-cols-2 md:grid-cols-4 gap-6">
+    <div class="grid sm:grid-cols-2 md:grid-cols-4 gap-4">
       <ContentBox>
         <template #icon>
-          <UserFilled />
+          <PictureFilled />
         </template>
         <template #title>队列长度</template>
         <template #content>{{ statisticInfo.uploadQueueLen }}</template>
       </ContentBox>
       <ContentBox>
         <template #icon>
-          <PictureFilled />
+          <UserFilled />
         </template>
         <template #title>用户数量</template>
         <template #content>{{ statisticInfo.userNum }}</template>
       </ContentBox>
       <ContentBox>
         <template #icon>
-          <CameraFilled />
+          <Management />
         </template>
         <template #title>入库图片</template>
         <template #content>{{ statisticInfo.photoNum }}</template>
       </ContentBox>
       <ContentBox>
         <template #icon>
-          <UserFilled />
+          <Promotion />
         </template>
         <template #title>累计运行</template>
         <template #content>{{ `${daysPassed} 天` }}</template>
@@ -91,51 +90,5 @@ onMounted(async () => {
     </div>
   </div>
 </template>
-<style scoped>
-.btn-box {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1.5rem;
-}
-.statistic .icon {
-  width: 2rem;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  margin-right: 0.5em;
-}
-.statistic .content {
-  padding-left: 0.8em;
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-}
-.statistic strong {
-  text-align: left;
-  font-weight: 500;
-  font-size: 1.5rem;
-  /* vertical-align: middle; */
-  /* line-height: 1.5rem; */
-}
-.statistic strong span {
-  font-size: 1.1rem;
-  font-weight: 400;
-  display: inline-flex;
-  align-items: baseline;
-}
-@media only screen and (max-width: 841px) {
-  .statistic-info {
-    flex-direction: column;
-  }
-  .statistic {
-    height: 6rem;
-    width: 100%;
-    margin-right: 0;
-    margin-bottom: 1rem;
-  }
-  .statistic:last-child {
-    margin-bottom: 0;
-  }
-}
-</style>
+
+<style scoped></style>
