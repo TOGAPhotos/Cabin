@@ -26,6 +26,7 @@ const onError = () => (loading.value = true);
     @load="onLoad()"
     @error="onError()"
     v-show="!loading"
+    draggable="false"
   />
   <img
     ref="img"

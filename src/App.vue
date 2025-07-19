@@ -6,7 +6,6 @@ import Footer from "@/component/Footer.vue";
 import { computed } from "vue";
 
 const showHeadBar = computed(() => {
-  console.log(window.location.pathname);
   const NO_SHOW_PATH = ["/maintenance"];
   return !NO_SHOW_PATH.includes(window.location.pathname);
 });

@@ -1,45 +1,30 @@
 <script setup lang="ts">
-import Thumbnail from "@/components/Thumbnail.vue";
 import ServerRequest from "@/utils/request";
 import { onMounted, ref } from "vue";
 
+import PhotoCard from "@/components/PhotoCard.vue";
 import type { AcceptPhoto } from "@/utils/type/photo";
 
 const photoList = ref<AcceptPhoto[]>([]);
-const photoListReq = new ServerRequest("GET", "/website?type=photos");
-photoListReq.success = () => (photoList.value = photoListReq.getData());
 
 onMounted(async () => {
+  const photoListReq = new ServerRequest("GET", "/website?type=photos");
+  photoListReq.success = () => {
+    photoList.value = photoListReq.getData();
+  };
   await photoListReq.send();
 });
 </script>
 
 <template>
-  <div class="content-box newphotos-box">
-    <div class="content-box-title">
+  <div class="global-container">
+    <div class="flex flex-col gap-8">
       <h2>最新图片</h2>
-    </div>
-    <div class="content-box-main newphotos-photolist">
-      <Thumbnail
-        v-for="photo in photoList"
-        :key="photo.id"
-        class="gallery-photo"
-        :id="photo.id"
-        :reg="photo.ac_reg"
-        :airline="photo.airline_cn || photo.airline_en"
-        :username="photo.username"
-        :airType="photo.ac_type"
-      />
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        <PhotoCard v-for="photo in photoList" v-bind="photo" :key="photo.id" />
+      </div>
     </div>
   </div>
 </template>
 
-<style scoped>
-.newphotos-photolist {
-  max-width: var(--max-width);
-  padding: 2rem 0rem;
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-}
-</style>
+<style scoped></style>

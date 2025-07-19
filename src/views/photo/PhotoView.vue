@@ -9,7 +9,6 @@ import router from "@/router";
 import ContactPanel from "@/component/ContactPanel.vue";
 import ImgLoader from "@/components/ImgLoader.vue";
 import InfoLabel from "@/components/InfoLabel.vue";
-import Thumbnail from "@/components/Thumbnail.vue";
 
 import Device from "@/utils/device";
 import { PhotoUrl } from "@/utils/photo-url";
@@ -18,6 +17,7 @@ import ServerRequest from "@/utils/request";
 import type { AcceptPhoto, PhotoSearchType } from "@/utils/type/photo";
 
 import InfoEditPanel from "@/component/InfoEditPanel.vue";
+import PhotoCard from "@/components/PhotoCard.vue";
 import useUserInfoStore from "@/stores/userInfo";
 
 const showContactPanel = ref(false);
@@ -221,14 +221,13 @@ const deletePhoto = async () => {
       </div>
     </div>
     <el-divider />
-    <div class="related-photo-area">
-      <Thumbnail
+    <div
+      class="global-container grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
+    >
+      <PhotoCard
         v-for="photo in relatedPhotoList"
-        :id="photo.id"
-        :reg="photo.ac_reg"
-        :airline="photo.airline_cn || photo.airline_en"
-        :username="photo.username"
-        :air-type="photo.ac_type"
+        v-bind="photo"
+        :key="photo.id"
       />
     </div>
     <ContactPanel
@@ -288,14 +287,6 @@ const deletePhoto = async () => {
   gap: 1rem;
   justify-content: center;
   align-items: center;
-}
-
-.related-photo-area {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  max-width: var(--max-width);
-  margin: 0 auto;
 }
 </style>
 <style>

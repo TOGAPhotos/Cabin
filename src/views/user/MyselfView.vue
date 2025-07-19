@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import AccountSetting from "@/component/AccountSetting.vue";
-import Thumbnail from "@/components/Thumbnail.vue";
+import PhotoCard from "@/components/PhotoCard.vue";
 import router from "@/router";
 import useUserInfoStore from "@/stores/userInfo";
 import { ThumbnailUrl } from "@/utils/photo-url";
@@ -131,14 +131,9 @@ const logout = async () => {
       </div>
     </div>
     <div class="photo-box">
-      <Thumbnail
-        v-for="photo in photoList"
-        :key="photo.id"
-        :id="photo.id"
-        :reg="photo.ac_reg"
-        :airline="photo.airline_cn || photo.airline_en"
-        :airType="photo.ac_type"
-      />
+      <div class="grid grid-cols-2 md:grid-cols-2 xl:grid-cols-3 gap-4">
+        <PhotoCard v-for="photo in photoList" v-bind="photo" :key="photo.id" />
+      </div>
     </div>
     <AccountSetting v-model="settingPanelVisible" />
   </div>
