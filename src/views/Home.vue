@@ -6,7 +6,7 @@ import ServerRequest from "@/utils/request";
 
 import HomeBanner from "@/component/firstScreen/HomeBanner.vue";
 import NewPhotos from "@/component/firstScreen/NewPhotos.vue";
-import StatisticInfoBox from "@/component/firstScreen/StatisticInfoBox.vue";
+import Stats from "@/component/firstScreen/Stats.vue";
 import useUserInfoStore from "@/stores/userInfo";
 
 const user = useUserInfoStore();
@@ -37,7 +37,7 @@ onMounted(() => {
 <template>
   <div class="flex flex-col gap-16">
     <HomeBanner :user="user" />
-    <StatisticInfoBox />
+    <Stats />
     <NewPhotos />
   </div>
 </template>

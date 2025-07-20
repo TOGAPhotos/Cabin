@@ -53,8 +53,8 @@ onMounted(async () => {
       <div
         class="flex gap-8 *:w-fit *:text-lg *:px-7 *:py-1 *:border-1 *:border-toga *:rounded-full *:transition-all *:duration-250 *:hover:text-white *:hover:font-bold *:hover:bg-toga"
       >
-        <a href="https://blog.togaphotos.com/">关于我们</a>
-        <a href="https://guide.togaphotos.com/">上传指南</a>
+        <a target="_blank" href="https://blog.togaphotos.com/">关于我们</a>
+        <a target="_blank" href="https://guide.togaphotos.com/">上传指南</a>
       </div>
     </div>
 
