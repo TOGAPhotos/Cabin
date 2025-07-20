@@ -32,7 +32,7 @@ const isAirportPhoto = computed(() => props.airport_icao_code === props.ac_reg);
         />
         <div class="w-full h-full flex flex-col justify-between text-xs">
           <div
-            v-if="showAirport && !isAirportPhoto"
+            v-if="!isAirportPhoto && showAirport"
             class="*:line-clamp-1 *:text-nowrap *:text-ellipsis"
           >
             {{
@@ -46,7 +46,7 @@ const isAirportPhoto = computed(() => props.airport_icao_code === props.ac_reg);
           <div
             class="flex gap-2 items-baseline justify-between *:line-clamp-1 *:text-nowrap *:text-ellipsis"
           >
-            <div v-if="showAirport && isAirportPhoto">
+            <div v-if="isAirportPhoto && showAirport">
               {{
                 formatAirportString(
                   airport_cn,
@@ -54,6 +54,9 @@ const isAirportPhoto = computed(() => props.airport_icao_code === props.ac_reg);
                   airport_iata_code,
                 )
               }}
+            </div>
+            <div v-if="isAirportPhoto && !showAirport" class="shrink-0">
+              {{ ac_type }}
             </div>
             <div v-if="!isAirportPhoto" class="shrink-0">{{ ac_reg }}</div>
             <div v-if="!isAirportPhoto" class="text-right">{{ ac_type }}</div>
