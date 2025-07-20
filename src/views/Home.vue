@@ -36,7 +36,7 @@ onMounted(() => {
 </script>
 <template>
   <div class="flex flex-col gap-16">
-    <HomeBanner :user="user" />
+    <HomeBanner :isLogged="user.isLoggedIn" />
     <Stats />
     <NewPhotos />
   </div>

@@ -1,4 +1,10 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+export type HomeBannerProps = {
+  isLogged?: boolean;
+};
+
+const props = defineProps<HomeBannerProps>();
+</script>
 
 <template>
   <div class="relative w-screen max-md:pt-18 mx-auto bg-toga overflow-clip">
@@ -36,9 +42,17 @@
           <h1>加入TOGAPhotos</h1>
           <h2>与广大航空爱好者分享你的作品</h2>
           <a
+            v-if="isLogged"
+            target="_blank"
             href="/upload"
             class="md:backdrop-blur-xs w-fit text-lg px-7 py-2 border-1 border-white rounded-full text-white transition-all duration-250 hover:text-black hover:font-bold hover:bg-white"
             >现在上传</a
+          >
+          <a
+            v-else
+            href="/login"
+            class="md:backdrop-blur-xs w-fit text-lg px-7 py-2 border-1 border-white rounded-full text-white transition-all duration-250 hover:text-black hover:font-bold hover:bg-white"
+            >登录 / 注册</a
           >
           <small>封面摄影师 - @Baigiver-0764</small>
         </div>
