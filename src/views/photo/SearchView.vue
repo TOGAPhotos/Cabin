@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Thumbnail from "@/components/Thumbnail.vue";
+import PhotoCard from "@/components/PhotoCard.vue";
 import router from "@/router";
 import { BottomLoader } from "@/utils/bottom-loader";
 import { RemoteSearch } from "@/utils/remoteSearch";
@@ -153,24 +153,15 @@ const searchOptions = [
         >&lAarr;返回普通搜索</el-button
       >
     </div>
-    <div class="content-box" v-loading="searchLoading">
+    <div class="global-container flex flex-col gap-8" v-loading="searchLoading">
       <div class="content-box-title" v-if="showResult">
         <h2>搜索结果</h2>
       </div>
-      <div class="content-box-main">
-        <Thumbnail
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        <PhotoCard
           v-for="photo in resultList"
+          v-bind="{ ...photo, showAirport: true }"
           :key="photo.id"
-          :id="photo.id"
-          :reg="photo.ac_reg"
-          :airline="photo.airline_cn"
-          :username="photo.username"
-          :airType="photo.ac_type"
-          :airport="{
-            name: photo.airport_cn,
-            icao: photo.airport_icao_code,
-            iata: photo.airport_iata_code,
-          }"
         />
       </div>
     </div>

@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 
-interface UserInfo {
+export interface UserInfo {
   username: string;
   email: string;
   token: string | null;
