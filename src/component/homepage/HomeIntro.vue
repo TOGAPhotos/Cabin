@@ -10,13 +10,13 @@ const headPhoto = ref<AcceptPhoto | null>(null);
 const randomPhotos = ref<AcceptPhoto[]>([]);
 
 onMounted(async () => {
-  const headPhotoReq = new ServerRequest("GET", `/website?type=random`);
-  headPhotoReq.success = () => {
-    const photos = headPhotoReq.getData();
+  const randomPhotosReq = new ServerRequest("GET", `/website?type=random`);
+  randomPhotosReq.success = () => {
+    const photos = randomPhotosReq.getData();
     headPhoto.value = photos.shift();
     randomPhotos.value = photos;
   };
-  await headPhotoReq.send();
+  await randomPhotosReq.send();
 });
 </script>
 

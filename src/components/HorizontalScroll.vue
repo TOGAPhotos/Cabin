@@ -83,7 +83,7 @@ onMounted(() => {
       });
     }
     if (scrollRef.value) {
-      const resizeObserver = new window.ResizeObserver(() => {
+      const resizeObserver = new ResizeObserver(() => {
         updateHeight();
       });
       resizeObserver.observe(scrollRef.value);
