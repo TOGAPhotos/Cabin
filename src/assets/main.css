@@ -3,6 +3,8 @@
 @import "./contentbox.css";
 
 @theme {
+  --breakpoint-desktop: 80rem;
+
   --color-toga: #001a38;
   --color-toga-light: #002240;
   --color-toga-lighter: #003062;
@@ -27,6 +29,16 @@
       transform: scale3d(1.01, 1.01, 1.01);
     }
   }
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  /*noinspection CssUnknownProperty*/
+  scrollbar-width: none; /* Firefox */
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  @apply hidden;
 }
 
 body {

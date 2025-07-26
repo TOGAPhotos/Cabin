@@ -2,12 +2,12 @@
 
 <template>
   <div
-    class="p-6 flex gap-3 bg-white rounded-lg shadow-md text-shadow-text-primary"
+    class="px-4 py-4 flex gap-3 bg-white rounded-lg shadow-md text-shadow-text-primary"
   >
-    <div class="size-8">
+    <div class="max-md:pt-1 size-6 md:size-8">
       <slot name="icon" />
     </div>
-    <div class="flex flex-col gap-2">
+    <div class="flex flex-col gap-1">
       <div class="text-lg font-bold">
         <slot name="title" />
       </div>
