@@ -23,7 +23,7 @@ onMounted(async () => {
 <template>
   <div class="global-container flex flex-col gap-6">
     <div class="grid lg:grid-cols-2 gap-4 max-lg:gap-8">
-      <div class="shrink-0 h-full flex flex-col justify-end gap-4 max-lg:gap-8">
+      <div class="shrink-0 flex flex-col justify-end gap-4 max-lg:gap-8">
         <div class="flex flex-col gap-2 max-lg:gap-4 text-toga-dark">
           <div class="flex flex-col text-2xl tracking-wide">
             <h1>TOGAPhotos</h1>
