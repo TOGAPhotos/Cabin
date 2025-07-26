@@ -25,14 +25,16 @@ onMounted(async () => {
     <div class="grid lg:grid-cols-2 gap-4 max-lg:gap-8">
       <div class="shrink-0 flex flex-col justify-end gap-4 max-lg:gap-8">
         <div class="flex flex-col gap-2 max-lg:gap-4 text-toga-dark">
-          <div class="flex flex-col text-2xl tracking-wide">
+          <div class="flex flex-col gap-1 text-lg tracking-wide">
             <h1>TOGAPhotos</h1>
-            <div>是一个由航空爱好者发起和维护的图库项目</div>
-            <div>我们诚挚的欢迎每一位新用户的到来</div>
-            <div>你们的支持是图库继续发展的最大动力</div>
+            <div class="flex flex-col gap-1 md:text-2xl">
+              <div>是一个由航空爱好者发起和维护的图库项目</div>
+              <div>我们诚挚的欢迎每一位新用户的到来</div>
+              <div>你们的支持是图库继续发展的最大动力</div>
+            </div>
           </div>
           <div
-            class="flex gap-8 *:w-fit *:text-lg *:px-7 *:py-1 *:border-1 *:border-toga *:rounded-full *:transition-all *:duration-250 *:hover:text-white *:hover:font-bold *:hover:bg-toga"
+            class="flex gap-8 *:w-fit *:md:text-lg *:px-5 *:md:px-7 *:py-1 *:border-1 *:border-toga *:rounded-full *:transition-all *:duration-250 *:hover:text-white *:hover:font-bold *:hover:bg-toga"
           >
             <a target="_blank" href="https://blog.togaphotos.com/">关于我们</a>
             <a target="_blank" href="https://guide.togaphotos.com/">上传指南</a>
