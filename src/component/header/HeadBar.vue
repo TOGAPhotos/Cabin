@@ -86,14 +86,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <header
-    :class="[
-      isFloat ? (showHeadBar ? 'fade-in-down' : 'fade-out-up') : '',
-      isAtTop && !isMouseOn && isTransparentBg ? 'transparent-bg' : '',
-      isFloat ? 'float' : 'fixed',
-    ]"
-    ref="header"
-  >
+  <header class="fixed top-0 left-0 z-1000" ref="header">
     <div class="global-container head-bar">
       <div>
         <a id="logo" href="/">
@@ -106,14 +99,14 @@ onUnmounted(() => {
       </div>
       <div class="head-bar-desk">
         <SearchBox :isFocus="isMouseOn"></SearchBox>
-        <LoginButton @loginDialogVisible="handleLoginClick"></LoginButton>
+        <LoginButton @loginDialogVisible="handleLoginClick" />
       </div>
       <div class="head-bar-mobile">
         <SearchBox :isMobile="true"></SearchBox>
         <LoginButton
           :isMobile="true"
           @mobileMenuVisible="handleMobileLoginClick"
-        ></LoginButton>
+        />
       </div>
     </div>
 
@@ -144,8 +137,7 @@ onUnmounted(() => {
 
 <style scoped>
 header {
-  /*background-color: #001529;*/
-  background-color: #001a38;
+  background: var(--color-toga);
   /* position: fixed;
   top: 0;
   z-index: 100; */
@@ -156,11 +148,6 @@ header {
 .float {
   position: fixed;
   top: 0;
-  z-index: 100;
-  width: 100%;
-}
-.fixed {
-  position: relative;
   z-index: 100;
   width: 100%;
 }
@@ -186,8 +173,7 @@ header {
 }
 
 .head-bar-menu {
-  /*background-color: #001529;*/
-  background-color: #002e4d;
+  background: var(--color-toga);
   height: 150px;
   padding: 1em 25px;
   z-index: 999;

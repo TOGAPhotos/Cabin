@@ -13,7 +13,7 @@ const showHeadBar = computed(() => {
 
 <template>
   <HeadBar v-if="showHeadBar" />
-  <main>
+  <main class="pt-16">
     <RouterView />
   </main>
   <Footer />
