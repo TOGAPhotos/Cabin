@@ -1,24 +1,27 @@
 <script setup lang="ts">
 import ImgLoader from "@/components/ImgLoader.vue";
 import formatAirportString from "@/utils/airport";
-import { ThumbnailUrl } from "@/utils/photo-url";
+import { PhotoUrl, ThumbnailUrl } from "@/utils/photo-url";
 import type { AcceptPhoto } from "@/utils/type/photo";
 import { computed } from "vue";
 
 export type PhotoCardProps = AcceptPhoto & {
+  highQuality?: boolean;
   showAirport?: boolean;
 };
 
 const props = defineProps<PhotoCardProps>();
 
-const url = computed(() => ThumbnailUrl(props.id));
+const url = computed(() =>
+  props.highQuality ? PhotoUrl(props.id) : ThumbnailUrl(props.id),
+);
 const href = computed(() => `/photo/${props.id}`);
 const hasAirline = computed(() => props.airline_cn !== props.ac_type);
 const isAirportPhoto = computed(() => props.airport_icao_code === props.ac_reg);
 </script>
 
 <template>
-  <a class="h-full transition-grow rounded-lg overflow-clip" :href="href">
+  <a class="h-fit transition-grow rounded-lg overflow-clip" :href="href">
     <div class="flex flex-col w-full h-full">
       <ImgLoader
         :src="url"
