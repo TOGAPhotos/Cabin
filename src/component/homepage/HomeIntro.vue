@@ -47,7 +47,7 @@ onMounted(async () => {
         <PhotoCard
           v-if="headPhoto"
           class="mt-auto w-full"
-          v-bind="{ ...headPhoto, highQuality: true }"
+          v-bind="{ ...(headPhoto as AcceptPhoto), highQuality: true }"
         />
       </div>
     </div>
