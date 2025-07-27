@@ -1,4 +1,4 @@
-<script setup lang="ts" xmlns="http://www.w3.org/1999/html"></script>
+<script setup lang="ts"></script>
 
 <template>
   <div id="agreement-view" class="page-box">
@@ -107,6 +107,9 @@
 </template>
 
 <style scoped>
+#agreement-view {
+  padding: 0 2em;
+}
 h1,
 h2,
 h3,
