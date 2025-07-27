@@ -1,4 +1,4 @@
-<script setup lang="ts" xmlns="http://www.w3.org/1999/html"></script>
+<script setup lang="ts"></script>
 
 <template>
   <div class="privacy-page">
@@ -87,7 +87,7 @@
 <style scoped>
 .privacy-page {
   max-width: var(--max-width);
-  padding: 0 15px;
+  padding: 0 2rem;
   margin: 24px auto;
 }
 p {

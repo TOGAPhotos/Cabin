@@ -18,6 +18,6 @@
 <script setup lang="ts">
 const links = [
   { href: "/privacy", label: "隐私政策" },
-  { href: "/user-agreement", label: "用户协议" },
+  { href: "/tos", label: "用户协议" },
 ];
 </script>
