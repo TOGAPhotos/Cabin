@@ -50,7 +50,7 @@ const search = () => {
 <template>
   <div
     v-if="!isMobile"
-    class="mt-4 input-box"
+    class="input-box"
     :class="!isFocus && inputContent === '' ? 'blur' : ''"
   >
     <el-input

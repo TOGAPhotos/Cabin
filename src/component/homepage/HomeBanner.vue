@@ -7,9 +7,9 @@ const props = defineProps<HomeBannerProps>();
 </script>
 
 <template>
-  <div class="relative w-screen max-md:pt-18 mx-auto bg-toga overflow-clip">
+  <div class="relative w-screen mx-auto bg-toga overflow-clip">
     <div
-      class="absolute z-20 max-md:h-1/2 h-1/3 left-1/2 -translate-x-1/2 max-md:top-16 top-0 w-full bg-gradient-to-b from-toga"
+      class="absolute z-20 max-md:h-1/2 h-1/3 left-1/2 -translate-x-1/2 top-0 w-full bg-gradient-to-b from-toga"
     />
     <div class="relative mx-auto max-w-[108rem] max-md:blur-[1px]">
       <div
