@@ -51,7 +51,7 @@ async function login() {
   };
   loginRequest.error = (_, msg) => {
     ElNotification.error({
-      title: "登陆时发生错误",
+      title: "登录时发生错误",
       message: msg,
     });
   };
@@ -87,7 +87,7 @@ async function login() {
         </div>
       </div>
       <div class="form-group" style="margin-top: 2em">
-        <button type="submit" class="login-button"><h2>登陆</h2></button>
+        <button type="submit" class="login-button"><h2>登录</h2></button>
       </div>
     </form>
   </div>
