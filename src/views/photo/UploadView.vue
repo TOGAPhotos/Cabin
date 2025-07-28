@@ -108,6 +108,7 @@ const uploadFormRules = reactive<FormRules<UploadFormInfo>>({
   ac_type: [{ required: true, message: "请选择机型", trigger: "blur" }],
   remark: [{ max: 100, message: "备注不能超过100字", trigger: "blur" }],
   message: [{ max: 100, message: "留言不能超过100字", trigger: "blur" }],
+  date: [{ required: true, message: "请选择拍摄日期", trigger: "blur" }],
 });
 const watermark = ref({
   x: 0,
@@ -327,7 +328,7 @@ const readExifDate = async (file: UploadFile) => {
       });
     }
   } catch (e) {
-    ElNotification.error({
+    ElNotification.warning({
       title: "读取EXIF失败",
       message: "请手动填写拍摄日期",
     });
@@ -444,7 +445,7 @@ const readExifDate = async (file: UploadFile) => {
         <el-form-item label="图片分类">
           <PhotoTypeSelect v-model="uploadFormData.photoType" />
         </el-form-item>
-        <el-form-item label="拍摄日期">
+        <el-form-item label="拍摄日期" prop="date">
           <el-date-picker
             style="width: 100%"
             size="large"
