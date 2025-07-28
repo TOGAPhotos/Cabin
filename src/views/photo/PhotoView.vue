@@ -19,6 +19,7 @@ import type { AcceptPhoto, PhotoSearchType } from "@/utils/type/photo";
 import InfoEditPanel from "@/component/InfoEditPanel.vue";
 import PhotoCard from "@/components/PhotoCard.vue";
 import useUserInfoStore from "@/stores/userInfo";
+import { setMetaDescription } from "@/utils/meta-description";
 
 const showContactPanel = ref(false);
 const showInfoEditPanel = ref(false);
@@ -97,8 +98,14 @@ const setImgBoxPositon = () => {
 
 const loadPhoto = async () => {
   const photoInfoReq = new ServerRequest("GET", `/photo/${photoId}`);
-  photoInfoReq.success = () =>
-    (photoInfo.value = photoInfoReq.getData() as AcceptPhoto);
+  photoInfoReq.success = () => {
+    photoInfo.value = photoInfoReq.getData() as AcceptPhoto;
+    setMetaDescription(
+      `${photoInfo.value.airline_cn || photoInfo.value.airline_cn}${photoInfo.value.ac_type}，` +
+        `注册号：${photoInfo.value?.ac_reg}，拍摄于${photoInfo.value?.airport_cn || photoInfo.value.airline_en}，` +
+        `摄影师：${photoInfo.value?.username}`,
+    );
+  };
   photoInfoReq.error = (_, msg) => {
     ElNotification.error({
       title: msg,
