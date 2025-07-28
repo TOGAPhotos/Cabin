@@ -125,7 +125,7 @@ const logout = async () => {
           </div>
           <a @click="settingPanelVisible = true">账户设置</a>
           <div class="explain">更改账户信息，调整您对第三方的授权</div>
-          <a style="color: #ff4d4a" @click="logout()">退出登陆</a>
+          <a style="color: #ff4d4a" @click="logout()">退出登录</a>
           <div class="explain">退出当前账户，注销本地存储的凭据</div>
         </div>
       </div>
