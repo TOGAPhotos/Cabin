@@ -180,8 +180,6 @@ watch(
 );
 
 async function preCheck() {
-  // read out the image by submit
-  fileUpload.value!.submit();
   const validateResult = await uploadFormInstance.value!.validate(
     (isValid, invalidFields) => {
       if (isValid) return;
@@ -189,6 +187,10 @@ async function preCheck() {
       uploadFormInstance.value?.scrollToField(firstField);
     },
   );
+  if (!validateResult) return;
+
+  // read out the image by submit
+  fileUpload.value!.submit();
 
   if (!FILE) {
     uploadFormInstance.value!.scrollToField("file");
@@ -196,7 +198,6 @@ async function preCheck() {
   }
 
   if (!(await checkImage(FILE))) return;
-  if (!validateResult) return;
 
   return showWatermarkDialog();
 }
