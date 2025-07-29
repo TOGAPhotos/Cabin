@@ -82,6 +82,8 @@ const _ThumbnailUrl = (photo: _FullPhotoInfo) => {
         </div>
         <div class="row">
           <InfoLabel label="队列位置" value="0" />
+        </div>
+        <div class="row" style="gap: 0.3rem">
           <el-button
             size="small"
             type="primary"
@@ -140,6 +142,7 @@ const _ThumbnailUrl = (photo: _FullPhotoInfo) => {
 }
 
 .upload-photo-list {
+  padding: 2rem;
   display: flex;
   flex-direction: column;
   gap: 2vh;
@@ -199,5 +202,8 @@ const _ThumbnailUrl = (photo: _FullPhotoInfo) => {
 
 .info-box .row:last-of-type {
   align-items: end;
+}
+.el-button + .el-button {
+  margin-left: 0;
 }
 </style>
