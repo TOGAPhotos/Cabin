@@ -39,6 +39,9 @@ const rejectPhotoList = ref<RejectPhotoInfo[]>([]);
   </div>
 </template>
 <style scoped>
+.page-box {
+  padding: 2rem;
+}
 .reject-list {
   margin-top: 2em;
   display: flex;
