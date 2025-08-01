@@ -1,9 +1,9 @@
 <script setup lang="ts">
-const props = defineProps({
-  label: String,
-  value: String,
-  link: String,
-});
+const props = defineProps<{
+  label: string;
+  value: string | number;
+  link?: string;
+}>();
 </script>
 
 <template>
