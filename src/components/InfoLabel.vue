@@ -1,9 +1,9 @@
 <script setup lang="ts">
-const props = defineProps({
-  label: String,
-  value: String,
-  link: String,
-});
+const props = defineProps<{
+  label: string;
+  value: string | number | undefined;
+  link?: string;
+}>();
 </script>
 
 <template>
@@ -14,7 +14,7 @@ const props = defineProps({
       }}</span>
     </div>
     <div class="value" v-if="props.link">
-      <a class="link" :href="props.link" v-html="props.value"></a>
+      <a class="link" :href="props!.link" v-html="props.value"></a>
     </div>
     <div class="value" v-else>
       <span>{{ props.value }}</span>

@@ -10,6 +10,7 @@ interface _FullPhotoInfo extends AcceptPhoto {
   queueIndex: number;
   airport: string;
   message: string;
+  position_in_queue: number;
   storage_status: string;
 }
 
@@ -81,7 +82,7 @@ const _ThumbnailUrl = (photo: _FullPhotoInfo) => {
           <InfoLabel label="留言" :value="photo.message" />
         </div>
         <div class="row">
-          <InfoLabel label="队列位置" value="0" />
+          <InfoLabel label="队列位置" :value="photo.position_in_queue" />
         </div>
         <div class="row" style="gap: 0.3rem">
           <el-button
