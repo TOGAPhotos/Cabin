@@ -107,7 +107,7 @@ watch(
         (resolve) => (watermarkImg.onload = resolve),
       );
       watermarkImg.crossOrigin = "anonymous";
-      watermarkImg.src = "https://source.cdn.794td.cn/TOGA/watermark.png";
+      watermarkImg.src = "https://cos-0688-tp-cdn.794td.cn/watermark.png";
 
       const { left, top } = canvas.value!.getBoundingClientRect();
       canvasInfo.position.x = left;
