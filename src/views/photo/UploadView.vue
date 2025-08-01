@@ -306,13 +306,6 @@ async function AutoFill() {
   await infoReq.send();
 }
 
-// const watermarkTest = async () => {
-// fileUpload.value!.submit();
-// elemStatus.watermark = true;
-// const exif = await ExifReader(FILE)
-// uploadFormData.date = isNaN(exif.DateOriginal.getTime()) ? "" : exif.DateOriginal.toISOString().split("T")[0];
-// }
-
 const readExifDate = async (file: UploadFile) => {
   if (file.status !== "ready") return;
 
@@ -552,8 +545,8 @@ const readExifDate = async (file: UploadFile) => {
     width: 100%;
   }
 
-  .intro-box * {
-    font-size: 0.9rem !important;
+  .intro-box {
+    padding: 1rem 2rem;
   }
 }
 </style>
