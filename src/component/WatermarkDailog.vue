@@ -89,9 +89,9 @@ watch(
   async (value) => {
     if (!value) return;
 
-    const watermarkDailog = useTemplateRef("watermark-dialog");
+    const watermarkDialog = useTemplateRef("watermark-dialog");
     const loading = ElLoading.service({
-      target: <HTMLElement>watermarkDailog.value,
+      target: <HTMLElement>watermarkDialog.value,
       text: "加载中...",
     });
 
@@ -156,6 +156,7 @@ watch(
     width="fit-content"
     ref="watermark-dialog"
     oncontextmenu="return false"
+    align-center
   >
     <div>
       <canvas ref="watermark-canvas"></canvas>
