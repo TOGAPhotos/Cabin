@@ -68,7 +68,6 @@ const route = useRoute();
 
 const init = async () => {
   const userInfoReq = new ServerRequest("GET", `/user/${localUserInfo.id}`);
-  uploadFormData;
   userInfoReq.success = () => {
     const u = userInfoReq.getData("userInfo");
     elemStatus.normQueueText = `普通队列（空余${u.free_queue}张）`;
@@ -241,6 +240,7 @@ async function upload() {
   if (uploadError) {
     fileUpload.value!.clearFiles();
     uploadFormInstance.value!.resetFields();
+    uploadFormData.photoType = [];
     uploading.close();
     return;
   }
@@ -270,6 +270,7 @@ async function upload() {
   } finally {
     fileUpload.value!.clearFiles();
     uploadFormInstance.value!.resetFields();
+    uploadFormData.photoType = [];
     uploading.close();
     await init();
   }
