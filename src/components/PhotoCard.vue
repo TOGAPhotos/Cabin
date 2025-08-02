@@ -25,7 +25,7 @@ const isAirportPhoto = computed(() => props.airport_icao_code === props.ac_reg);
     <div class="flex flex-col w-full h-full">
       <ImgLoader
         :src="url"
-        class="w-full aspect-[2/1] object-center md:aspect-video md:object-top object-cover select-none"
+        className="w-full aspect-[2/1] object-center md:aspect-video md:object-top object-cover select-none"
       />
       <div
         class="h-full relative px-2 py-1.5 bg-toga-darker text-white hover:bg-toga-dark active:bg-toga-dark group"
