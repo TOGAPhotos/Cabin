@@ -7,12 +7,12 @@ export default function formatAirportString({
   airport_icao_code?: string;
   airport_iata_code?: string;
 }): string {
-  const enCode = [iata, icao].filter(Boolean).join("/") || "";
+  const airportCodes = [iata, icao].filter(Boolean).join("/") || "";
   if (!cnName) {
-    return enCode;
+    return airportCodes;
   }
-  if (!enCode) {
+  if (!airportCodes) {
     return cnName;
   }
-  return [enCode, cnName].filter(Boolean).join("-");
+  return [airportCodes, cnName].filter(Boolean).join("-");
 }
