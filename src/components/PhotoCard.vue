@@ -25,7 +25,7 @@ const isAirportPhoto = computed(() => props.airport_icao_code === props.ac_reg);
     <div class="flex flex-col w-full h-full">
       <ImgLoader
         :src="url"
-        className="w-full aspect-video object-top object-cover select-none"
+        className="w-full aspect-[2/1] object-center md:aspect-video md:object-top object-cover select-none"
       />
       <div
         class="h-full relative px-2 py-1.5 bg-toga-darker text-white hover:bg-toga-dark active:bg-toga-dark group"
@@ -35,31 +35,36 @@ const isAirportPhoto = computed(() => props.airport_icao_code === props.ac_reg);
         />
         <div class="w-full h-full flex flex-col justify-between text-xs">
           <div
-            v-if="!isAirportPhoto && showAirport"
+            v-if="showAirport"
             class="*:line-clamp-1 *:text-nowrap *:text-ellipsis"
           >
             {{
-              formatAirportString(
-                airport_cn,
+              formatAirportString({
+                ...(isAirportPhoto
+                  ? undefined
+                  : {
+                      airport_cn,
+                    }),
                 airport_icao_code,
                 airport_iata_code,
-              )
+              })
             }}
           </div>
           <div
             class="flex gap-2 items-baseline justify-between *:line-clamp-1 *:text-nowrap *:text-ellipsis"
           >
-            <div v-if="isAirportPhoto && showAirport">
+            <div v-if="isAirportPhoto" class="shrink-0">
               {{
-                formatAirportString(
+                formatAirportString({
                   airport_cn,
-                  airport_icao_code,
-                  airport_iata_code,
-                )
+                  ...(isAirportPhoto
+                    ? undefined
+                    : {
+                        airport_icao_code,
+                        airport_iata_code,
+                      }),
+                })
               }}
-            </div>
-            <div v-if="isAirportPhoto && !showAirport" class="shrink-0">
-              {{ ac_type }}
             </div>
             <div v-if="!isAirportPhoto" class="shrink-0">{{ ac_reg }}</div>
             <div v-if="!isAirportPhoto" class="text-right">{{ ac_type }}</div>
