@@ -13,14 +13,14 @@ const _remoteMethod = async (query: string) => {
     return;
   }
   loading.value = true;
-  const resutl = await RemoteSearch.airtype(query);
+  const result = await RemoteSearch.airtype(query);
   loading.value = false;
 
-  if (resutl.length === 0) {
+  if (result.length === 0) {
     aircraftTypeOptions.value = [];
     return;
   }
-  aircraftTypeOptions.value = resutl.map((item) => {
+  aircraftTypeOptions.value = result.map((item) => {
     return {
       value: item.sub_type,
       label: `${item.manufacturer_cn}/${item.sub_type}`,
