@@ -2,6 +2,6 @@ export interface AircraftInfo {
   reg: string;
   msn: string;
   ln: string;
-  airlineId: number;
+  airline_id: number;
   air_type: string;
 }

@@ -2,13 +2,13 @@
 import ServerRequest from "@/utils/request";
 import type { Option } from "@/utils/type/option";
 import { ElMessage } from "element-plus";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 
 const value = defineModel<number | null>();
 const loading = ref(false);
 const airlineOptions = ref<Option[]>([]);
 
-const loadAirportInfo = async () => {
+const loadAirlineInfo = async () => {
   const airlineReq = new ServerRequest("GET", `/airline/${value.value}`);
   airlineReq.success = () => {
     const data = airlineReq.getData();
@@ -21,9 +21,23 @@ const loadAirportInfo = async () => {
   };
   await airlineReq.send();
 };
+
+watch(
+  () => value.value,
+  async (value, oldValue) => {
+    const localSearch = airlineOptions.value.filter(
+      (item) => item.value === value,
+    );
+    if (localSearch.length > 0) {
+      return;
+    }
+    await loadAirlineInfo();
+  },
+);
+
 onMounted(async () => {
   if (!value.value) return;
-  await loadAirportInfo();
+  await loadAirlineInfo();
 });
 const airlineRemoteSearch = async (query: string) => {
   if (!query || query.length < 2) {
