@@ -279,7 +279,7 @@ async function upload() {
 function AutoFillSelect(aircraft: AircraftInfo) {
   uploadFormData.reg = aircraft.reg;
   uploadFormData.msn = aircraft.msn;
-  uploadFormData.airlineId = aircraft.airlineId;
+  uploadFormData.airlineId = aircraft.airline_id;
   uploadFormData.ac_type = aircraft.air_type;
 }
 
