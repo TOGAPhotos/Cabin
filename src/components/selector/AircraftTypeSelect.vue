@@ -1,12 +1,25 @@
 <script setup lang="ts">
 import { RemoteSearch } from "@/utils/remoteSearch";
 
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 
 const value = defineModel({ default: "" });
 const loading = ref(false);
 const aircraftTypeOptions = ref<{ value: string; label: string }[]>([]);
 onMounted(() => _remoteMethod(value.value));
+
+watch(
+  () => value.value,
+  (newValue) => {
+    const localSearch = aircraftTypeOptions.value.filter((obj) => {
+      return obj.value === newValue;
+    });
+    if (localSearch.length > 0) {
+      return;
+    }
+    _remoteMethod(newValue);
+  },
+);
 
 const _remoteMethod = async (query: string) => {
   if (query.length < 2) {
