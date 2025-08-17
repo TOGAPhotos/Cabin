@@ -12,6 +12,6 @@ export const consoleStr = `
     | | | |__| | |__| |/ ____ \\  | |    | | | | (_) | || (_) \\__ \\
     |_|  \\____/ \\_____/_/    \\_\\ |_|    |_| |_|\\___/ \\__\\___/|___/  
                            
-                                  Maintenance by TO/GAPhotos Team
+                                  Maintenance by TOGAPhotos Team
                                   Welcome to join us
 `;
