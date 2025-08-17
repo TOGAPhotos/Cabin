@@ -53,7 +53,7 @@ watch(
     if (val) {
       searchInfo.type = "blurry";
     } else {
-      searchInfo.type = (route.query?.type as string) || "reg";
+      searchInfo.type = "reg";
     }
   },
 );
