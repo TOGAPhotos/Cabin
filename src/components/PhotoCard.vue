@@ -36,7 +36,7 @@ const isAirportPhoto = computed(() => props.airport_icao_code === props.ac_reg);
         <div class="w-full h-full flex flex-col justify-between text-xs">
           <div
             v-if="showAirport"
-            class="line-clamp-1 text-nowrap text-ellipsis"
+            class="text-nowrap text-ellipsis"
           >
             {{
               formatAirportString({
