@@ -254,7 +254,6 @@ async function upload() {
   try {
     const buffer = await FILE.arrayBuffer();
     await CosStrorage.uploadFile(uploadUrl, buffer);
-    ElNotification.success({ title: "上传成功" });
     const updateReq = new ServerRequest(
       "PUT",
       `/cos/photo?photo_id=${photoId}&status=available`,
@@ -263,10 +262,10 @@ async function upload() {
       throw new Error(msg);
     };
     await updateReq.send();
+    ElNotification.success({ title: "上传成功" });
   } catch (e) {
-    ElNotification.error({
-      title: "上传失败",
-    });
+    await new ServerRequest("DELETE", `/photo/recall/${photoId}`).send();
+    ElNotification.error({ title: "上传失败，已撤回" });
   } finally {
     fileUpload.value!.clearFiles();
     uploadFormInstance.value!.resetFields();
