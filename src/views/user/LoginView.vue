@@ -47,7 +47,7 @@ async function login() {
       expireTime,
       permission,
     });
-    router.push("/");
+    return router.push("/");
   };
   loginRequest.error = (_, msg) => {
     ElNotification.error({
@@ -64,7 +64,7 @@ async function login() {
   <div id="login-view" class="login-container">
     <img
       id="login-logo-img"
-      src="https://source.cdn.794td.cn/TOGA/n_logo_b.jpg"
+      src="https://cos-125-tp-cdn.794td.cn/assets/n_logo_b.jpg"
     />
     <form @submit.prevent="login">
       <div class="form-group">
@@ -82,9 +82,9 @@ async function login() {
           v-model="loginForm.password"
           required
         />
-        <div class="right-align">
-          <a href="/forget">> 忘记密码</a>
-        </div>
+        <!--        <div class="right-align">-->
+        <!--          <a href="/forget">> 忘记密码</a>-->
+        <!--        </div>-->
       </div>
       <div class="form-group" style="margin-top: 2em">
         <button type="submit" class="login-button"><h2>登录</h2></button>

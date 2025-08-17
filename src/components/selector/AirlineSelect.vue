@@ -25,6 +25,7 @@ const loadAirlineInfo = async () => {
 watch(
   () => value.value,
   async (value, oldValue) => {
+    if (!value) return;
     const localSearch = airlineOptions.value.filter(
       (item) => item.value === value,
     );
