@@ -36,6 +36,7 @@ const status = reactive({
   contact: user.id !== photoInfo.value?.upload_user_id,
   info:
     user.permission === "ADMIN" || user.id === photoInfo.value?.upload_user_id,
+  protect: user.id !== photoInfo.value?.upload_user_id,
 });
 
 const airportText = computed(() => {
@@ -159,7 +160,11 @@ const deletePhoto = async () => {
 <template>
   <div id="photo-view">
     <div class="image-box" ref="_imgBox">
-      <ImgLoader :src="PhotoUrl(photoId)" :alt="photoInfo?.ac_reg" protect />
+      <ImgLoader
+        :src="PhotoUrl(photoId)"
+        :alt="photoInfo?.ac_reg"
+        :protect="status.protect"
+      />
     </div>
     <div class="info-box">
       <div class="info-area">
