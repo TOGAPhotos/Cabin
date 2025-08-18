@@ -24,60 +24,37 @@
         background-color: #061936;
         z-index: 1000;
       }
-
-      #loading img {
-        width: 60vw;
-        animation: fadeCycle 8s ease-in-out infinite;
-      }
-
-      @keyframes fadeCycle {
-        0% {
-          opacity: 0;
-        }
-
-        25% {
-          opacity: 1;
-        }
-
-        /* 淡入约0.6s */
-        85% {
-          opacity: 1;
-        }
-
-        /* 淡出约1s */
-        100% {
-          opacity: 0;
-        }
-      }
-
-      #l-t {
-        margin-top: 1rem;
-        font-size: 0.95rem;
-        letter-spacing: 0.05em;
-      }
     </style>
   </head>
-
   <body>
-    <!-- 暂停进入 Vue 应用：移除 /src/main.ts 入口，仅展示维护/加载遮罩 -->
+    <div id="app"></div>
     <div id="loading">
-      <img
-        src="https://cos-125-tp-cdn.794td.cn/assets/placeholder.png"
-        alt="loading"
-      />
-      <div id="l-t">TOGAPhotos正在进行系统升级，服务暂不可用</div>
+      <img src="/placeholder.png" alt="loading" />
+      <div id="l-t"></div>
     </div>
-    <!-- 保留遮罩，不加载 Vue 应用。 如需恢复，删除下方 return 注释并重新引入 main.js/ts -->
     <script>
-      // 可选：如果需要在后台执行某些心跳或检测，可以在这里添加。
-      // 当前故意不隐藏 #loading，以阻止用户进入 Vue 页面。
-      // function resumeApp(){
-      //   document.getElementById('loading').style.display='none';
-      //   const s=document.createElement('script');
-      //   s.type='module';
-      //   s.src='/src/main.js'; // 或 /src/main.ts 视项目实际
-      //   document.body.appendChild(s);
-      // }
+      if (sessionStorage.getItem("l") !== "1") {
+        let loadedResources = 0;
+        const ltElem = document.getElementById("l-t");
+        ltElem.style.display = "none";
+        setTimeout(() => (ltElem.style.display = "block"), 1000);
+        const updateLoadRes = () => {
+          ltElem.innerText = `${loadedResources}已登机`;
+          loadedResources++;
+        };
+        const observer = new PerformanceObserver((list) => {
+          const entries = list.getEntries();
+          entries.forEach(() => updateLoadRes());
+        });
+
+        observer.observe({ entryTypes: ["resource"] });
+        window.addEventListener("DOMContentLoaded", () => {
+          observer.disconnect();
+          sessionStorage.setItem("l", "1");
+        });
+      }
+      document.getElementById("loading").style.display = "none";
     </script>
+    <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
