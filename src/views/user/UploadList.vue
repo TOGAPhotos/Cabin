@@ -10,7 +10,7 @@ interface _FullPhotoInfo extends AcceptPhoto {
   queueIndex: number;
   airport: string;
   message: string;
-  position_in_queue: number;
+  global_row_num: number;
   storage_status: string;
 }
 
@@ -41,11 +41,11 @@ const deletePhoto = (photoId: number) => {
 };
 
 const _ThumbnailUrl = (photo: _FullPhotoInfo) => {
-  if (photo.storage_status === "COMPLETE") {
-    return ThumbnailUrl(photo.id);
-  } else {
-    return RawPhotoUrl(photo.id);
-  }
+  // if (photo.storage_status === "COMPLETE") {
+  return ThumbnailUrl(photo.id);
+  // } else {
+  //   return RawPhotoUrl(photo.id);
+  // }
 };
 </script>
 
@@ -82,7 +82,7 @@ const _ThumbnailUrl = (photo: _FullPhotoInfo) => {
           <InfoLabel label="留言" :value="photo.message" />
         </div>
         <div class="row">
-          <InfoLabel label="队列位置" :value="photo.position_in_queue" />
+          <InfoLabel label="队列位置" :value="photo.global_row_num" />
         </div>
         <div class="row" style="gap: 0.3rem">
           <el-button
