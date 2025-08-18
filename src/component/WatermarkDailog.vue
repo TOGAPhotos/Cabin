@@ -17,7 +17,6 @@ const confirmWatermark = (add: Boolean) => {
   dialogVisible.value = false;
   if (!add) {
     finalPosition.value = { x: -1, y: -1, s: 0, a: 0 };
-    return;
   } else {
     finalPosition.value.x = watermark.position.x / canvasInfo.scale;
     finalPosition.value.y = watermark.position.y / canvasInfo.scale;
