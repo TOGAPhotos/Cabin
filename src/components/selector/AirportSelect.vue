@@ -18,6 +18,7 @@ const airportOptionsList = ref([
 const loading = ref(false);
 
 const getAirportById = async (id: number) => {
+  if (id === null) return;
   const airportReq = new ServerRequest("GET", `/airport/${id}`);
   airportReq.success = () => {
     const airport = airportReq.getData();
@@ -29,9 +30,7 @@ const getAirportById = async (id: number) => {
 };
 
 onMounted(async () => {
-  if (!value.value) {
-    return;
-  }
+  if (!value.value) return;
   await getAirportById(value.value);
 });
 
