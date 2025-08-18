@@ -34,15 +34,18 @@ const router = createRouter({
     {
       path: "/myself",
       name: "myself",
+      meta: { permission: "USER" },
       component: () => import("@/views/user/MyselfView.vue"),
     },
     {
       path: "/upload",
       name: "upload",
+      meta: { permission: "USER" },
       component: () => import("@/views/photo/UploadView.vue"),
     },
     {
       path: "/queue",
+      meta: { permission: "USER" },
       children: [
         {
           path: "reject",
@@ -100,7 +103,7 @@ router.beforeEach((to, from, next) => {
     return next("/");
   }
 
-  if (!Permission.check(to.meta.permission, user.permission)) {
+  if (!Permission.check(<string>to.meta?.permission, user.permission)) {
     ElMessage.error("无权限访问");
     return next("/");
   }
