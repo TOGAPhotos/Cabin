@@ -61,72 +61,72 @@ onMounted(async () => {
         <div id="home-base">
           <div class="airport">{{ airportText }}</div>
         </div>
-        <div class="badge-box">
-          <el-popover class="badge" :width="300">
-            <template #default>
-              <img
-                class="badge-big"
-                src="https://cdn.photo.tp.794td.cn/badge/Badge_IB.jpg"
-                alt=""
-              />
-            </template>
-            <template #reference>
-              <img
-                class="badge-small"
-                src="https://cdn.photo.tp.794td.cn/badge/Badge_IB.jpg"
-                alt=""
-              />
-            </template>
-          </el-popover>
-          <el-popover :width="300">
-            <template #default>
-              <img
-                class="badge-big"
-                src="https://cdn.photo.tp.794td.cn/badge/Badge_IB.jpg"
-                alt=""
-              />
-            </template>
-            <template #reference>
-              <img
-                class="badge-small"
-                src="https://cdn.photo.tp.794td.cn/badge/Badge_IB.jpg"
-                alt=""
-              />
-            </template>
-          </el-popover>
-          <el-popover :width="300">
-            <template #default>
-              <img
-                class="badge-big"
-                src="https://cdn.photo.tp.794td.cn/badge/Badge_IB.jpg"
-                alt=""
-              />
-            </template>
-            <template #reference>
-              <img
-                class="badge-small"
-                src="https://cdn.photo.tp.794td.cn/badge/Badge_IB.jpg"
-                alt=""
-              />
-            </template>
-          </el-popover>
-          <el-popover :width="300">
-            <template #default>
-              <img
-                class="badge-big"
-                src="https://cdn.photo.tp.794td.cn/badge/Badge_IB.jpg"
-                alt=""
-              />
-            </template>
-            <template #reference>
-              <img
-                class="badge-small"
-                src="https://cdn.photo.tp.794td.cn/badge/Badge_IB.jpg"
-                alt=""
-              />
-            </template>
-          </el-popover>
-        </div>
+        <!--        <div class="badge-box">-->
+        <!--          <el-popover class="badge" :width="300">-->
+        <!--            <template #default>-->
+        <!--              <img-->
+        <!--                class="badge-big"-->
+        <!--                src="https://cdn.photo.tp.794td.cn/badge/Badge_IB.jpg"-->
+        <!--                alt=""-->
+        <!--              />-->
+        <!--            </template>-->
+        <!--            <template #reference>-->
+        <!--              <img-->
+        <!--                class="badge-small"-->
+        <!--                src="https://cdn.photo.tp.794td.cn/badge/Badge_IB.jpg"-->
+        <!--                alt=""-->
+        <!--              />-->
+        <!--            </template>-->
+        <!--          </el-popover>-->
+        <!--          <el-popover :width="300">-->
+        <!--            <template #default>-->
+        <!--              <img-->
+        <!--                class="badge-big"-->
+        <!--                src="https://cdn.photo.tp.794td.cn/badge/Badge_IB.jpg"-->
+        <!--                alt=""-->
+        <!--              />-->
+        <!--            </template>-->
+        <!--            <template #reference>-->
+        <!--              <img-->
+        <!--                class="badge-small"-->
+        <!--                src="https://cdn.photo.tp.794td.cn/badge/Badge_IB.jpg"-->
+        <!--                alt=""-->
+        <!--              />-->
+        <!--            </template>-->
+        <!--          </el-popover>-->
+        <!--          <el-popover :width="300">-->
+        <!--            <template #default>-->
+        <!--              <img-->
+        <!--                class="badge-big"-->
+        <!--                src="https://cdn.photo.tp.794td.cn/badge/Badge_IB.jpg"-->
+        <!--                alt=""-->
+        <!--              />-->
+        <!--            </template>-->
+        <!--            <template #reference>-->
+        <!--              <img-->
+        <!--                class="badge-small"-->
+        <!--                src="https://cdn.photo.tp.794td.cn/badge/Badge_IB.jpg"-->
+        <!--                alt=""-->
+        <!--              />-->
+        <!--            </template>-->
+        <!--          </el-popover>-->
+        <!--          <el-popover :width="300">-->
+        <!--            <template #default>-->
+        <!--              <img-->
+        <!--                class="badge-big"-->
+        <!--                src="https://cdn.photo.tp.794td.cn/badge/Badge_IB.jpg"-->
+        <!--                alt=""-->
+        <!--              />-->
+        <!--            </template>-->
+        <!--            <template #reference>-->
+        <!--              <img-->
+        <!--                class="badge-small"-->
+        <!--                src="https://cdn.photo.tp.794td.cn/badge/Badge_IB.jpg"-->
+        <!--                alt=""-->
+        <!--              />-->
+        <!--            </template>-->
+        <!--          </el-popover>-->
+        <!--        </div>-->
       </div>
       <div class="statistic-box">
         <el-statistic
