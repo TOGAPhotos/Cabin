@@ -18,4 +18,10 @@ export default class Permission {
     const requireRoleIndex = Permission.ROLE_LIST.indexOf(require);
     return userRoleIndex >= requireRoleIndex;
   }
+  static isStaff(user: string) {
+    return (
+      Permission.ROLE_LIST.indexOf(user) >
+      Permission.ROLE_LIST.indexOf(Permission.user)
+    );
+  }
 }
