@@ -5,7 +5,7 @@ import router from "@/router";
 import userInfoStore from "@/stores/userInfo";
 import { computed, onMounted, onUnmounted, ref } from "vue";
 import { useRoute } from "vue-router";
-import { floatNameList, transparentNameList } from "./config";
+import { floatNameList } from "./config";
 
 const header = ref<HTMLElement | null>(null);
 const user = userInfoStore();
@@ -23,19 +23,14 @@ if (user.isLoggedIn) {
   userPageText.value = user.username;
 }
 
-const goUserPage = () =>
-  user.isLoggedIn ? router.push(`/myself`) : (loginDialogVisible.value = true);
-const showMobileMenu = () =>
-  (mobileMenuVisible.value = !mobileMenuVisible.value);
-
-const isTransparentBg = computed(() => {
-  if (typeof route.name === "string") {
-    if (transparentNameList.includes(route.name)) {
-      return true;
-    }
+const goUserPage = () => {
+  if (user.isLoggedIn) {
+    router.push(`/myself`);
+  } else {
+    router.push(`/login`);
+    mobileMenuVisible.value = false;
   }
-  return false;
-});
+};
 
 const isFloat = computed(() => {
   if (typeof route.name === "string") {
@@ -49,16 +44,8 @@ const isFloat = computed(() => {
 function windowScroll() {
   const currentScrollTop =
     window.pageYOffset || document.documentElement.scrollTop;
-  if (currentScrollTop === 0) {
-    isAtTop.value = true;
-  } else {
-    isAtTop.value = false;
-  }
-  if (currentScrollTop > lastScrollTop.value) {
-    showHeadBar.value = false;
-  } else {
-    showHeadBar.value = true;
-  }
+  isAtTop.value = currentScrollTop === 0;
+  showHeadBar.value = currentScrollTop <= lastScrollTop.value;
   lastScrollTop.value = currentScrollTop;
 }
 
@@ -92,7 +79,7 @@ onUnmounted(() => {
         <a id="logo" href="/">
           <img
             style="width: 10em"
-            src="https://source.cdn.794td.cn/TOGA/n_logo_w.jpg"
+            src="https://cos-125-tp-cdn.794td.cn/assets/n_logo_w.jpg"
             alt=""
           />
         </a>
@@ -138,21 +125,9 @@ onUnmounted(() => {
 <style scoped>
 header {
   background: var(--color-toga);
-  /* position: fixed;
-  top: 0;
-  z-index: 100; */
   width: 100%;
   color: white;
   transition: all 0.5s ease;
-}
-.float {
-  position: fixed;
-  top: 0;
-  z-index: 100;
-  width: 100%;
-}
-.transparent-bg {
-  background-color: transparent;
 }
 
 .head-bar {
@@ -189,34 +164,12 @@ header {
   color: white;
 }
 
-.head-bar-item {
-  padding: 0 1vw;
-  font-size: 1rem;
-  font-weight: 600;
-}
-
-.login-btn {
-  cursor: pointer;
-}
-
 .user-page {
   font-weight: bolder;
   margin-top: 0.8em;
   padding-bottom: 0.4em;
   border-bottom: 1px solid white;
   margin-bottom: 0.6em;
-}
-
-.head-bar-item:hover {
-  background-color: #1890ff;
-}
-
-.fade-in-down {
-  animation: fadeInDown 0.5s forwards;
-}
-
-.fade-out-up {
-  animation: fadeOutUp 0.5s forwards;
 }
 
 @keyframes fadeInDown {
@@ -261,7 +214,6 @@ header {
   }
 
   .head-bar-mobile {
-    /* background-color: red; */
     display: flex;
     gap: 1rem;
     justify-content: center;
