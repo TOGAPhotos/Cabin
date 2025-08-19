@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { User } from "@element-plus/icons-vue";
 import { ElMessage, ElMessageBox, ElNotification } from "element-plus";
-import { computed, onMounted, reactive, ref, useTemplateRef, watch } from "vue";
+import { computed, onMounted, ref, useTemplateRef, watch } from "vue";
 import { useRoute } from "vue-router";
 
 import router from "@/router";
@@ -18,27 +18,33 @@ import type { AcceptPhoto, PhotoSearchType } from "@/utils/type/photo";
 
 import InfoEditPanel from "@/component/InfoEditPanel.vue";
 import PhotoCard from "@/components/PhotoCard.vue";
-import useUserInfoStore from "@/stores/userInfo";
+import userInfo from "@/stores/userInfo";
 import { setMetaDescription } from "@/utils/meta-description";
+import Permission from "@/utils/permission";
 
 const showContactPanel = ref(false);
 const showInfoEditPanel = ref(false);
 const route = useRoute();
-const user = useUserInfoStore();
+const user = userInfo();
 const photoId = <string>route.params.id;
 const photoInfo = ref<AcceptPhoto>();
 const relatedPhotoList = ref<AcceptPhoto[]>([]);
 const imgBoxElm = useTemplateRef("_imgBox");
 
-const status = reactive({
-  edit:
-    user.permission === "ADMIN" || user.id === photoInfo.value?.upload_user_id,
-  contact: user.id !== photoInfo.value?.upload_user_id,
-  info:
-    user.permission === "ADMIN" || user.id === photoInfo.value?.upload_user_id,
-  protect: user.id !== photoInfo.value?.upload_user_id,
+const status = computed(() => {
+  return {
+    edit:
+      user.permission === "ADMIN" ||
+      user.id === photoInfo.value?.upload_user_id,
+    contact: user.id !== photoInfo.value?.upload_user_id,
+    info:
+      user.permission === "ADMIN" ||
+      user.id === photoInfo.value?.upload_user_id,
+    protect:
+      Permission.isStaff(user.permission) ||
+      user.id === photoInfo.value?.upload_user_id,
+  };
 });
-
 const airportText = computed(() => {
   if (!photoInfo.value) return;
   let _s = photoInfo.value.airport_icao_code as string;
