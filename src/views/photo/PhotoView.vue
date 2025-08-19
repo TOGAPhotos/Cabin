@@ -169,7 +169,7 @@ const deletePhoto = async () => {
       <ImgLoader
         :src="PhotoUrl(photoId)"
         :alt="photoInfo?.ac_reg"
-        :protect="status.protect"
+        :protect="false"
       />
     </div>
     <div class="info-box">
