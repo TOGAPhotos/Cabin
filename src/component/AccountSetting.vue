@@ -113,8 +113,8 @@ async function submit() {
         协议的情况下，可以在使用图片时不事先与您取得联系
       </div>
       <div style="font-size: 0.8em">
-        <strong>CC BY-NC-ND 4.0 协议</strong
-        >:简单来说，这项协议要求使用者遵守三个限制：需要以适当的方式署名作者；不可以将您的作品用于商业用途；不可以对您的作品进行二次加工。
+        <strong>CC BY-NC-ND 4.0 协议</strong>:
+        简单来说，这项协议要求第三方合作伙伴遵守三个限制：需要以适当的方式署名作者；不可以将您的作品用于商业用途；不可以对您的作品进行二次加工。
       </div>
       <el-radio-group v-model="accountSetting.thirdParty">
         <el-radio :value="true" size="large">授权</el-radio>
