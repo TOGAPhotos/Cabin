@@ -45,13 +45,13 @@ const props = defineProps<HomeBannerProps>();
             v-if="isLogged"
             target="_blank"
             href="/upload"
-            class="md:backdrop-blur-xs w-fit text-lg px-7 py-2 border-1 border-white rounded-full text-white transition-all duration-250 hover:text-black hover:font-bold hover:bg-white"
+            class="md:backdrop-blur-xs w-fit md:text-lg px-5 md:px-7 py-1 border-1 border-white rounded-full text-white transition-all duration-250 hover:text-toga hover:font-bold hover:bg-white"
             >现在上传</a
           >
           <a
             v-else
             href="/login"
-            class="md:backdrop-blur-xs w-fit text-lg px-7 py-2 border-1 border-white rounded-full text-white transition-all duration-250 hover:text-black hover:font-bold hover:bg-white"
+            class="md:backdrop-blur-xs w-fit md:text-lg px-5 md:px-7 py-1 border-1 border-white rounded-full text-white transition-all duration-250 hover:text-toga hover:font-bold hover:bg-white"
             >登录 / 注册</a
           >
           <small>封面摄影师 - @Baigiver-0764</small>
