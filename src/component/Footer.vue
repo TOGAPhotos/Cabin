@@ -9,8 +9,8 @@
     </div>
 
     <div class="flex flex-col items-center gap-3 text-xs font-semibold">
-      <div>Maintenance by TO/GAPhotos Team</div>
-      <div>Copyright © 2023-Present TO/GAPhotos All Rights Reserved.</div>
+      <div>Maintenance by TOGAPhotos Team</div>
+      <div>Copyright © 2023-Present TOGAPhotos All Rights Reserved.</div>
     </div>
   </footer>
 </template>
