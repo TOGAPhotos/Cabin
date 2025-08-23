@@ -78,6 +78,7 @@ onUnmounted(() => {
       <div>
         <a id="logo" href="/">
           <img
+            class="select-none"
             style="width: 10em"
             src="https://cos-125-tp-cdn.794td.cn/assets/n_logo_w.jpg"
             alt=""

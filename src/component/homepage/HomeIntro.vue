@@ -34,7 +34,7 @@ onMounted(async () => {
             </div>
           </div>
           <div
-            class="flex gap-8 *:w-fit *:md:text-lg *:px-5 *:md:px-7 *:py-1 *:border-1 *:border-toga *:rounded-full *:transition-all *:duration-250 *:hover:text-white *:hover:font-bold *:hover:bg-toga"
+            class="flex gap-8 select-none *:w-fit *:md:text-lg *:px-5 *:md:px-7 *:py-1 *:border-1 *:border-toga *:rounded-full *:transition-all *:duration-250 *:hover:text-white *:hover:font-bold *:hover:bg-toga"
           >
             <a target="_blank" href="https://blog.togaphotos.com/">关于我们</a>
             <a target="_blank" href="https://guide.togaphotos.com/">上传指南</a>

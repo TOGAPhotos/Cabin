@@ -70,6 +70,7 @@ watch(
 }
 .login-btn-text {
   font-size: 1rem;
+  user-select: none;
 }
 .login-btn-mobile {
   display: flex;
