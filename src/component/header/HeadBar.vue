@@ -73,7 +73,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <header class="fixed top-0 left-0 z-2010" ref="header">
+  <header class="fixed top-0 left-0 z-2001" ref="header">
     <div class="global-container head-bar">
       <div>
         <a id="logo" href="/">
