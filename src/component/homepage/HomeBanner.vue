@@ -37,7 +37,7 @@ const props = defineProps<HomeBannerProps>();
     <div
       class="absolute z-30 top-2/5 left-1/2 -translate-x-1/2 -translate-y-1/2 pt-16 w-full flex flex-col justify-center"
     >
-      <div class="global-container flex">
+      <div class="global-container flex select-none">
         <div class="md:mt-16 py-8 flex flex-col gap-4 w-fit text-white">
           <h1>加入TOGAPhotos</h1>
           <h2>与广大航空爱好者分享你的作品</h2>
