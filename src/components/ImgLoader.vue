@@ -22,7 +22,7 @@ const onError = () => (loading.value = true);
     v-if="!prop.protect"
     :src="prop.src"
     :alt="prop.alt"
-    :class="prop.className"
+    :class="prop.className + ' !object-[50%_36%]'"
     @load="onLoad()"
     @error="onError()"
     v-show="!loading"
