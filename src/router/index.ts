@@ -1,3 +1,4 @@
+import { addNoIndex, removeNoIndex } from "@/router/no-index";
 import userInfoStore from "@/stores/userInfo";
 import { ElMessage } from "element-plus";
 import { createRouter, createWebHistory } from "vue-router";
@@ -93,6 +94,12 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
+  if (to.path === "/search") {
+    addNoIndex();
+  } else {
+    removeNoIndex();
+  }
+
   if (!to.meta?.permission) {
     return next();
   }
