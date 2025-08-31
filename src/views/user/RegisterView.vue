@@ -2,7 +2,11 @@
 import router from "@/router";
 import userInfoStore from "@/stores/userInfo";
 import serverRequest from "@/utils/request";
-import type { FormInstance, FormRules } from "element-plus";
+import {
+  ElNotification,
+  type FormInstance,
+  type FormRules,
+} from "element-plus";
 import { reactive, ref } from "vue";
 
 const registerForm = ref<FormInstance>();
@@ -77,6 +81,12 @@ async function register() {
     email: registerInfo.email,
     password: registerInfo.password,
   });
+
+  registerRequest.error = (_, msg) => {
+    ElNotification.error(msg);
+    registerButton.text = "注册";
+    registerButton.status = false;
+  };
 
   registerRequest.success = () => {
     const user = userInfoStore();
