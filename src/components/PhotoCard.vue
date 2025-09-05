@@ -2,10 +2,10 @@
 import ImgLoader from "@/components/ImgLoader.vue";
 import formatAirportString from "@/utils/airport";
 import { PhotoUrl, ThumbnailUrl } from "@/utils/photo-url";
-import type { AcceptPhoto } from "@/utils/type/photo";
+import type { ThumbnailInfo } from "@/utils/type/photo";
 import { computed } from "vue";
 
-export type PhotoCardProps = AcceptPhoto & {
+export type PhotoCardProps = ThumbnailInfo & {
   highQuality?: boolean;
   showAirport?: boolean;
 };
