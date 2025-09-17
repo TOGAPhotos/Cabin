@@ -55,9 +55,7 @@ async function login() {
       message: msg,
     });
   };
-  const loginRes = await loginRequest.send();
-
-  if (loginRes) return router.push("/");
+  await loginRequest.send();
 }
 </script>
 <template>
