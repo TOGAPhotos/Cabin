@@ -19,7 +19,7 @@ import type { AcceptPhoto, PhotoSearchType } from "@/utils/type/photo";
 import InfoEditPanel from "@/component/InfoEditPanel.vue";
 import PhotoCard from "@/components/PhotoCard.vue";
 import userInfo from "@/stores/userInfo";
-import { setMetaDescription } from "@/utils/meta-description";
+import { setDocTitle, setMetaDescription } from "@/utils/meta";
 import Permission from "@/utils/permission";
 
 const showContactPanel = ref(false);
@@ -106,12 +106,16 @@ const setImgBoxPositon = () => {
 const loadPhoto = async () => {
   const photoInfoReq = new ServerRequest("GET", `/photo/${photoId}`);
   photoInfoReq.success = () => {
-    photoInfo.value = photoInfoReq.getData() as AcceptPhoto;
-    setMetaDescription(
-      `${photoInfo.value.airline_cn || photoInfo.value.airline_cn}${photoInfo.value.ac_type}，` +
-        `注册号：${photoInfo.value?.ac_reg}，拍摄于${photoInfo.value?.airport_cn || photoInfo.value.airline_en}，` +
-        `摄影师：${photoInfo.value?.username}`,
+    const _data = photoInfoReq.getData() as AcceptPhoto;
+    setDocTitle(
+      `${_data.ac_reg}|${_data.ac_type}|${_data.airline_cn || _data.airline_en}`,
     );
+    setMetaDescription(
+      `${_data.airline_cn || _data.airline_cn}${_data.ac_type}，` +
+        `注册号：${_data.ac_reg}，拍摄于${_data.airport_cn || _data.airline_en}，` +
+        `摄影师：${_data.username}`,
+    );
+    photoInfo.value = _data;
   };
   photoInfoReq.error = (_, msg) => {
     ElNotification.error({
