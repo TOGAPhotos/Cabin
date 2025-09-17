@@ -10,3 +10,7 @@ export const setMetaDescription = (description: string) => {
     document.head.appendChild(newMeta);
   }
 };
+
+export const setDocTitle = (title: string) => {
+  document.title = "TOGAPhotos|" + title;
+};
