@@ -1,6 +1,7 @@
 import { API_URL } from "@/config";
 import useLocalIdStore from "@/stores/localId";
 import userInfoStore from "@/stores/userInfo";
+import { uploadFetchLog, uploadReqErrorLog } from "@/utils/acars";
 import { ElMessage } from "element-plus";
 
 interface RequestFailFunc {
@@ -28,7 +29,6 @@ export default class ServerRequest {
   ) {
     this.METHOD = method;
     this.URL = API_URL + url;
-
     this.headers = this.setHeader(contentType);
     this.body = data;
   }
@@ -77,8 +77,11 @@ export default class ServerRequest {
       this.success(msg || "请求成功");
     } else {
       this.error(<number>this.response?.status, msg || "请求出错");
+      uploadReqErrorLog(this.URL, <number>this.response?.status, msg);
     }
-    return this.response!.ok;
+    uploadFetchLog(
+      <PerformanceResourceTiming>performance.getEntriesByName(this.URL).pop(),
+    );
   }
 
   getData(...args: string[]) {
@@ -94,7 +97,7 @@ export default class ServerRequest {
     return data;
   }
   success: RequestSuccessFunc = () => {};
-  error = (code: number, msg: string): void => {};
+  error: RequestFailFunc = (code: number, msg: string): void => {};
 
   networkError(e: Error) {
     console.log(e);
