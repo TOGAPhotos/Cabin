@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import InfoLabel from "@/components/InfoLabel.vue";
+import preSignKey from "@/stores/preSignKey";
 import { RawPhotoUrl, ThumbnailUrl } from "@/utils/photo-url";
 import ServerRequest from "@/utils/request";
 import { OpenToolWindow } from "@/utils/tool-page";
@@ -20,7 +21,7 @@ const uploadQueue = ref<_FullPhotoInfo[]>();
   infoReq.success = () => {
     uploadQueue.value = infoReq.getData("photoQueue") as _FullPhotoInfo[];
   };
-  await infoReq.send();
+  await Promise.all([infoReq.send(), preSignKey().getValidKey()]);
   uploadQueue.value?.forEach((item) => {
     item.airport = item.airport_icao_code;
     if (item.airport_iata_code) {
