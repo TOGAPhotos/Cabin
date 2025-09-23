@@ -23,7 +23,7 @@ const uploadQueue = ref<_FullPhotoInfo[]>();
   };
   await Promise.all([infoReq.send(), preSignKey().getValidKey()]);
   uploadQueue.value?.forEach((item) => {
-    item.airport = item.airport_icao_code;
+    item.airport = <string>item.airport_icao_code;
     if (item.airport_iata_code) {
       item.airport += "/" + item.airport_iata_code;
     }
