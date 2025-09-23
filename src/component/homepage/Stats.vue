@@ -8,7 +8,7 @@ import {
   Promotion,
   UserFilled,
 } from "@element-plus/icons-vue";
-import { onMounted, reactive } from "vue";
+import { onMounted, reactive, ref } from "vue";
 
 function daysSince(date: Date): number {
   const today = new Date();
@@ -24,10 +24,13 @@ const statisticInfo = reactive({
   uploadQueueLen: null,
   photoNum: null,
 });
+const load = ref(true);
 
 onMounted(async () => {
+  load.value = true;
   const websiteInfoReq = new ServerRequest("GET", "/website?type=statistics");
   websiteInfoReq.success = () => {
+    load.value = false;
     const data = websiteInfoReq.getData();
     Object.assign(statisticInfo, {
       ...data,
@@ -40,34 +43,88 @@ onMounted(async () => {
 </script>
 
 <template>
-  <ContentBox>
-    <template #icon>
-      <PictureFilled />
+  <el-skeleton animated :loading="load">
+    <template #template>
+      <div class="grid grid-cols-2 sm:max-lg:grid-cols-4 gap-4">
+        <ContentBox>
+          <template #icon>
+            <PictureFilled />
+          </template>
+          <template #title>队列长度</template>
+          <template #content>
+            <el-skeleton-item variant="text" style="width: 100%" />
+          </template>
+        </ContentBox>
+        <ContentBox>
+          <template #icon>
+            <UserFilled />
+          </template>
+          <template #title>用户数量</template>
+          <template #content>
+            <el-skeleton-item variant="text" style="width: 100%" />
+          </template>
+        </ContentBox>
+        <ContentBox>
+          <template #icon>
+            <Management />
+          </template>
+          <template #title>入库图片</template>
+          <template #content>
+            <el-skeleton-item variant="text" style="width: 100%" />
+          </template>
+        </ContentBox>
+        <ContentBox>
+          <template #icon>
+            <Promotion />
+          </template>
+          <template #title>累计运行</template>
+          <template #content>
+            <el-skeleton-item variant="text" style="width: 100%" />
+          </template>
+        </ContentBox>
+      </div>
     </template>
-    <template #title>队列长度</template>
-    <template #content>{{ statisticInfo.uploadQueueLen }}</template>
-  </ContentBox>
-  <ContentBox>
-    <template #icon>
-      <UserFilled />
+    <template #default>
+      <div class="grid grid-cols-2 sm:max-lg:grid-cols-4 gap-4">
+        <ContentBox>
+          <template #icon>
+            <PictureFilled />
+          </template>
+          <template #title>队列长度</template>
+          <template #content>
+            <div>{{ statisticInfo.uploadQueueLen }}</div>
+          </template>
+        </ContentBox>
+        <ContentBox>
+          <template #icon>
+            <UserFilled />
+          </template>
+          <template #title>用户数量</template>
+          <template #content>
+            <div>{{ statisticInfo.userNum }}</div>
+          </template>
+        </ContentBox>
+        <ContentBox>
+          <template #icon>
+            <Management />
+          </template>
+          <template #title>入库图片</template>
+          <template #content>
+            <div>{{ statisticInfo.photoNum }}</div>
+          </template>
+        </ContentBox>
+        <ContentBox>
+          <template #icon>
+            <Promotion />
+          </template>
+          <template #title>累计运行</template>
+          <template #content>
+            <div>{{ `${daysPassed} 天` }}</div>
+          </template>
+        </ContentBox>
+      </div>
     </template>
-    <template #title>用户数量</template>
-    <template #content>{{ statisticInfo.userNum }}</template>
-  </ContentBox>
-  <ContentBox>
-    <template #icon>
-      <Management />
-    </template>
-    <template #title>入库图片</template>
-    <template #content>{{ statisticInfo.photoNum }}</template>
-  </ContentBox>
-  <ContentBox>
-    <template #icon>
-      <Promotion />
-    </template>
-    <template #title>累计运行</template>
-    <template #content>{{ `${daysPassed} 天` }}</template>
-  </ContentBox>
+  </el-skeleton>
 </template>
 
 <style scoped></style>

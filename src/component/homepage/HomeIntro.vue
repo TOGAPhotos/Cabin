@@ -41,7 +41,7 @@ onMounted(async () => {
           </div>
         </div>
 
-        <div class="grid grid-cols-2 sm:max-lg:grid-cols-4 gap-4">
+        <div>
           <Stats />
         </div>
       </div>
