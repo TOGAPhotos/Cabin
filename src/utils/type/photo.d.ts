@@ -1,18 +1,19 @@
 export interface ThumbnailInfo {
-  airline_cn: string;
+  airline_cn?: string;
   airline_en: string;
   ac_type: string;
 
   id: number;
   ac_reg: string;
   username: string;
+
+  airport_cn?: string;
+  airport_iata_code?: string;
+  airport_icao_code?: string;
 }
 
 export interface AcceptPhoto extends ThumbnailInfo {
   airport_id: number;
-  airport_cn: string;
-  airport_iata_code: string;
-  airport_icao_code: string;
 
   allow_socialmedia: number;
 
