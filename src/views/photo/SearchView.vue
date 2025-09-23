@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import PhotoCard from "@/components/PhotoCard.vue";
-import router from "@/router";
 import { BottomLoader } from "@/utils/bottom-loader";
 import { RemoteSearch } from "@/utils/remoteSearch";
 import type { AcceptPhoto, PhotoSearchType } from "@/utils/type/photo";
@@ -15,10 +14,10 @@ const searchLoading = ref(false);
 const useFuzzySearch = ref(true);
 const route = useRoute();
 
-watch(
-  () => route.path,
-  () => router.go(0),
-);
+// watch(
+//   () => route.path,
+//   () => router.go(0),
+// );
 
 onMounted(async () => {
   searchInfo.type = (route.query?.type as string) || "reg";
@@ -51,9 +50,10 @@ watch(
   () => useFuzzySearch.value,
   (val) => {
     if (val) {
-      searchInfo.type = "blurry";
-    } else {
-      searchInfo.type = "reg";
+      return (searchInfo.type = "blurry");
+    }
+    if (searchInfo.type === "blurry") {
+      return (searchInfo.type = "reg");
     }
   },
 );
@@ -71,7 +71,6 @@ async function search() {
       lastId,
     );
     resultList.value = resultList.value.concat(result);
-    console.log(resultList.value, result);
     showResult.value = true;
   } catch (error) {
     console.log(error);
