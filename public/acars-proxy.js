@@ -1,1 +1,1 @@
-importScripts('https://acars.toga.photos/r/acars-worker.js');
+// importScripts('https://acars.toga.photos/r/acars-worker.js');
