@@ -1,6 +1,11 @@
 <script setup lang="ts">
 import { User } from "@element-plus/icons-vue";
-import { ElMessage, ElMessageBox, ElNotification } from "element-plus";
+import {
+  ElLoading,
+  ElMessage,
+  ElMessageBox,
+  ElNotification,
+} from "element-plus";
 import { computed, onMounted, ref, useTemplateRef, watch } from "vue";
 import { useRoute } from "vue-router";
 
@@ -34,11 +39,11 @@ const imgBoxElm = useTemplateRef("_imgBox");
 const status = computed(() => {
   return {
     edit:
-      user.permission === "ADMIN" ||
+      Permission.isStaff(user.permission) ||
       user.id === photoInfo.value?.upload_user_id,
     contact: user.id !== photoInfo.value?.upload_user_id,
     info:
-      user.permission === "ADMIN" ||
+      Permission.isStaff(user.permission) ||
       user.id === photoInfo.value?.upload_user_id,
     protect:
       Permission.isStaff(user.permission) ||
@@ -137,6 +142,7 @@ onMounted(async () => {
     setImgBoxPositon();
     window.addEventListener("resize", setImgBoxPositon);
   }
+  return getVoteEvent();
 });
 const searchLink = (type: PhotoSearchType, content: string | undefined) =>
   content ? `/search?type=${type}&content=${content}` : " ";
@@ -164,6 +170,55 @@ const deletePhoto = async () => {
   };
   req.error = (_, msg) => ElMessage.error(msg);
   await req.send();
+};
+
+const getVoteEvent = (() => {
+  let voteResult: Promise<{ id: number }> | null = null;
+  return () => {
+    if (voteResult) {
+      return voteResult;
+    }
+    voteResult = new Promise((resolve, reject) => {
+      const req = new ServerRequest(
+        "GET",
+        `/vote/screenerChoices?pId=${photoId}`,
+      );
+      req.success = () => {
+        const d = req.getData() as { id: number }[];
+        if (d.length === 0) {
+          return resolve({ id: -1 });
+        }
+        return resolve({ id: d[0].id });
+      };
+      req.error = (_, msg) => {
+        reject(msg);
+      };
+      req.send();
+    });
+    return voteResult;
+  };
+})();
+
+const vote = async () => {
+  const loading = ElLoading.service({
+    lock: true,
+    text: "正在提交投票",
+    background: "rgba(0, 0, 0, 0.7)",
+  });
+  try {
+    const voteData = await getVoteEvent();
+    let req: ServerRequest;
+    if (voteData.id === -1) {
+      req = new ServerRequest("POST", `/vote/screenerChoice?pId=${photoId}`);
+    } else {
+      req = new ServerRequest("PUT", `/vote/screenerChoice/${voteData.id}?t=1`);
+    }
+    req.success = (msg) => ElMessage.success("投票成功");
+    req.error = (_, msg) => ElMessage.error(msg);
+    await req.send();
+  } finally {
+    loading.close();
+  }
 };
 </script>
 
@@ -239,6 +294,13 @@ const deletePhoto = async () => {
         </div>
         <div v-if="status.edit">
           <el-button type="danger" @click="deletePhoto"> 删除图片 </el-button>
+        </div>
+        <div v-if="status.edit">
+          <el-popconfirm title="确定发起SC投票？" @confirm="vote">
+            <template #reference>
+              <el-button type="warning"> SC投票 </el-button>
+            </template>
+          </el-popconfirm>
         </div>
       </div>
     </div>
