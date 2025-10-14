@@ -28,6 +28,11 @@ const router = createRouter({
       component: () => import("@/views/photo/SearchView.vue"),
     },
     {
+      path: "/editorChoice",
+      name: "editorChoice",
+      component: () => import("@/views/photo/editorChoice.vue"),
+    },
+    {
       path: "/login",
       name: "login",
       component: () => import("@/views/user/LoginView.vue"),

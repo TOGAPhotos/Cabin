@@ -6,6 +6,7 @@ export interface ThumbnailInfo {
   id: number;
   ac_reg: string;
   username: string;
+  pic_type: string;
 
   airport_cn?: string;
   airport_iata_code?: string;
