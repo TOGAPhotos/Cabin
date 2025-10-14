@@ -3,6 +3,7 @@ import ImgLoader from "@/components/ImgLoader.vue";
 import formatAirportString from "@/utils/airport";
 import { PhotoUrl, ThumbnailUrl } from "@/utils/photo-url";
 import type { ThumbnailInfo } from "@/utils/type/photo";
+import { Medal } from "@element-plus/icons-vue";
 import { computed } from "vue";
 
 export type PhotoCardProps = ThumbnailInfo & {
@@ -18,15 +19,28 @@ const url = computed(() =>
 const href = computed(() => `/photo/${props.id}`);
 const hasAirline = computed(() => props.airline_cn !== props.ac_type);
 const isAirportPhoto = computed(() => props.airport_icao_code === props.ac_reg);
+const SC = computed(() => props.pic_type.includes("ScreenerChoice"));
 </script>
 
 <template>
   <a class="h-fit transition-grow rounded-lg overflow-clip" :href="href">
     <div class="flex flex-col w-full h-full">
-      <ImgLoader
-        :src="url"
-        className="w-full aspect-[2/1] object-center object-cover select-none"
-      />
+      <div class="relative">
+        <ImgLoader
+          :src="url"
+          className="w-full aspect-[2/1] object-center object-cover select-none"
+        />
+        <div
+          v-if="SC"
+          class="absolute bottom-2 left-2 text-white backdrop-blur-sm bg-black/10 rounded-md py-0.5 px-1 text-xs"
+        >
+          <!--        <div-->
+          <!--          class="absolute bottom-2 left-2 text-white bg-[#FEB900] rounded-md py-0.5 px-1 text-xs"-->
+          <!--        >-->
+          <el-icon class="align-middle"><Medal /></el-icon
+          ><span class="align-middle">编辑精选</span>
+        </div>
+      </div>
       <div
         class="h-full relative px-2 py-1.5 bg-toga-darker text-white hover:bg-toga-dark active:bg-toga-dark group"
       >
