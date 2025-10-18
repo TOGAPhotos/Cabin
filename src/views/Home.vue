@@ -4,6 +4,7 @@ import { onMounted } from "vue";
 
 import ServerRequest from "@/utils/request";
 
+import EditorChoiceComponent from "@/component/homepage/EditorChoiceComponent.vue";
 import HomeBanner from "@/component/homepage/HomeBanner.vue";
 import HomeIntro from "@/component/homepage/HomeIntro.vue";
 import NewPhotos from "@/component/homepage/NewPhotos.vue";
@@ -38,6 +39,7 @@ onMounted(() => {
   <div class="flex flex-col gap-16">
     <HomeBanner :isLogged="user.isLoggedIn" />
     <HomeIntro />
+    <EditorChoiceComponent />
     <NewPhotos />
   </div>
 </template>
