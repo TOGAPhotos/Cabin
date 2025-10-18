@@ -60,11 +60,6 @@ onMounted(async () => {
         class="w-56.5 sm:w-60 lg:w-75"
       />
     </HorizontalScroll>
-    <div class="pl-4">
-      <router-link to="/editorChoice">
-        <el-button type="text"> 查看更多编辑精选>> </el-button>
-      </router-link>
-    </div>
   </div>
 </template>
 
