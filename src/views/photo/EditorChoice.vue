@@ -9,11 +9,7 @@ const loading = ref(true);
 onMounted(async () => {
   const photoListReq = new ServerRequest("GET", "/photos?type=ScreenerChoice");
   photoListReq.success = () => {
-    const d = photoListReq.getData() as AcceptPhoto[];
-    photoList.value = d.map((p) => {
-      p.pic_type += "ScreenerChoice";
-      return p;
-    });
+    photoList.value = photoListReq.getData() as AcceptPhoto[];
   };
   await photoListReq.send();
   loading.value = false;
@@ -21,10 +17,10 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="global-container py-12 flex flex-col gap-6">
+  <div class="global-container py-10 flex flex-col gap-6">
     <div class="flex flex-col gap-2 max-lg:gap-4 text-toga-dark">
       <div class="flex flex-col gap-1 text-lg tracking-wide">
-        <h1>编辑精选</h1>
+        <h2>编辑精选</h2>
         <div class="flex flex-col gap-1 md:text-2xl">
           <div>由TOGAPhotos团队从海量图片中以投票的方式精选出的高质量图片</div>
         </div>
@@ -36,7 +32,7 @@ onMounted(async () => {
         class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
       >
         <div
-          v-for="i in 12"
+          v-for="i in 6"
           :key="i"
           class="animate-pulse flex flex-col w-full h-full bg-toga-darker rounded-lg overflow-clip"
         >
