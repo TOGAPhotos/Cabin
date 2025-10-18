@@ -30,7 +30,7 @@ const router = createRouter({
     {
       path: "/editorChoice",
       name: "editorChoice",
-      component: () => import("@/views/photo/editorChoice.vue"),
+      component: () => import("@/views/photo/EditorChoice.vue"),
     },
     {
       path: "/login",
