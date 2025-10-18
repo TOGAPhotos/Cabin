@@ -38,6 +38,7 @@ const imgBoxElm = useTemplateRef("_imgBox");
 
 const status = computed(() => {
   return {
+    scVote: Permission.isStaff(user.permission),
     edit:
       Permission.isStaff(user.permission) ||
       user.id === photoInfo.value?.upload_user_id,
@@ -295,10 +296,10 @@ const vote = async () => {
         <div v-if="status.edit">
           <el-button type="danger" @click="deletePhoto"> 删除图片 </el-button>
         </div>
-        <div v-if="status.edit">
+        <div v-if="status.scVote">
           <el-popconfirm title="确定发起SC投票？" @confirm="vote">
             <template #reference>
-              <el-button type="warning"> SC投票 </el-button>
+              <el-button type="warning"> SC </el-button>
             </template>
           </el-popconfirm>
         </div>
