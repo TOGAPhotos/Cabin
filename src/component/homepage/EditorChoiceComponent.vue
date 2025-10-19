@@ -15,7 +15,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="global-container" v-if="photoList.length > 4">
+  <div class="global-container" v-if="photoList.length >= 4">
     <div class="flex flex-col gap-8">
       <h2>编辑精选</h2>
       <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
