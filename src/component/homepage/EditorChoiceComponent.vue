@@ -8,11 +8,7 @@ onMounted(async () => {
   const photoListReq = new ServerRequest("GET", "/photos?type=ScreenerChoice");
   photoListReq.success = () => {
     const d = photoListReq.getData() as AcceptPhoto[];
-    if (d.length > 8) {
-      photoList.value = d.slice(0, 8);
-    } else {
-      photoList.value = d;
-    }
+    photoList.value = d.slice(0, Math.min(d.length - (d.length % 4), 8));
   };
   await photoListReq.send();
 });
@@ -25,6 +21,11 @@ onMounted(async () => {
       <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         <PhotoCard v-for="photo in photoList" v-bind="photo" :key="photo.id" />
       </div>
+    </div>
+    <div class="pt-4">
+      <ElButton type="text">
+        <router-link to="/editorChoice">查看全部编辑精选 &gt;</router-link>
+      </ElButton>
     </div>
   </div>
 </template>
