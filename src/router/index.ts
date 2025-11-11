@@ -112,7 +112,7 @@ router.beforeEach((to, from, next) => {
   const user = userInfoStore();
   if (!user.isLoggedIn) {
     ElMessage.error("未登录用户无法访问");
-    return next("/");
+    return next("/login");
   }
 
   if (!Permission.check(<string>to.meta?.permission, user.permission)) {
