@@ -30,7 +30,6 @@ const preSignKey = defineStore("preSignKey", {
       return this.preSign;
     },
   },
-  persist: true,
 });
 
 export default preSignKey;
