@@ -38,6 +38,12 @@ const router = createRouter({
       component: () => import("@/views/user/LoginView.vue"),
     },
     {
+      path: "/need-login",
+      name: "need-login",
+      meta: { permission: "USER" },
+      component: () => import("@/views/user/NeedLoginView.vue"),
+    },
+    {
       path: "/myself",
       name: "myself",
       meta: { permission: "USER" },
@@ -112,7 +118,7 @@ router.beforeEach((to, from, next) => {
   const user = userInfoStore();
   if (!user.isLoggedIn) {
     ElMessage.error("未登录用户无法访问");
-    return next("/");
+    return next(`/login?redirect=${encodeURIComponent(to.fullPath)}`);
   }
 
   if (!Permission.check(<string>to.meta?.permission, user.permission)) {

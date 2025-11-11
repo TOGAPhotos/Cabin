@@ -4,6 +4,7 @@ import userInfoStore from "@/stores/userInfo";
 import ServerRequest from "@/utils/request";
 import { ElNotification } from "element-plus";
 import { reactive } from "vue";
+import { useRoute } from "vue-router";
 
 interface LoginForm {
   email: string;
@@ -16,6 +17,7 @@ const loginForm = reactive<LoginForm>({
 });
 
 const user = userInfoStore();
+const route = useRoute();
 
 if (user.isLoggedIn) {
   router.replace("/");
@@ -47,7 +49,8 @@ async function login() {
       expireTime,
       permission,
     });
-    return router.push("/");
+    const redirect = route.query.redirect as string | undefined;
+    return router.push(redirect || "/");
   };
   loginRequest.error = (_, msg) => {
     ElNotification.error({
