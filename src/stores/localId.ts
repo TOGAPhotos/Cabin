@@ -1,5 +1,4 @@
 import { defineStore } from "pinia";
-import { v4 as uuidV4 } from "uuid";
 
 interface localId {
   id: string | null;
@@ -22,7 +21,7 @@ export const useLocalIdStore = defineStore("local_id", {
       if (this.time && Date.now() - this.time < 1000 * 60 * 60 * 24 * 15) {
         return;
       }
-      this.id = uuidV4();
+      this.id = crypto.randomUUID();
       this.time = Date.now();
     },
     clearId() {
