@@ -4,7 +4,7 @@ import { BottomLoader } from "@/utils/bottom-loader";
 import { RemoteSearch } from "@/utils/remoteSearch";
 import type { AcceptPhoto, PhotoSearchType } from "@/utils/type/photo";
 import { Loading } from "@element-plus/icons-vue"; // added icon import
-import { ElMessage } from "element-plus";
+import { ElNotification } from "element-plus";
 import { onMounted, onUnmounted, reactive, ref, watch } from "vue"; // added onUnmounted
 import { useRoute, useRouter } from "vue-router"; // import router
 
@@ -49,7 +49,7 @@ function getLastId() {
 
 async function NewSearch() {
   if (searchInfo.content === "") {
-    return ElMessage.warning("请输入查询内容");
+    return ElNotification.warning("请输入查询内容");
   }
   bottomLoader.reset();
   resultList.value = [];
@@ -70,8 +70,10 @@ watch(
 );
 async function search() {
   if (searchLoading.value) return;
+  if (searchInfo.content === "") {
+    return ElNotification.warning("请输入查询内容");
+  }
   let lastId = getLastId();
-
   try {
     searchLoading.value = true;
     if (useFuzzySearch.value) {
