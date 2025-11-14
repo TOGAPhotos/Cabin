@@ -40,9 +40,16 @@ onBeforeUnmount(() => {
 });
 
 const search = () => {
+  if (inputContent.value.trim() === "") {
+    return;
+  }
+  // 使用 push 导航，确保即使在同一页面也能触发更新
   return router.push({
     path: "/search",
-    query: { content: inputContent.value, type: "blurry" },
+    query: {
+      content: inputContent.value.trim(),
+      type: "blurry",
+    },
   });
 };
 </script>
@@ -58,6 +65,7 @@ const search = () => {
       style="max-width: 600px"
       placeholder="搜索注册号、机型、机场、摄影师等信息"
       class="input-with-select"
+      @keyup.enter="search"
     >
       <template #append>
         <el-button :icon="Search" @click="search" />
@@ -81,6 +89,7 @@ const search = () => {
         v-model="inputContent"
         placeholder="搜索注册号、机型、机场、摄影师等信息"
         class="input-with-select mobile-input"
+        @keyup.enter="search"
       >
         <template #append>
           <el-button :icon="Search" @click="search" />

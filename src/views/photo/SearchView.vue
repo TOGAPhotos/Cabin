@@ -138,16 +138,7 @@ watch(
       if (useFuzzySearch.value && searchInfo.type !== "blurry")
         useFuzzySearch.value = false;
     }
-
-    // 当内容被清空时清理结果
-    if (newContent === "") {
-      resultList.value = [];
-      showResult.value = false;
-    } else if (
-      (typeChanged || contentChanged) &&
-      resultList.value.length === 0
-    ) {
-      // 导航导致的首次加载
+    if (typeChanged || contentChanged) {
       NewSearch();
     }
     syncingFromRoute = false;
