@@ -33,6 +33,11 @@ const router = createRouter({
       component: () => import("@/views/photo/EditorChoice.vue"),
     },
     {
+      path: "/newPhotos",
+      name: "newPhotos",
+      component: () => import("@/views/photo/NewPhotosView.vue"),
+    },
+    {
       path: "/login",
       name: "login",
       meta: { hideHeader: true },

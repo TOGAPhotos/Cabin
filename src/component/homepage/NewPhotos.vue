@@ -18,8 +18,13 @@ onMounted(async () => {
 
 <template>
   <div class="global-container">
-    <div class="flex flex-col gap-8">
-      <h2>最新图片</h2>
+    <div class="flex flex-col gap-6">
+      <div class="py-0">
+        <h2 class="py-0">最新图片</h2>
+        <ElButton type="text">
+          <router-link to="/newPhotos">查看全部最新图片 &gt;</router-link>
+        </ElButton>
+      </div>
       <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         <PhotoCard v-for="photo in photoList" v-bind="photo" :key="photo.id" />
       </div>
