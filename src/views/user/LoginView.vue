@@ -3,7 +3,7 @@ import router from "@/router";
 import userInfoStore from "@/stores/userInfo";
 import ServerRequest from "@/utils/request";
 import { ElNotification } from "element-plus";
-import { reactive } from "vue";
+import { onMounted, reactive } from "vue";
 import { useRoute } from "vue-router";
 import { z } from "zod";
 
@@ -18,10 +18,21 @@ const loginForm = reactive<LoginForm>({
   email: "",
   password: "",
 });
-
 const backgroundImg = reactive({
-  url: "https://cos-125-tp-cdn.794td.cn/photos/41687.jpg",
+  url: "",
   status: "loading",
+});
+
+onMounted(async () => {
+  const bgImgList = new ServerRequest(
+    "GET",
+    "/photos?type=ScreenerChoice&take=20",
+  );
+  await bgImgList.send();
+  const data = bgImgList.getData() as Array<{ id: string }>;
+  const randomIndex = Math.floor(Math.random() * data.length);
+  backgroundImg.url = `https://cos-125-tp-cdn.794td.cn/photos/${data[randomIndex].id}.jpg`;
+  preloadImage();
 });
 const user = userInfoStore();
 const route = useRoute();
@@ -41,9 +52,6 @@ const preloadImage = () => {
   };
   img.src = backgroundImg.url;
 };
-
-// Start loading image on component mount
-preloadImage();
 
 async function login() {
   // valid form
