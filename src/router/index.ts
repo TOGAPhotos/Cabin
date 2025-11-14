@@ -35,6 +35,7 @@ const router = createRouter({
     {
       path: "/login",
       name: "login",
+      meta: { hideHeader: true },
       component: () => import("@/views/user/LoginView.vue"),
     },
     {
@@ -88,6 +89,7 @@ const router = createRouter({
     {
       path: "/maintenance",
       name: "maintenance",
+      meta: { hideHeader: true },
       component: () => import("@/views/other/Maintenance.vue"),
     },
     {
