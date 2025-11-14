@@ -19,7 +19,7 @@ const url = computed(() =>
 const href = computed(() => `/photo/${props.id}`);
 const hasAirline = computed(() => props.airline_cn !== props.ac_type);
 const isAirportPhoto = computed(() => props.airport_icao_code === props.ac_reg);
-const SC = computed(() => props.pic_type.includes("ScreenerChoice"));
+const SC = computed(() => props.pic_type?.includes("ScreenerChoice"));
 </script>
 
 <template>
@@ -90,7 +90,7 @@ const SC = computed(() => props.pic_type.includes("ScreenerChoice"));
               {{ username }}
             </div>
             <div v-if="hasAirline" class="text-right">
-              {{ airline_cn ?? airline_en }}
+              {{ airline_cn || airline_en || "L.O.S." }}
             </div>
           </div>
         </div>

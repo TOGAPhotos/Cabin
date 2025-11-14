@@ -1,6 +1,6 @@
 export interface ThumbnailInfo {
   airline_cn?: string;
-  airline_en: string;
+  airline_en?: string;
   ac_type: string;
 
   id: number;
