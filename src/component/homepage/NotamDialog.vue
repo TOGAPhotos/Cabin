@@ -11,27 +11,8 @@ const htmlContent = ref("");
 const notamId = ref<number | null>(null);
 
 function sanitizeNotamHtml(input: string): string {
-  // Allow only <br> and <b>, escape all other tags/characters
-  const tokens = [
-    { re: /<br\s*\/?>/gi, token: "__BR__" },
-    { re: /<b>/gi, token: "__B_OPEN__" },
-    { re: /<\/b>/gi, token: "__B_CLOSE__" },
-  ];
-  let s = input || "";
-  for (const { re, token } of tokens) s = s.replace(re, token);
-  s = s
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#39;");
-  return s
-    .split("__BR__")
-    .join("<br>")
-    .split("__B_OPEN__")
-    .join("<b>")
-    .split("__B_CLOSE__")
-    .join("</b>");
+  if (!input || input === "") return "";
+  return input.replace(/<\s*a\b[^>]*>/gi, "").replace(/<\s*\/\s*a\s*>/gi, "");
 }
 
 const notamReq = new ServerRequest("GET", "/notam");
