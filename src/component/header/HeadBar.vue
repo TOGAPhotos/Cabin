@@ -3,17 +3,13 @@ import LoginButton from "@/component/header/LoginButton.vue";
 import SearchBox from "@/component/header/SearchBox.vue";
 import router from "@/router";
 import userInfoStore from "@/stores/userInfo";
-import { computed, onMounted, onUnmounted, ref } from "vue";
-import { useRoute } from "vue-router";
-import { floatNameList } from "./config";
+import { onMounted, onUnmounted, ref } from "vue";
 
 const header = ref<HTMLElement | null>(null);
 const user = userInfoStore();
 const userPageText = ref("登录/注册");
-const route = useRoute();
 
 const mobileMenuVisible = ref(false);
-const loginDialogVisible = ref(false);
 const lastScrollTop = ref(0);
 const showHeadBar = ref(true);
 const isAtTop = ref(true);
@@ -32,15 +28,6 @@ const goUserPage = () => {
   }
 };
 
-const isFloat = computed(() => {
-  if (typeof route.name === "string") {
-    if (floatNameList.includes(route.name)) {
-      return true;
-    }
-  }
-  return false;
-});
-
 function windowScroll() {
   const currentScrollTop =
     window.pageYOffset || document.documentElement.scrollTop;
@@ -49,7 +36,7 @@ function windowScroll() {
   lastScrollTop.value = currentScrollTop;
 }
 
-const handleLoginClick = (value: boolean) => router.push("/login");
+const handleLoginClick = () => router.push("/login");
 const handleMobileLoginClick = (value: boolean) =>
   (mobileMenuVisible.value = value);
 const handleMouseEnter = () => (isMouseOn.value = true);
@@ -87,7 +74,10 @@ onUnmounted(() => {
       </div>
       <div class="head-bar-desk">
         <SearchBox :isFocus="isMouseOn"></SearchBox>
-        <LoginButton @loginDialogVisible="handleLoginClick" />
+        <div class="nav-links">
+          <LoginButton @loginDialogVisible="handleLoginClick" />
+        </div>
+        <a href="/contact" class="nav-link">联系我们</a>
       </div>
       <div class="head-bar-mobile">
         <SearchBox :isMobile="true"></SearchBox>
@@ -99,24 +89,23 @@ onUnmounted(() => {
     </div>
 
     <div class="head-bar-menu" v-show="mobileMenuVisible">
-      <div
-        style="display: flex; justify-content: space-around; margin-bottom: 2em"
-      >
-        <a href="/search">
+      <div class="menu-section">
+        <a @click="goUserPage()">
+          <div class="user-page">
+            <i class="iconfont icon-user"></i>
+            {{ userPageText }}
+          </div>
+        </a>
+      </div>
+      <div class="menu-section menu-links">
+        <a href="/newPhotos">
           <div class="head-bar-menu-item">图库</div>
+        </a>
+        <a href="/contact">
+          <div class="head-bar-menu-item">联系我们</div>
         </a>
         <a href="https://blog.togaphotos.com">
           <div class="head-bar-menu-item">关于</div>
-        </a>
-      </div>
-      <a @click="goUserPage()">
-        <div class="user-page">
-          {{ userPageText }}
-        </div>
-      </a>
-      <div>
-        <a @click="goUserPage()">
-          <div>个人主页</div>
         </a>
       </div>
     </div>
@@ -150,8 +139,7 @@ header {
 
 .head-bar-menu {
   background: var(--color-toga);
-  height: 150px;
-  padding: 1em 25px;
+  padding: 1.5em 25px;
   z-index: 999;
 }
 
@@ -159,18 +147,32 @@ header {
   line-height: 1em;
 }
 
+.menu-section {
+  margin-bottom: 1.5em;
+}
+
+.menu-links {
+  display: flex;
+  justify-content: space-around;
+  gap: 1.5em;
+}
+
 .head-bar-menu-item {
   font-size: 1.1rem;
   line-height: 1em;
   color: white;
+  padding: 0.8em 0;
+  text-align: center;
 }
 
 .user-page {
   font-weight: bolder;
-  margin-top: 0.8em;
-  padding-bottom: 0.4em;
-  border-bottom: 1px solid white;
-  margin-bottom: 0.6em;
+  font-size: 1.1rem;
+  padding: 0.8em 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
 }
 
 @keyframes fadeInDown {
@@ -197,14 +199,38 @@ header {
 
 @media only screen and (min-width: 701px) {
   .head-bar-desk {
-    width: 31rem;
     display: flex;
-    justify-content: space-between;
+    width: 100%;
+    justify-content: end;
     align-items: center;
     gap: 1rem;
+    flex: 1;
+    margin-left: 2rem;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  .nav-link {
+    padding: 0rem 1rem;
+    font-size: 1rem;
+    transition: background-color 0.3s;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+
+  .nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.1);
   }
 
   .head-bar-mobile {
+    display: none;
+  }
+
+  .head-bar-menu {
     display: none;
   }
 }

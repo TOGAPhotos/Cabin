@@ -45,7 +45,8 @@ onMounted(async () => {
           <Stats />
         </div>
       </div>
-      <div class="w-full flex flex-col gap-4">
+      <!-- Hide headPhoto container on mobile, show starting from lg -->
+      <div class="w-full hidden flex-col gap-4 lg:flex">
         <PhotoCard
           v-if="headPhoto"
           class="mt-auto w-full"

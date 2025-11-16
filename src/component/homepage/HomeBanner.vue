@@ -1,9 +1,6 @@
 <script setup lang="ts">
-export type HomeBannerProps = {
-  isLogged?: boolean;
-};
-
-const props = defineProps<HomeBannerProps>();
+import useUserInfoStore from "@/stores/userInfo";
+const user = useUserInfoStore();
 </script>
 
 <template>
@@ -42,7 +39,7 @@ const props = defineProps<HomeBannerProps>();
           <h1>加入TOGAPhotos</h1>
           <h2>与广大航空爱好者分享你的作品</h2>
           <a
-            v-if="isLogged"
+            v-if="user.isLoggedIn"
             target="_blank"
             href="/upload"
             class="md:backdrop-blur-xs w-fit md:text-lg px-5 md:px-7 py-1 border-1 border-white rounded-full text-white transition-all duration-250 hover:text-toga hover:font-bold hover:bg-white"
