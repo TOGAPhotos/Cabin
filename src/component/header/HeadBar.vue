@@ -74,7 +74,10 @@ onUnmounted(() => {
       </div>
       <div class="head-bar-desk">
         <SearchBox :isFocus="isMouseOn"></SearchBox>
-        <LoginButton @loginDialogVisible="handleLoginClick" />
+        <div class="nav-links">
+          <LoginButton @loginDialogVisible="handleLoginClick" />
+        </div>
+        <a href="/contact" class="nav-link">联系我们</a>
       </div>
       <div class="head-bar-mobile">
         <SearchBox :isMobile="true"></SearchBox>
@@ -97,6 +100,9 @@ onUnmounted(() => {
       <div class="menu-section menu-links">
         <a href="/newPhotos">
           <div class="head-bar-menu-item">图库</div>
+        </a>
+        <a href="/contact">
+          <div class="head-bar-menu-item">联系我们</div>
         </a>
         <a href="https://blog.togaphotos.com">
           <div class="head-bar-menu-item">关于</div>
@@ -193,11 +199,13 @@ header {
 
 @media only screen and (min-width: 701px) {
   .head-bar-desk {
-    width: 31rem;
     display: flex;
-    justify-content: space-between;
+    width: 100%;
+    justify-content: end;
     align-items: center;
     gap: 1rem;
+    flex: 1;
+    margin-left: 2rem;
   }
 
   .nav-links {
@@ -207,7 +215,7 @@ header {
   }
 
   .nav-link {
-    padding: 0.5rem 1rem;
+    padding: 0rem 1rem;
     font-size: 1rem;
     transition: background-color 0.3s;
     border-radius: 4px;

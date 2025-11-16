@@ -61,8 +61,7 @@ watch(
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 1rem;
-  height: 100%;
+  padding: 0rem 1rem;
   cursor: pointer;
 }
 .login-btn:hover {
