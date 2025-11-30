@@ -38,7 +38,7 @@ export default class ServerRequest {
     }
     return {
       "Content-Type": contentType,
-      t_id: this.localId.id,
+      "X-tId": this.localId.id,
       Authorization: this.user.isLoggedIn ? "Bearer " + this.user.token : "",
     };
   }
