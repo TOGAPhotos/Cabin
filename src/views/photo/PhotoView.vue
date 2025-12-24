@@ -248,7 +248,10 @@ const vote = async () => {
           />
         </div>
         <div class="label-group">
-          <InfoLabel label="航空公司/运营人" :value="photoInfo?.airline_cn" />
+          <InfoLabel
+            label="航空公司/运营人"
+            :value="photoInfo?.airline_cn || photoInfo?.airline_en"
+          />
           <InfoLabel
             label="机场"
             :value="airportText"
