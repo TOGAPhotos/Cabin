@@ -55,7 +55,7 @@ const logout = async () => {
 };
 
 const summary2025 = () => {
-  const origin = window.location.origin;
+  const origin = window.location.host;
   const newWindow = window.open("https://summary." + origin, "_blank");
   window.addEventListener(
     "message",
