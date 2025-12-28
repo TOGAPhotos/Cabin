@@ -4,7 +4,6 @@ import PhotoCard from "@/components/PhotoCard.vue";
 import router from "@/router";
 import useUserInfoStore from "@/stores/userInfo";
 import Device from "@/utils/device";
-import Permission from "@/utils/permission";
 import { PhotoUrl, ThumbnailUrl } from "@/utils/photo-url";
 import ServerRequest from "@/utils/request";
 import type { AirportData } from "@/utils/type/airport";
@@ -125,7 +124,7 @@ const summary2025 = () => {
           <a @click="settingPanelVisible = true">账户设置</a>
           <div class="explain">更改账户信息，调整您对第三方的授权</div>
         </div>
-        <div class="action-card" v-if="Permission.isStaff(user.permission)">
+        <div class="action-card">
           <a @click="summary2025">2025年度总结</a>
           <div class="explain">看一看你和我们一起走过的2025年</div>
         </div>
