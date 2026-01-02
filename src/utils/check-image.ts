@@ -34,7 +34,7 @@ export async function checkImage(rawFile: UploadRawFile) {
   if (longSide > 2160) {
     ElNotification.error({
       title: "图片分辨率过高",
-      message: "长边需小于2160像素",
+      message: "长边需小于等于2160像素",
     });
     return false;
   }
