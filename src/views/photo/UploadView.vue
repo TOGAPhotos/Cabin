@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { onMounted, reactive, ref, watch } from "vue";
-import { useRoute } from "vue-router";
 
 import { UploadFilled } from "@element-plus/icons-vue";
 import type {
@@ -64,7 +63,6 @@ const elemStatus = reactive({
   watermark: false,
 });
 const localUserInfo = useUserInfoStore();
-const route = useRoute();
 
 const init = async () => {
   const userInfoReq = new ServerRequest("GET", `/user/${localUserInfo.id}`);
@@ -198,12 +196,8 @@ async function preCheck() {
 
   if (!(await checkImage(FILE))) return;
 
-  return showWatermarkDialog();
-}
-
-const showWatermarkDialog = () => {
   elemStatus.watermark = true;
-};
+}
 
 async function upload() {
   let uploading = ElLoading.service({
@@ -395,7 +389,7 @@ const readExifDate = async (file: UploadFile) => {
               将文件拖拽到此处或<em>点此上传</em>
             </div>
             <template #tip>
-              <div class="el-upload__tip">只接受JPEG文件，文件不大于4MB。</div>
+              <div class="el-upload__tip">只接受JPEG文件，文件不大于8MB。</div>
             </template>
           </el-upload>
         </el-form-item>

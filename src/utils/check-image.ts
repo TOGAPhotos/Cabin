@@ -1,12 +1,18 @@
 import type { UploadRawFile } from "element-plus";
-import { ElMessage } from "element-plus";
+import { ElNotification } from "element-plus";
 export async function checkImage(rawFile: UploadRawFile) {
   if (rawFile.type !== "image/jpeg") {
-    ElMessage.error("格式错误");
+    ElNotification.error({
+      title: "文件错误",
+      message: "我们只支持 JPEG 格式的图片",
+    });
     return false;
   }
-  if (rawFile.size / 1024 / 1024 > 4) {
-    ElMessage.error("图片大于4MB");
+  if (rawFile.size / 1024 / 1024 > 8) {
+    ElNotification.error({
+      title: "文件错误",
+      message: "图片大小不能超过8MB",
+    });
     return false;
   }
 
@@ -18,10 +24,19 @@ export async function checkImage(rawFile: UploadRawFile) {
   img.src = fileReader.result as string;
   await new Promise<void>((resolve) => (img.onload = () => resolve()));
   const longSide = Math.max(img.width, img.height);
-  if (longSide < 1279 || longSide > 1920) {
-    ElMessage.warning("尺寸超限");
+  if (longSide < 1279) {
+    ElNotification.error({
+      title: "图片分辨率过低",
+      message: "长边需大于1280像素",
+    });
     return false;
   }
-
+  if (longSide > 2160) {
+    ElNotification.error({
+      title: "图片分辨率过高",
+      message: "长边需小于等于2160像素",
+    });
+    return false;
+  }
   return true;
 }
