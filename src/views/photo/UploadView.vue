@@ -389,7 +389,7 @@ const readExifDate = async (file: UploadFile) => {
               将文件拖拽到此处或<em>点此上传</em>
             </div>
             <template #tip>
-              <div class="el-upload__tip">只接受JPEG文件，文件不大于4MB。</div>
+              <div class="el-upload__tip">只接受JPEG文件，文件不大于8MB。</div>
             </template>
           </el-upload>
         </el-form-item>
